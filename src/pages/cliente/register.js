@@ -19,7 +19,6 @@ export default () => {
   });
 
   const [selectedUf, setSelectedUf] = useState("0");
-  // eslint-disable-next-line
   const [selectedCity, setSelectedCity] = useState("0");
 
   const actionChangeElementsValues = {
@@ -38,12 +37,13 @@ export default () => {
 
     async function apiShow() {
       const response = await api.get(`/client/${id}`)
-      const [client] = response.data
+      const [client] = response.data.client
       if (!client) {
         toast.error('Cliente não encontrado')
         history.push('/cliente/register')
         return
       }
+      toast.info(response.data.message)
       setFormData({
         name: client.name,
         email: client.email,
@@ -98,9 +98,9 @@ export default () => {
   async function handleSubmit(event) {
 
     event.preventDefault();
-
+    let response = {}
     if (id) {
-      await api.put(`/client/${id}`, {
+      response = await api.put(`/client/${id}`, {
         uf: selectedUf,
         city: selectedCity,
         name: formData.name,
@@ -108,10 +108,8 @@ export default () => {
         telephone: formData.telephone,
         cpf: formData.cpf
       })
-      toast.success("Cliente alterado com sucesso.");
     } else {
-
-      await api.post('/client', {
+      response = await api.post('/client', {
         uf: selectedUf,
         city: selectedCity,
         name: formData.name,
@@ -119,10 +117,9 @@ export default () => {
         telephone: formData.telephone,
         cpf: formData.cpf
       })
-
-      toast.success("Cliente cadastrado com sucesso.");
     }
 
+    toast.success(response.data.message);
     history.push("/cliente");
   }
 

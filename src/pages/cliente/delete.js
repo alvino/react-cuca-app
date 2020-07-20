@@ -29,12 +29,13 @@ export default () => {
 
         async function apiShow() {
             const response = await api.get(`/client/${id}`)
-            const [client] = response.data
+            const [client] = response.data.client
             if (!client) {
                 toast.error('Cliente não encontrado')
                 history.push('/cliente/register')
                 return
             }
+            toast.info(response.data.message)
             setFormData({
                 name: client.name,
                 email: client.email,
@@ -55,8 +56,8 @@ export default () => {
         event.preventDefault();
 
 
-        await api.delete(`/client/${id}`)
-        toast.success("Cliente deletado com sucesso.");
+        const response = await api.delete(`/client/${id}`)
+        toast.success(response.data.message);
 
 
         history.push("/cliente");
@@ -66,7 +67,6 @@ export default () => {
         <div>
             <h2>Tem certeza que deseja deletar:</h2>
             <div className="mt-4 mb-4 justify-content-center">
-
                 <p >Nome: {formData.name}</p>
 
                 <p>Email: {formData.email}</p>
@@ -78,7 +78,6 @@ export default () => {
                 <p>Estado: {selectedUf}</p>
 
                 <p>Cidade: {selectedCity}</p>
-
             </div>
             <button className="btn btn-danger" onClick={handleSubmit}>
                 Confirma deleta

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table"
+import React, { useState, useEffect } from 'react';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify';
 import api from '../../server/api'
 
 
@@ -12,7 +13,8 @@ export default () => {
   useEffect(() => {
     async function fetchData() {
       const response = await api.get("/client")
-      setClients(response.data)
+      toast.info(response.data.message)
+      setClients(response.data.clients)
     }
     fetchData()
   }, []);
