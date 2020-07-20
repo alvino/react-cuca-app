@@ -96,7 +96,6 @@ export default () => {
   }
 
   async function handleSubmit(event) {
-
     event.preventDefault();
     let response = {}
     if (id) {
