@@ -81,9 +81,7 @@ export default () => {
     if (selectedUf === "0") return;
 
     async function apiCities() {
-      const response = await ibge.get(
-        `/estados/${selectedUf}/municipios`
-      );
+      const response = await ibge.get(`/estados/${selectedUf}/municipios`);
 
       const cityNames = response.data.map((city) => city.nome);
 
@@ -97,27 +95,22 @@ export default () => {
     actionChangeElementsValues[event.target.name](event.target.value);
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    const provider = {
+      uf: selectedUf,
+      city: selectedCity,
+      nickname: formData.nickname,
+      email: formData.email,
+      telephone: formData.telephone,
+      cnpj: formData.cnpj
+    }
+
     let response = {}
     if (id) {
-      response = await api.put(`/provider/${id}`, {
-        uf: selectedUf,
-        city: selectedCity,
-        nickname: formData.nickname,
-        email: formData.email,
-        telephone: formData.telephone,
-        cnpj: formData.cnpj
-      })
+      response = await api.put(`/provider/${id}`, provider)
     } else {
-      response = await api.post('/provider', {
-        uf: selectedUf,
-        city: selectedCity,
-        nickname: formData.nickname,
-        email: formData.email,
-        telephone: formData.telephone,
-        cnpj: formData.cnpj
-      })
+      response = await api.post('/provider', provider)
     }
 
     toast.success(response.data.message);

@@ -97,25 +97,20 @@ export default () => {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    const client = {
+      uf: selectedUf,
+      city: selectedCity,
+      name: formData.name,
+      email: formData.email,
+      telephone: formData.telephone,
+      cpf: formData.cpf
+    }
+
     let response = {}
     if (id) {
-      response = await api.put(`/client/${id}`, {
-        uf: selectedUf,
-        city: selectedCity,
-        name: formData.name,
-        email: formData.email,
-        telephone: formData.telephone,
-        cpf: formData.cpf
-      })
+      response = await api.put(`/client/${id}`, client)
     } else {
-      response = await api.post('/client', {
-        uf: selectedUf,
-        city: selectedCity,
-        name: formData.name,
-        email: formData.email,
-        telephone: formData.telephone,
-        cpf: formData.cpf
-      })
+      response = await api.post('/client', client)
     }
 
     toast.success(response.data.message);

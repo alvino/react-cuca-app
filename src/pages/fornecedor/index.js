@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import { Link } from 'react-router-dom'
-import toast from 'react-toastify'
+import { toast } from 'react-toastify'
 import api from "../../server/api";
 
 
@@ -19,7 +19,7 @@ export default () => {
   }, []);
 
   function onRowSelect(row, isSelected) {
-    setRowSelected({row, isSelected})
+    setRowSelected({ row, isSelected })
   }
 
 
@@ -37,8 +37,8 @@ export default () => {
     <div>
       <ul className="nav justify-content-center">
         <li>
-        <Link to="/fornecedor/register" className="nav-link btn-primary">
-          Cadastra Fornecedor
+          <Link to="/fornecedor/register" className="nav-link btn-primary">
+            Cadastra Fornecedor
         </Link>
         </li>
         {
