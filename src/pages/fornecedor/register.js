@@ -33,8 +33,6 @@ export default () => {
   useEffect(() => {
     if (!id) return
 
-    toast.info('Carregando dados do fornecedor', { autoClose: 2000 })
-
     async function apiShow() {
       const response = await api.get(`/provider/${id}`)
       const [provider] = response.data.provider

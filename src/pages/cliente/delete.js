@@ -25,8 +25,6 @@ export default () => {
             return
         }
 
-        toast.info('Carregando dados do cliente', { autoClose: 2000 })
-
         async function apiShow() {
             const response = await api.get(`/client/${id}`)
             const [client] = response.data.client

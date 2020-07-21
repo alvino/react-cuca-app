@@ -33,8 +33,6 @@ export default () => {
   useEffect(() => {
     if (!id) return
 
-    toast.info('Carregando dados do cliente', { autoClose: 2000 })
-
     async function apiShow() {
       const response = await api.get(`/client/${id}`)
       const [client] = response.data.client
@@ -113,7 +111,7 @@ export default () => {
       response = await api.post('/client', client)
     }
 
-    toast.success(response.data.message);
+    if (response.data) toast.success(response.data.message);
     history.push("/cliente");
   }
 

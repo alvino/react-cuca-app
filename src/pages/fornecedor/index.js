@@ -12,7 +12,6 @@ export default () => {
   useEffect(() => {
     async function fetchData() {
       const response = await api.get("/provider")
-      toast.info(response.data.message)
       setProviders(response.data.providers)
     }
     fetchData()

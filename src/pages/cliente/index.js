@@ -13,8 +13,7 @@ export default () => {
   useEffect(() => {
     async function fetchData() {
       const response = await api.get("/client")
-      toast.info(response.data.message)
-      setClients(response.data.clients)
+      setClients(response.data.clients, { autoClose: 2000 })
     }
     fetchData()
   }, []);
