@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from 'react-router-dom'
+// eslint-disable-next-line
 import { toast } from "react-toastify";
 import api from '../../server/api'
 import ibge from '../../server/ibge'
