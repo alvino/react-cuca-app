@@ -15,6 +15,9 @@ export default function NavBar() {
                 <li className="nav-item">
                     <NavLink activeClassName='active' className="nav-link" to="/fornecedor">Fornecedor</NavLink>
                 </li>
+                <li className="nav-item">
+                    <NavLink activeClassName='active' className="nav-link" to="/estoque">Estoque</NavLink>
+                </li>
             </Header>
         </div>
     )
