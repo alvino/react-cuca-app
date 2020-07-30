@@ -12,7 +12,7 @@ export default () => {
   useEffect(() => {
     async function fetchData() {
       const response = await api.get("/client")
-      setClients(response.data.clients, { autoClose: 2000 })
+      setClients(response.data.clients)
     }
     fetchData()
   }, []);
