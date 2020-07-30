@@ -12,9 +12,10 @@ export default () => {
       <Header />
 
       <div className='container-fluid'>
-        <main className='d-flex'>
+        <main className='mt-5 d-flex justify-content-center align-items-center'>
           <Box title='Cliente' to='/cliente' />
           <Box title='Fornecedor' to='/fornecedor' />
+          <Box title='Estoque' to='/estoque' />
           <Box title='Ponto de Venda' to='/pdv' />
         </main>
       </div>
