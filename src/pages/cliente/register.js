@@ -2,205 +2,207 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from 'react-router-dom'
 // eslint-disable-next-line
 import { toast } from "react-toastify";
+import { Button, Form } from 'react-bootstrap'
+
+import InputFormControl from '../../components/bootstrap/InputFormControl'
+import InputNumberFormat from '../../components/bootstrap/InputNumberFormat'
+import SelectFormControl from '../../components/bootstrap/SelectFormControl'
+
+
 import api from '../../server/api'
-import ibge from '../../server/ibge'
+import localizacao from '../../server/localizacao'
 
 export default () => {
-  const history = useHistory()
-  const { id } = useParams(0)
+	const history = useHistory()
+	const { id } = useParams(0)
 
-  const [ufs, setUfs] = useState([]);
-  const [cities, setCities] = useState([]);
+	const [ufs, setUfs] = useState([]);
+	const [cities, setCities] = useState([]);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    telephone: "",
-    cpf: "",
-  });
+	const [formData, setFormData] = useState({
+		name: '',
+		email: '',
+		telephone: '',
+		cpf: '',
+	});
 
-  const [selectedUf, setSelectedUf] = useState("0");
-  const [selectedCity, setSelectedCity] = useState("0");
+	const [selectedUf, setSelectedUf] = useState('');
+	const [selectedCity, setSelectedCity] = useState('');
 
-  const actionChangeElementsValues = {
-    selectedUf: (value) => setSelectedUf(value),
-    selectedCity: (value) => setSelectedCity(value),
-    name: (value) => setFormData({ ...formData, name: value }),
-    email: (value) => setFormData({ ...formData, email: value }),
-    telephone: (value) => setFormData({ ...formData, telephone: value }),
-    cpf: (value) => setFormData({ ...formData, cpf: value }),
-  };
+	const actionChangeElementsValues = {
+		selectedUf: (value) => setSelectedUf(value),
+		selectedCity: (value) => setSelectedCity(value),
+		name: (value) => setFormData({ ...formData, name: value }),
+		email: (value) => setFormData({ ...formData, email: value }),
+		telephone: (value) => setFormData({ ...formData, telephone: value }),
+		cpf: (value) => setFormData({ ...formData, cpf: value }),
+	};
 
-  useEffect(() => {
-    if (!id) return
+	useEffect(() => {
+		if (!id) return
 
-    async function apiShow() {
-      const response = await api.get(`/client/${id}`)
-      const [client] = response.data.client
-      if (!client) {
-        toast.error('Cliente não encontrado')
-        history.push('/cliente/register')
-        return
-      }
-      toast.info(response.data.message)
-      setFormData({
-        name: client.name,
-        email: client.email,
-        telephone: client.telephone,
-        cpf: client.cpf,
-      })
-      setSelectedUf(client.uf)
-      setSelectedCity(client.city)
-    }
+		async function apiShow() {
+			const response = await api.get(`/client/${id}`)
+			const [client] = response.data.client
+			if (!client) {
+				toast.error('Cliente não encontrado')
+				history.push('/cliente/register')
+				return
+			}
+			toast.info(response.data.message)
+			setFormData({
+				name: client.name,
+				email: client.email,
+				telephone: client.telephone,
+				cpf: client.cpf,
+			})
+			setSelectedUf(client.uf)
+			setSelectedCity(client.city)
+		}
 
-    apiShow()
-    // eslint-disable-next-line
-  }, [])
+		apiShow()
+		// eslint-disable-next-line
+	}, [])
 
-  // Load UFs
-  useEffect(() => {
-    async function apiUfs() {
-      const response = await ibge.get("/estados?orderBy=nome")
+	// Load UFs
+	useEffect(() => {
+		async function apiUfs() {
+			const response = await localizacao.get("/estados.json");
+			const ufInitials = response.data.estados.map((uf) => {
+				return {
+					sigla: uf.id,
+					nome: uf.estado,
+				};
+			});
 
-      const ufInitials = response.data.map((uf) => {
-        return {
-          sigla: uf.sigla,
-          nome: uf.nome,
-        };
-      });
+			setUfs(ufInitials)
+		}
 
-      setUfs(ufInitials);
-    }
+		apiUfs()
+	}, [])
 
-    apiUfs();
-  }, []);
+	// Load Cities
+	useEffect(() => {
+		if (selectedUf === '') return;
 
-  // Load Cities
-  useEffect(() => {
-    if (selectedUf === "0") return;
+		async function apiCities() {
+			const response = await localizacao.get(`/cidades/${selectedUf}.json`);
+			const cityNames = response.data.cidades.map((city) => city.cidade);
 
-    async function apiCities() {
-      const response = await ibge.get(`/estados/${selectedUf}/municipios`)
+			setCities(cityNames);
+		}
 
-      const cityNames = response.data.map((city) => city.nome);
+		apiCities();
+	}, [selectedUf]);
 
-      setCities(cityNames);
-    }
+	function handleChange(event) {
+		actionChangeElementsValues[event.target.name](event.target.value);
+	}
 
-    apiCities();
-  }, [selectedUf]);
+	async function handleSubmit(event) {
+		event.preventDefault();
 
-  function handleChange(event) {
-    actionChangeElementsValues[event.target.name](event.target.value);
-  }
+		if (formData.name === '') {
+			toast.warning('Preencha no minimo o nome')
+			return
+		}
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    const client = {
-      uf: selectedUf,
-      city: selectedCity,
-      name: formData.name,
-      email: formData.email,
-      telephone: formData.telephone,
-      cpf: formData.cpf
-    }
+		const client = {
+			uf: selectedUf,
+			city: selectedCity,
+			name: formData.name,
+			email: formData.email,
+			telephone: formData.telephone,
+			cpf: formData.cpf
+		}
 
-    let response = {}
-    if (id) {
-      response = await api.put(`/client/${id}`, client)
-    } else {
-      response = await api.post('/client', client)
-    }
+		let response = {}
+		if (id) {
+			response = await api.put(`/client/${id}`, client)
+		} else {
+			response = await api.post('/client', client)
+		}
 
-    if (response.data) toast.success(response.data.message);
-    history.push("/cliente");
-  }
+		if (response.data) toast.success(response.data.message);
+		history.goBack()
+	}
 
-  return (
-    <form className="p-5" onSubmit={handleSubmit} method="POST">
-      <div className='form-group'>
-        <legend>Cadastro de Cliente</legend>
+	return (
+		<>
+			<Button variant='secondary' size='lg' className='mb-4' onClick={() => history.goBack()}>Voltar</Button>
 
-        <label htmlFor="name">Nome</label>
-        <input
-          className="form-control"
-          type="text"
-          name="name"
-          id="name"
-          placeholder="Nome do Cliente"
-          value={formData.name}
-          onChange={handleChange}
-        />
+			<Form>
 
-        <label htmlFor="email">Email</label>
-        <input
-          className="form-control"
-          type="email"
-          name="email"
-          id="email"
-          placeholder="Email do Cliente"
-          value={formData.email}
-          onChange={handleChange}
-        />
+				<InputFormControl
+					label='Nome'
+					id="name"
+					name="name"
+					placeholder="Nome do Cliente"
+					value={formData.name}
+					onChange={handleChange}
+				/>
 
-        <label htmlFor="phone">Telefone</label>
-        <input
-          className="form-control"
-          type="tel"
-          name="telephone"
-          id="phone"
-          placeholder="Telefone do Cliente"
-          value={formData.telephone}
-          onChange={handleChange}
-        />
+				<InputFormControl
+					label='Email'
+					type="email"
+					id="email"
+					name="email"
+					placeholder="Email do Cliente"
+					value={formData.email}
+					onChange={handleChange}
+				/>
 
-        <label htmlFor="cpf">CPF</label>
-        <input
-          className="form-control"
-          type="text"
-          name="cpf"
-          id="cpf"
-          placeholder="CPF do Cliente"
-          value={formData.cpf}
-          onChange={handleChange}
-        />
+				<InputNumberFormat
+					label='Telefone'
+					type="tel"
+					id="telephone"
+					name="telephone"
+					format='(##) # ####-####'
+					prefix=''
+					value={formData.telephone}
+					onValueChange={(values) => setFormData({ ...formData, telephone: values.formattedValue })}
+				/>
 
-        <label htmlFor="selectedUf">Estado</label>
-        <select
-          className="form-control"
-          type="select"
-          name="selectedUf"
-          id="selectedUf"
-          value={selectedUf}
-          onChange={handleChange}
-        >
-          <option>Selecionar Estado</option>
-          {ufs.map((uf, id) => (
-            <option key={id} value={uf.sigla}>
-              {uf.nome}
-            </option>
-          ))}
-        </select>
+				<InputFormControl
+					label='CPF/CNPJ'
+					id="cpf"
+					name="cpf"
+					placeholder="CPF/CNPJ do Cliente"
+					value={formData.cpf}
+					onChange={handleChange}
+				/>
 
-        <label htmlFor="selectedCity">Cidade</label>
-        <select
-          className="form-control"
-          type="select"
-          name="selectedCity"
-          id="selectedCity"
-          value={selectedCity}
-          onChange={handleChange}
-        >
-          <option >Selecionar Cidade</option>
-          {cities.map((city, id) => (
-            <option key={id}>{city}</option>
-          ))}
-        </select>
-      </div>
-      <button type="submit" className="btn btn-primary">
-        Salvar Cadastro
-      </button>
-    </form>
-  );
+				<SelectFormControl
+					label='Estado'
+					name="selectedUf"
+					id="selectedUf"
+					value={selectedUf}
+					onChange={handleChange}
+				>
+					<option>{ufs.length === 0 ? '...Loanding' : 'Selecionar Estado'}</option>
+					{ufs.map((uf, id) => (
+						<option key={id} value={uf.sigla}>
+							{uf.nome}
+						</option>
+					))}
+				</SelectFormControl>
+
+				<SelectFormControl
+					label='Cidade'
+					name="selectedCity"
+					id="selectedCity"
+					value={selectedCity}
+					onChange={handleChange}
+				>
+					<option>{selectedUf === '0' ? 'Selecione um estado primeiro' : 'Selecionar Cidade'}</option>
+					{cities.map((city, id) => (
+						<option key={id}>{city}</option>
+					))}
+				</SelectFormControl>
+
+				<Button variant="primary" size='lg' onClick={handleSubmit}> Salvar Cadastro </Button>
+			</Form>
+		</>
+	);
 }
 

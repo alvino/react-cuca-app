@@ -4,15 +4,16 @@ import { Button } from 'react-bootstrap'
 import { TableHeaderColumn } from 'react-bootstrap-table'
 import {
   BsListUl as IconList,
-  BsPlus as IconAdd,
   BsTrashFill as IconRemoveList
 } from 'react-icons/bs'
-import numeral from 'numeral'
 import { toast } from 'react-toastify'
 
 
 import api from '../../server/api'
 import ModalCenterBootstrapTable from '../../components/ModalCenterBootstrapTable'
+import InputFormControl from '../../components/bootstrap/InputFormControl'
+import InputNumberFormat from '../../components/bootstrap/InputNumberFormat'
+import NumberFormat from '../../components/NumberFormat'
 
 
 
@@ -29,9 +30,15 @@ export default () => {
     description: '',
     detail: '',
     unit: '',
-    quantity_purchase: '',
-    purchase_price: '',
-    sale_value: ''
+    quantity_purchase: {
+      value: '0'
+    },
+    purchase_price: {
+      value: '0'
+    },
+    sale_value: {
+      value: '0'
+    }
   })
   const [listStock, setListStock] = useState([])
 
@@ -44,18 +51,6 @@ export default () => {
     fetchData()
   }, []);
 
-  const actionChangeElementsValues = {
-    description: (value) => setFormData({ ...formData, description: value }),
-    detail: (value) => setFormData({ ...formData, detail: value }),
-    unit: (value) => setFormData({ ...formData, unit: value }),
-    quantity_purchase: (value) => setFormData({ ...formData, quantity_purchase: value }),
-    purchase_price: (value) => setFormData({ ...formData, purchase_price: value }),
-    sale_value: (value) => setFormData({ ...formData, sale_value: value }),
-  };
-
-  function handleChange(event) {
-    actionChangeElementsValues[event.target.name](event.target.value);
-  }
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -73,9 +68,16 @@ export default () => {
       return
     }
 
+
+
     const newStock = {
       provider_id: selectedFornecedor.id,
-      ...formData
+      description: formData.description,
+      detail: formData.detail,
+      unit: formData.unit,
+      quantity_purchase: formData.quantity_purchase.floatValue,
+      purchase_price: formData.purchase_price.floatValue,
+      sale_value: formData.sale_value.floatValue
     }
 
     setListStock([newStock, ...listStock])
@@ -83,9 +85,9 @@ export default () => {
       description: '',
       detail: '',
       unit: '',
-      quantity_purchase: '',
-      purchase_price: '',
-      sale_value: ''
+      quantity_purchase: { value: '0', formattedValue: '' },
+      purchase_price: { value: '0', formattedValue: '' },
+      sale_value: { value: '0', formattedValue: '' }
     })
   }
 
@@ -98,130 +100,122 @@ export default () => {
     const res = await api.post("/stock", listStock)
     toast.success(res.data.message)
 
-    history.push('/estoque')
+    history.goBack()
   }
 
   return (
     <div className="row">
       <div className="col-4">
-        <div className="form-group">
-          <label>Fornecedor</label>
-          <div className="d-flex">
 
-            <input type="text"
-              className="form-control form-control-lg"
-              id='inputFornecedor'
-              value={selectedFornecedor.nickname || ''}
-              readOnly />
-            <Button variant="secondary" className='px-2' onClick={() => setModalShowFornecedor(true)}>
-              <IconList size='22px' title='Pesquisar Fornecedor' />
+        <form>
+
+          <InputFormControl
+            label='Descrição'
+            id="description"
+            name="description"
+            value={formData.description}
+            onChange={(event) => setFormData({ ...formData, description: event.target.value })}
+          />
+
+          <InputFormControl
+            label='Detalhe'
+            id="detail"
+            name="detail"
+            value={formData.detail}
+            onChange={(event) => setFormData({ ...formData, detail: event.target.value })}
+          />
+
+          <InputFormControl
+            label='Unidade de Medida'
+            id="unit"
+            name='unit'
+            value={formData.unit}
+            onChange={(event) => setFormData({ ...formData, unit: event.target.value })}
+          />
+
+          <InputNumberFormat
+            label='Quantidade'
+            id="quantity_purchase"
+            name="quantity_purchase"
+            prefix=''
+            value={formData.quantity_purchase.formattedValue}
+            onValueChange={(values) => setFormData({ ...formData, quantity_purchase: values })}
+          />
+
+          <InputNumberFormat
+            label='Valor da Compra'
+            id="purchase_price"
+            name="purchase_price"
+            value={formData.purchase_price.formattedValue}
+            onValueChange={(values) => setFormData({ ...formData, purchase_price: values })}
+          />
+
+          <InputNumberFormat
+            label='Valor de Venda'
+            id="sale_value"
+            name="sale_value"
+            value={formData.sale_value.formattedValue}
+            onValueChange={(values) => setFormData({ ...formData, sale_value: values })}
+          />
+
+          <div className='d-flex justify-content-end'>
+            <Button
+              variant='success'
+              size='lg'
+              onClick={handleSubmit}>
+              Adicionar
             </Button>
 
-            <ModalCenterBootstrapTable
-              show={modalShowFornecedor}
-              dataList={providers}
-              onSelected={handleSelectedFornecedor}
-              onHide={() => setModalShowFornecedor(false)}
-            >
-              <TableHeaderColumn dataField="id" isKey={true} width='10%' >#</TableHeaderColumn>
-              <TableHeaderColumn dataField="nickname" >Descrição</TableHeaderColumn>
-              <TableHeaderColumn dataField="cnpj" width='20%'>Detalhe</TableHeaderColumn>
-            </ModalCenterBootstrapTable>
-
-          </div>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className='form-group'>
-            <legend>Cadastro de Estoque </legend>
-
-            <label htmlFor="inputDescricao">Descrição</label>
-            <input
-              className="form-control"
-              type="text"
-              name="description"
-              id="inputDescricao"
-              value={formData.description}
-              onChange={handleChange}
-            />
-
-            <label htmlFor="inputDetalhe">Detalhe</label>
-            <input
-              className="form-control"
-              type="text"
-              name="detail"
-              id="inputDetalhe"
-              value={formData.detail}
-              onChange={handleChange}
-            />
-
-            <label htmlFor="inputUnidade">Unidade Medida</label>
-            <input
-              className="form-control"
-              type="text"
-              name="unit"
-              id="inputUnidade"
-              value={formData.unit}
-              onChange={handleChange}
-            />
-
-            <label htmlFor="inputQuantidade">Quantidade</label>
-            <input
-              className="form-control"
-              type="text"
-              name="quantity_purchase"
-              id="inputQuantidade"
-              value={formData.quantity_purchase}
-              onChange={handleChange}
-            />
-
-            <label htmlFor="inputValorCompra">Valor da Compra</label>
-            <input
-              className="form-control"
-              type="text"
-              name="purchase_price"
-              id="inputValorCompra"
-              value={formData.purchase_price}
-              onChange={handleChange}
-            />
-
-            <label htmlFor="inputValorVenda">Valor de Venda</label>
-            <input
-              className="form-control"
-              type="text"
-              name="sale_value"
-              id="inputValorVenda"
-              value={formData.sale_value}
-              onChange={handleChange}
-            />
-
-
-          </div>
-          <div className='d-flex justify-content-end'>
-            <button type="submit" className="btn btn-success">
-              <IconAdd size='22px' />Adicionar
-            </button>
           </div>
         </form>
         {
           listStock.length === 0 ? '' :
-            <button
-              type="submit"
-              className="btn-lg btn-primary"
+            <Button
+              variant="primary"
+              size='lg'
               onClick={handleSaveListStock}>
               Salvar Lista de Produtos
-            </button>
+            </Button>
         }
-      </div>
+      </div >
       <div className="col-8">
+
+        <InputFormControl
+          label='Fornecedor'
+          className="form-control form-control-lg"
+          id='inputFornecedor'
+          value={selectedFornecedor.nickname || ''}
+          readOnly
+        >
+          <Button variant="secondary" className='px-4' onClick={() => setModalShowFornecedor(true)}>
+            <IconList size='22px' title='Pesquisar Fornecedor' />
+          </Button>
+          <Button variant="secondary" size='lg' onClick={() => history.push('/fornecedor/register')}>Criar</Button>
+        </InputFormControl>
+
+
+        <ModalCenterBootstrapTable
+          title='Lista de Fornecedores'
+          show={modalShowFornecedor}
+          dataList={providers}
+          onSelected={handleSelectedFornecedor}
+          onHide={() => setModalShowFornecedor(false)}
+        >
+          <TableHeaderColumn dataField="id" isKey={true} width='10%' >#</TableHeaderColumn>
+          <TableHeaderColumn dataField="nickname" >Descrição</TableHeaderColumn>
+          <TableHeaderColumn dataField="cnpj" width='20%'>Detalhe</TableHeaderColumn>
+        </ModalCenterBootstrapTable>
+
 
         <table className="table table-hover">
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col" className='text-right'>For.</th>
+              <th scope="col" style={{ width: '5%' }}>For.</th>
               <th scope="col">Produto (descrição)</th>
-              <th scope="col" className='text-right'>Valor Compra</th>
-              <th scope="col" className='text-right'>Valor Venda</th>
+              <th scope="col" style={{ width: '5%' }}>Qt.</th>
+              <th scope="col" style={{ width: '15%' }} className='text-right'>Valor Compra</th>
+              <th scope="col" style={{ width: '15%' }} className='text-right'>Valor Venda</th>
             </tr>
           </thead>
           <tbody>
@@ -230,18 +224,25 @@ export default () => {
                 (item, index) => (
                   <tr key={index}>
                     <th scope="row">
-                      <button
-                        className='btn btn-danger'
+                      <Button
+                        variant='danger'
                         onClick={() => (setListStock(
                           listStock.filter((pedido) => (pedido !== item))
                         ))}>
                         <IconRemoveList size='15px' title='Revomer produto da lista' />
-                      </button>
+                      </Button>
                     </th>
                     <td className='text-right'>{item.provider_id}</td>
                     <td>{item.description}</td>
-                    <td className='text-right'>{numeral(item.purchase_price).format('0,0.00')}</td>
-                    <td className='text-right'>{numeral(item.sale_value).format('0,0.00')}</td>
+                    <td>
+                      <NumberFormat value={item.quantity_purchase} prefix='' />
+                    </td>
+                    <td className='text-right'>
+                      <NumberFormat value={item.purchase_price} />
+                    </td>
+                    <td className='text-right'>
+                      <NumberFormat value={item.sale_value} />
+                    </td>
                   </tr>
                 )
               )

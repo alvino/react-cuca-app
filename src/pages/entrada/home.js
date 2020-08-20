@@ -5,19 +5,37 @@ import { Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 
 
+import NumberFormat from '../../components/NumberFormat'
+import DateFormat from '../../components/DateFormat'
+
+
 export default () => {
   const history = useHistory()
 
-  const [clients, setClients] = useState([]);
+  const [sales, setSales] = useState([]);
   const [rowSelected, setRowSelected] = useState({ row: {}, isSelected: false })
 
   useEffect(() => {
     async function fetchData() {
-      const response = await api.get("/client")
-      setClients(response.data.clients)
+      const response = await api.get("/sale")
+      // const serializedSales = response.data.sales.map((item) => (
+      //   {
+      //     ...item,
+          
+      //   }
+      // ))
+      setSales(response.data.sales)
     }
     fetchData()
   }, []);
+
+  function priceFormatter(cell, row) {
+    return <NumberFormat value={parseFloat(cell)} />
+  }
+
+  function dateFormatter(cell, row) {
+    return <DateFormat value={cell} />
+  }
 
   function onRowSelect(row, isSelected) {
     setRowSelected({ row, isSelected })
@@ -34,30 +52,21 @@ export default () => {
     <div >
       <div className="d-flex justify-content-center">
 
-
         <Button
           variant='primary'
           className='m-2' size='lg'
-          onClick={() => history.push('/cliente/register')}
-        >Cadastra Cliente</Button>
+          onClick={() => history.push('/entrada/register')}
+        >Cadastra Entrada</Button>
 
         {
-          rowSelected.isSelected ?
+          rowSelected.isSelected && !rowSelected.row.budget_id ?
             <>
-              <Button
-                variant='info'
-                className='m-2'
-                size='lg'
-                onClick={() => history.push(`/cliente/register/${rowSelected.row.id}`)}
-              >Alterar Cliente</Button>
-
               <Button
                 variant='danger'
                 className='m-2'
                 size='lg'
-                onClick={() => history.push(`/cliente/delete/${rowSelected.row.id}`)}
-              >Deletar Cliente</Button>
-
+                onClick={() => history.push(`/entrada/delete/${rowSelected.row.id}`)}
+              >Deletar Entrada</Button>
             </>
             : ""
         }
@@ -67,7 +76,7 @@ export default () => {
 
       <BootstrapTable
         version="4"
-        data={clients}
+        data={sales}
         selectRow={selectRow}
         pagination
         search
@@ -77,23 +86,23 @@ export default () => {
         ignoreSinglePage
       >
 
-        <TableHeaderColumn dataField="name" dataSort>
-          Name
+        <TableHeaderColumn dataField="id" isKey={true} width='5%'>
+          COD.
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="email" dataSort>
-          Email
+        <TableHeaderColumn dataField="description" dataSort>
+          Descrição
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="telephone" >
-          Telefone
+        <TableHeaderColumn dataField="parcel" width='5%' >
+          De
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="cpf" isKey={true} width='15%'>
-          CPF/CNPJ
+        <TableHeaderColumn dataField="all_parcel" width='5%' >
+          Parcelas
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="city" dataSort>
-          Cidade
+        <TableHeaderColumn dataField="amount" dataSort dataFormat={priceFormatter} width='10%'>
+          Valor
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="uf" dataSort width='5%'>
-          Uf
+        <TableHeaderColumn dataField="date_sale" dataSort dataFormat={dateFormatter} width='10%'>
+          Data
         </TableHeaderColumn>
       </BootstrapTable>
     </div >

@@ -5,20 +5,24 @@ import {
 
 import Header from './Header'
 
+function LiNavLink(props) {
+    return (
+        <li className="nav-item">
+            <NavLink activeClassName='active' className="nav-link" to={props.to}>{props.title}</NavLink>
+        </li>
+    )
+}
+
+
 export default function NavBar() {
     return (
-        <div className="sticky-top">
-            <Header>
-                <li className="nav-item">
-                    <NavLink activeClassName='active' className="nav-link" to="/cliente">Cliente</NavLink>
-                </li>
-                <li className="nav-item">
-                    <NavLink activeClassName='active' className="nav-link" to="/fornecedor">Fornecedor</NavLink>
-                </li>
-                <li className="nav-item">
-                    <NavLink activeClassName='active' className="nav-link" to="/estoque">Estoque</NavLink>
-                </li>
-            </Header>
-        </div>
+        <Header
+            logoWidth='120px'
+        >
+            <LiNavLink to='/cliente' title='Cliente' />
+            <LiNavLink to='/fornecedor' title='Fornecedor' />
+            <LiNavLink to='/estoque' title='Estoque' />
+            <LiNavLink to='/orcamento' title='Orçamento' />
+        </Header>
     )
 }

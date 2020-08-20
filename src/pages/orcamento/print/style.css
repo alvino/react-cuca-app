@@ -1,0 +1,20 @@
+
+
+
+@media print {
+  .page {
+    margin: 0;
+    box-shadow: 0;
+  }
+  
+  button {
+    visibility: hidden;
+  }
+
+  @page {
+    size: A4;
+    margin: 5mm 6mm 2mm 6mm;
+    page-break-after: always;
+  }
+
+}

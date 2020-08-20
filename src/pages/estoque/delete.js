@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import api from '../../server/api'
+import { Button } from 'react-bootstrap'
 
 export default () => {
     const history = useHistory()
@@ -21,18 +22,19 @@ export default () => {
 
     useEffect(() => {
         if (!id) {
-            history.push("/stock")
+            history.push("/estoque")
             return
         }
 
         async function apiShow() {
-            const resStock = await api.get(`/stock/${id}`)
-            const [stock] = resStock.data.stock
-            toast.success(resStock.data.message)
+            const responseStock = await api.get(`/stock/${id}`)
+            const [stock] = responseStock.data.stock
             if (!stock) {
-                history.push('/stock/register')
+                toast.error(responseStock.data.message)
+                history.push('/estoque/register')
                 return
             }
+            toast.info(responseStock.data.message)
             setFormData({
                 nickname: stock.nickname,
                 description: stock.description,
@@ -43,7 +45,6 @@ export default () => {
                 purchase_price: stock.purchase_price,
                 sale_value: stock.sale_value
             })
-
         }
 
         apiShow()
@@ -54,10 +55,10 @@ export default () => {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        const response = await api.delete(`/provider/${id}`)
-        toast.success(response.data.message);
+        const response = await api.delete(`/stock/${id}`)
+        toast.success(response.data.message)
 
-        history.push("/fornecedor");
+        history.push("/estoque")
     }
 
     return (
@@ -73,9 +74,9 @@ export default () => {
                 <p>Preço: {formData.purchase_price}</p>
                 <p>Preço Venda: {formData.sale_value}</p>
             </div>
-            <button className="btn btn-danger" onClick={handleSubmit}>
-                Confirma deleta
-            </button>
+            <Button variant="danger" size='lg' onClick={handleSubmit}>
+                Confirmar remoção
+            </Button>
         </div>
     )
 }

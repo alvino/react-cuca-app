@@ -2,8 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from 'react-router-dom'
 // eslint-disable-next-line
 import { toast } from "react-toastify";
+import { Button } from 'react-bootstrap'
+
+
+import InputFormControl from '../../components/bootstrap/InputFormControl'
+import SelectFormControl from '../../components/bootstrap/SelectFormControl'
+
+
 import api from '../../server/api'
-import ibge from '../../server/ibge'
+import localizacao from '../../server/localizacao'
 
 export default () => {
   const history = useHistory()
@@ -13,14 +20,15 @@ export default () => {
   const [cities, setCities] = useState([]);
 
   const [formData, setFormData] = useState({
-    nickname: "",
-    email: "",
-    telephone: "",
-    cnpj: "",
+    nickname: '',
+    email: '',
+    telephone: '',
+    cnpj: '',
+    bank_data: ''
   });
 
-  const [selectedUf, setSelectedUf] = useState("0");
-  const [selectedCity, setSelectedCity] = useState("0");
+  const [selectedUf, setSelectedUf] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
 
   const actionChangeElementsValues = {
     selectedUf: (value) => setSelectedUf(value),
@@ -29,6 +37,7 @@ export default () => {
     email: (value) => setFormData({ ...formData, email: value }),
     telephone: (value) => setFormData({ ...formData, telephone: value }),
     cnpj: (value) => setFormData({ ...formData, cnpj: value }),
+    bank_data: (value) => setFormData({ ...formData, bank_data: value }),
   };
 
   useEffect(() => {
@@ -48,6 +57,7 @@ export default () => {
         email: provider.email,
         telephone: provider.telephone,
         cnpj: provider.cnpj,
+        bank_data: provider.bank_data,
       })
       setSelectedUf(provider.uf)
       setSelectedCity(provider.city)
@@ -60,12 +70,12 @@ export default () => {
   // Load UFs
   useEffect(() => {
     async function apiUfs() {
-      const response = await ibge.get("/estados?orderBy=nome");
-
-      const ufInitials = response.data.map((uf) => {
+      const response = await localizacao.get("/estados.json");
+      console.log(response)
+      const ufInitials = response.data.estados.map((uf) => {
         return {
-          sigla: uf.sigla,
-          nome: uf.nome,
+          sigla: uf.id,
+          nome: uf.estado,
         };
       });
 
@@ -77,12 +87,12 @@ export default () => {
 
   // Load Cities
   useEffect(() => {
-    if (selectedUf === "0") return;
+    if (selectedUf === '') return;
 
     async function apiCities() {
-      const response = await ibge.get(`/estados/${selectedUf}/municipios`);
-
-      const cityNames = response.data.map((city) => city.nome);
+      const response = await localizacao.get(`/cidades/${selectedUf}.json`);
+      console.log(response.data)
+      const cityNames = response.data.cidades.map((city) => city.cidade);
 
       setCities(cityNames);
     }
@@ -96,13 +106,20 @@ export default () => {
 
   async function handleSubmit(event) {
     event.preventDefault();
+
+    if (formData.nickname === '') {
+      toast.warning('Preencha no minimo a razão social')
+      return
+    }
+
     const provider = {
       uf: selectedUf,
       city: selectedCity,
       nickname: formData.nickname,
       email: formData.email,
       telephone: formData.telephone,
-      cnpj: formData.cnpj
+      cnpj: formData.cnpj,
+      bank_data: formData.bank_data,
     }
 
     let response = {}
@@ -113,98 +130,96 @@ export default () => {
     }
 
     toast.success(response.data.message);
-    history.push("/provider");
+    history.goBack()
   }
 
   return (
-    <form className="p-5" onSubmit={handleSubmit} method="POST">
-      <div className='form-group'>
-        <legend>Cadastro de Fornecedor
-        </legend>
+    <>
+      <Button variant='secondary' size='lg' className='mb-4' onClick={() => history.goBack()}>Voltar</Button>
+      <form>
 
-        <label htmlFor="nickname">Razão</label>
-        <input
-          className="form-control"
-          type="text"
-          name="nickname"
-          id="nickname"
-          placeholder="Razão do Fornecedor"
+        <InputFormControl
+          label='Razão'
+          id='nickname'
+          name='nickname'
+          placeholder='Razão social'
           value={formData.nickname}
           onChange={handleChange}
         />
 
-        <label htmlFor="email">Email</label>
-        <input
-          className="form-control"
+        <InputFormControl
+          label='Email'
           type="email"
-          name="email"
           id="email"
-          placeholder="Email do Fornecedor
-          "
+          name="email"
+          placeholder="Email do Fornecedor"
           value={formData.email}
           onChange={handleChange}
         />
 
-        <label htmlFor="phone">Telefone</label>
-        <input
-          className="form-control"
+        <InputFormControl
+          label='Telefone'
           type="tel"
+          id="telephone"
           name="telephone"
-          id="phone"
-          placeholder="Telefone do Fornecedor
-          "
+          placeholder="Telefone do Fornecedor"
           value={formData.telephone}
           onChange={handleChange}
         />
 
-        <label htmlFor="cnpj">CNPJ</label>
-        <input
-          className="form-control"
-          type="text"
-          name="cnpj"
+        <InputFormControl
+          label='CNPJ'
           id="cnpj"
-          placeholder="CNPJ do Fornecedor
-          "
+          name="cnpj"
+          placeholder="CNPJ do Fornecedor"
           value={formData.cnpj}
           onChange={handleChange}
         />
 
-        <label htmlFor="selectedUf">Estado</label>
-        <select
-          className="form-control"
-          type="select"
+        <SelectFormControl
+          label='Estado'
           name="selectedUf"
           id="selectedUf"
           value={selectedUf}
           onChange={handleChange}
         >
-          <option>Selecionar Estado</option>
+          <option>{ufs.length === 0 ? '...Loanding' : 'Selecionar Estado'}</option>
           {ufs.map((uf, id) => (
             <option key={id} value={uf.sigla}>
               {uf.nome}
             </option>
           ))}
-        </select>
+        </SelectFormControl>
 
-        <label htmlFor="selectedCity">Cidade</label>
-        <select
-          className="form-control"
-          type="select"
+        <SelectFormControl
+          label='Cidade'
           name="selectedCity"
           id="selectedCity"
           value={selectedCity}
           onChange={handleChange}
         >
-          <option>Selecionar Cidade</option>
+          <option>{selectedUf === '0' ? 'Selecione um estado primeiro' : 'Selecionar Cidade'}</option>
           {cities.map((city, id) => (
             <option key={id}>{city}</option>
           ))}
-        </select>
-      </div>
-      <button type="submit" className="btn btn-primary">
-        Salvar Cadastro
-      </button>
-    </form>
+        </SelectFormControl>
+
+        <div class="form-group">
+          <label for="textareaBankData">Dados Bancarios</label>
+          <textarea
+            class="form-control form-control-lg"
+            id="textareaBankData"
+            name='bank_data'
+            rows="3"
+            value={formData.bank_data}
+            onChange={handleChange}
+          />
+        </div>
+
+        <Button variant="primary" size='lg' onClick={handleSubmit}> Salvar Cadastro </Button>
+
+      </form>
+    </>
   );
 }
 

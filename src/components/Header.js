@@ -1,5 +1,10 @@
 import React from "react";
 import { Link } from 'react-router-dom'
+import {
+  Navbar,
+  Nav,
+} from 'react-bootstrap'
+
 
 import logoCuca from '../assert/logo_cuca.svg'
 
@@ -7,24 +12,26 @@ import logoCuca from '../assert/logo_cuca.svg'
 export default function Header(props) {
 
   return (
+    <div className="sticky-top mb-5">
 
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow p-2 mb-3">
-      <Link to='/' className='text-white'>
-        <img src={logoCuca} width='120px' alt="Logo" />
-      </Link>
+      <Navbar bg="primary" variant="dark" className='shadow'>
+        <Navbar.Brand href="#home">
+          <Link to='/'>
+            <img src={logoCuca} width={props.logoWidth} alt="Logo" />
+          </Link>
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            {props.children}
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
 
-      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span className="navbar-toggler-icon"></span>
-      </button>
-
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav mr-auto">
-          {props.children}
-        </ul>
-      </div>
-    </nav>
-
-
-
+    </div>
   )
+}
+
+Header.defaultProps = {
+  logoWidth: '180px'
 }

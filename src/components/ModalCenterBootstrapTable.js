@@ -15,6 +15,7 @@ export default function ModalCenterBootstrapTable(props) {
         mode: "radio",//"checkbox",
         bgColor: "rgba(0,123,255,.4)",
         onSelect: onRowSelect,
+        clickToSelect: true,
     }
 
     return (
@@ -25,7 +26,7 @@ export default function ModalCenterBootstrapTable(props) {
             centered
         >
             <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter"> Pesquisa de Produto </Modal.Title>
+                <Modal.Title id="contained-modal-title-vcenter"> {props.title} </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <BootstrapTable

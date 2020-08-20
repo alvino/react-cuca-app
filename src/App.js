@@ -17,7 +17,9 @@ import Home from './pages/home'
 import Client from './pages/cliente'
 import Provider from './pages/fornecedor'
 import Estoque from './pages/estoque'
-import PDV from './pages/venda'
+import Orcamento from './pages/orcamento'
+import Venda from './pages/venda'
+import Entrada from './pages/entrada'
 
 
 function App() {
@@ -42,8 +44,14 @@ function App() {
 					<Route path="/estoque">
 						<Estoque />
 					</Route>
-					<Route path='/pdv'>
-						<PDV />
+					<Route path="/orcamento">
+						<Orcamento />
+					</Route>
+					<Route path='/venda'>
+						<Venda />
+					</Route>
+					<Route path='/entrada'>
+						<Entrada />
 					</Route>
 					<Redirect to='/' />
 				</Switch>

@@ -4,19 +4,33 @@ import api from "../../server/api";
 import { Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 
+
+import NumberFormat from '../../components/NumberFormat'
+import DateFormat from '../../components/DateFormat'
+
+
 export default () => {
   const history = useHistory()
 
-  const [providers, setProviders] = useState([]);
+  const [orcamentos, setOrcamentos] = useState([]);
   const [rowSelected, setRowSelected] = useState({ row: {}, isSelected: false })
 
   useEffect(() => {
     async function fetchData() {
-      const response = await api.get("/provider")
-      setProviders(response.data.providers)
+      const response = await api.get("/budget")
+      setOrcamentos(response.data.budgets)
     }
     fetchData()
   }, []);
+
+  function priceFormatter(cell, row) {
+    return <NumberFormat value={parseFloat(cell)} />
+
+  }
+  function dateFormatter(cell, row) {
+    return <DateFormat value={cell} />
+  }
+
 
   function onRowSelect(row, isSelected) {
     setRowSelected({ row, isSelected })
@@ -35,29 +49,30 @@ export default () => {
       <div className="d-flex justify-content-center">
 
 
-        <Button
-          variant='primary'
-          className='m-2'
-          size='lg'
-          onClick={() => history.push('/fornecedor/register')}
-        > Cadastra Fornecedor </Button>
 
         {
           rowSelected.isSelected ?
             <>
               <Button
-                variant='info'
+                variant='primary'
                 className='m-2'
                 size='lg'
-                onClick={() => history.push(`/fornecedor/register/${rowSelected.row.id}`)}
-              >Alterar Fornecedor</Button>
+                onClick={() => history.push(`/venda/fechamentodevenda/${rowSelected.row.id}`)}
+              > Finalizar Venda </Button>
+
+              <Button
+                variant='success'
+                className='m-2'
+                size='lg'
+                onClick={() => history.push(`/orcamento/print/${rowSelected.row.id}`)}
+              > Imprimir Orcamento </Button>
 
               <Button
                 variant='danger'
                 className='m-2'
                 size='lg'
-                onClick={() => history.push(`/fornecedor/delete/${rowSelected.row.id}`)}
-              > Deletar Fornecedor</Button>
+                onClick={() => history.push(`/orcamento/delete/${rowSelected.row.id}`)}
+              > Deletar Orcamento</Button>
             </>
             : ""
         }
@@ -66,7 +81,7 @@ export default () => {
 
       <BootstrapTable
         version="4"
-        data={providers}
+        data={orcamentos}
         selectRow={selectRow}
         pagination
         search
@@ -75,26 +90,17 @@ export default () => {
         csvFileName="table-provider.csv"
         ignoreSinglePage
       >
-        <TableHeaderColumn dataField="nickname" dataSort>
-          Razão
+        <TableHeaderColumn dataField="id" isKey={true} dataSort width='5%'>
+          COD.
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="email" dataSort>
-          Email
+        <TableHeaderColumn dataField="name" dataSort>
+          Cliente
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="telephone" >
-          Telefone
+        <TableHeaderColumn dataField="amount" dataSort width='15%' dataFormat={priceFormatter}>
+          Valor Total
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="cnpj" isKey={true} >
-          CNPJ
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="city" dataSort>
-          Cidade
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="uf" dataSort width='5%'>
-          Uf
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="bank_data" >
-          Dados Bancarios
+        <TableHeaderColumn dataField="created_at" dataSort width='15%' dataFormat={dateFormatter}>
+          Data
         </TableHeaderColumn>
       </BootstrapTable>
     </div>

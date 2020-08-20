@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import { Link } from 'react-router-dom'
 import api from "../../server/api";
+import { Button } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 
+import NumberFormat from '../../components/NumberFormat'
 
 export default () => {
+  const history = useHistory()
   const [stocks, setStocks] = useState([]);
   const [rowSelected, setRowSelected] = useState({ row: {}, isSelected: false })
 
   useEffect(() => {
     async function fetchDataStock() {
       const response = await api.get("/stock")
-      setStocks(response.data.stocks)
+      const serializeStock = response.data.stocks.map(
+        (item) => ({ ...item, stock: Number(item.quantity_purchase - item.sale_amount).toFixed(2) })
+      )
+
+      setStocks(serializeStock.filter((item) => (item.stock > 0)))
     }
     fetchDataStock()
   }, []);
@@ -24,27 +31,41 @@ export default () => {
     mode: "radio",
     bgColor: "rgba(0,123,255,.4)",
     onSelect: onRowSelect,
+    clickToSelect: true,
+  }
+
+  function priceFormatter(cell, row) {
+    return <NumberFormat value={parseFloat(cell)} />
+  }
+
+  function quantityFormatter(cell, row) {
+    return <NumberFormat value={parseFloat(cell)} prefix='' />
   }
 
   return (
     <div>
-      <ul className="nav justify-content-center">
-        <li className="nav-item mx-2">
-          <Link to="/estoque/register" className="nav-link btn-primary">
-            Cadastra Estoque
-        </Link>
-        </li>
+      <div className="d-flex justify-content-center">
+
+        <Button
+          variant='primary'
+          className='m-2'
+          size='lg'
+          onClick={() => history.push('/estoque/register')}
+        > Cadastra Estoque </Button>
 
         {
           rowSelected.isSelected ?
-            <li className="nav-item mx-2">
-              <Link to={`/estoque/delete/${rowSelected.row.id}`} className="nav-link btn-danger" >
-                Deletar Estoque
-              </Link>
-            </li>
+            <Button
+              variant='danger'
+              className='m-2'
+              size='lg'
+              onClick={() => history.push(`/estoque/delete/${rowSelected.row.id}`)}
+            > Deletar Estoque</Button>
+
             : ""
         }
-      </ul>
+      </div>
+
 
       <BootstrapTable
         version="4"
@@ -57,7 +78,7 @@ export default () => {
         csvFileName="table-stock.csv"
         ignoreSinglePage
       >
-        <TableHeaderColumn dataField="id" isKey={true} dataSort>
+        <TableHeaderColumn dataField="id" isKey={true} dataSort width='5%'>
           COD
         </TableHeaderColumn>
         <TableHeaderColumn dataField="description" dataSort>
@@ -66,16 +87,13 @@ export default () => {
         <TableHeaderColumn dataField="detail" dataSort>
           Detalhe
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="unit" dataSort>
+        <TableHeaderColumn dataField="unit" width='5%'>
           UND
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="quantity_purchase" dataSort>
-          Qt.
+        <TableHeaderColumn dataField="stock" dataSort width='10%' dataFormat={quantityFormatter}>
+          Estoque
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="sale_amount" dataSort>
-          Qt. OF
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="sale_value" dataSort>
+        <TableHeaderColumn dataField="sale_value" dataSort width='10%' dataFormat={priceFormatter} >
           Valor de Venda
         </TableHeaderColumn>
       </BootstrapTable>

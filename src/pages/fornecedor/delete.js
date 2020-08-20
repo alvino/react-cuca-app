@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from 'react-router-dom'
 import { toast } from "react-toastify";
 import api from '../../server/api'
+import { Button } from 'react-bootstrap'
 
 export default () => {
     const history = useHistory()
@@ -9,10 +10,11 @@ export default () => {
 
 
     const [formData, setFormData] = useState({
-        nickname: "",
-        email: "",
-        telephone: "",
-        cnpj: "",
+        nickname: '',
+        email: '',
+        telephone: '',
+        cnpj: '',
+        bank_data: '',
     });
 
     const [selectedUf, setSelectedUf] = useState("0");
@@ -35,10 +37,11 @@ export default () => {
             }
             toast.info(response.data.message)
             setFormData({
-                name: provider.name,
+                nickname: provider.nickname,
                 email: provider.email,
                 telephone: provider.telephone,
-                cpf: provider.cpf,
+                cnpj: provider.cnpj,
+                bank_data: provider.bank_data,
             })
             setSelectedUf(provider.uf)
             setSelectedCity(provider.city)
@@ -76,10 +79,12 @@ export default () => {
                 <p>Estado: {selectedUf}</p>
 
                 <p>Cidade: {selectedCity}</p>
+
+                <p>Dados Bancarios: {formData.bank_data}</p>
             </div>
-            <button className="btn btn-danger" onClick={handleSubmit}>
-                Confirma deleta
-            </button>
+            <Button variant="danger" size='lg' onClick={handleSubmit}>
+                Confirmar remoção
+            </Button>
         </div>
     )
 }
