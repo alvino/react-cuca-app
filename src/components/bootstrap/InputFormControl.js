@@ -9,11 +9,11 @@ export default function InputFormControl(props) {
             <label htmlFor={restProps.id}>{restProps.label}</label>
             {
                 children ?
-                    <div class="input-group mb-3">
+                    <div className="input-group mb-3">
                         <input
                             {...restProps}
                         />
-                        <div class="input-group-append">
+                        <div className="input-group-append">
                             {children}
                         </div>
                     </div>
