@@ -20,6 +20,7 @@ import Estoque from './pages/estoque'
 import Orcamento from './pages/orcamento'
 import Venda from './pages/venda'
 import Entrada from './pages/entrada'
+import Saida from './pages/saida'
 
 
 function App() {
@@ -52,6 +53,9 @@ function App() {
 					</Route>
 					<Route path='/entrada'>
 						<Entrada />
+					</Route>
+					<Route path='/saida'>
+						<Saida />
 					</Route>
 					<Redirect to='/' />
 				</Switch>
