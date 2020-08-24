@@ -71,7 +71,7 @@ export default () => {
   useEffect(() => {
     async function apiUfs() {
       const response = await localizacao.get("/estados.json");
-      console.log(response)
+    
       const ufInitials = response.data.estados.map((uf) => {
         return {
           sigla: uf.id,
@@ -91,7 +91,7 @@ export default () => {
 
     async function apiCities() {
       const response = await localizacao.get(`/cidades/${selectedUf}.json`);
-      console.log(response.data)
+      
       const cityNames = response.data.cidades.map((city) => city.cidade);
 
       setCities(cityNames);
@@ -204,10 +204,10 @@ export default () => {
           ))}
         </SelectFormControl>
 
-        <div class="form-group">
+        <div className="form-group">
           <label for="textareaBankData">Dados Bancarios</label>
           <textarea
-            class="form-control form-control-lg"
+            className="form-control form-control-lg"
             id="textareaBankData"
             name='bank_data'
             rows="3"

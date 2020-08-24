@@ -12,20 +12,20 @@ export default () => {
     const { id } = useParams(0)
 
 
-    const [venda, setVenda] = useState({})
+    const [gasto, setGasto] = useState({})
 
 
     useEffect(() => {        
         async function apiShow() {
-            const response = await api.get(`/sale/${id}`)
+            const response = await api.get(`/outlay/${id}`)
 
             if (response.status === 500) {
                 toast.error('Venda não encontrado')
-                history.push('/entrada')
+                history.push('/saida')
                 return
             }
-
-            setVenda(response.data.sale)
+            console.log(response.data)
+            setGasto(response.data.outlay)
             toast.info(response.data.message)
         }
 
@@ -39,28 +39,26 @@ export default () => {
         event.preventDefault();
 
 
-        const response = await api.delete(`/sale/${id}`)
+        const response = await api.delete(`/outlay/${id}`)
         toast.success(response.data.message);
 
 
-        history.push("/entrada");
+        history.push("/saida");
     }
 
     return (
         <div>
             <h2>Tem certeza que deseja deletar:</h2>
             <div className="mt-4 mb-4 justify-content-center">
-                <p >Codigo: {venda.id}</p>
+                <p >Codigo: {gasto.id}</p>
 
-                <p>Descrição: {venda.description}</p>
+                <p>Descrição: {gasto.description}</p>
 
-                <p>Parcela: {`${venda.parcel} de ${venda.all_parcel}`}</p>
+                <p>Valor: <NumberFormat value={gasto.amount}/> </p>
 
-                <p>Valor: <NumberFormat value={venda.amount}/> </p>
+                <p>Vencimento: <DateFormat value={gasto.date_outlay} /> </p>
 
-                <p>Data para receber: <DateFormat value={venda.date_sale} /> </p>
-
-                <p>Data da venda: <DateFormat value={venda.created_at} /></p>
+                <p>Data de criação: <DateFormat value={gasto.created_at} /></p>
             </div>
             <Button variant="danger" size='lg' onClick={handleSubmit}>
                 Confirmar remoção
@@ -68,4 +66,3 @@ export default () => {
         </div>
     )
 }
-

@@ -23,6 +23,7 @@ export default function NavBar() {
             <LiNavLink to='/fornecedor' title='Fornecedor' />
             <LiNavLink to='/estoque' title='Estoque' />
             <LiNavLink to='/orcamento' title='Orçamento' />
+            <LiNavLink to='/entrada' title='Entrada' />
         </Header>
     )
 }

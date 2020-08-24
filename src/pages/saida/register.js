@@ -10,56 +10,53 @@ import SelectFormControl from "../../components/bootstrap/SelectFormControl";
 import api from "../../server/api";
 import {priceFormatter, dateFormatter} from '../../utils/react-bootstrap-table-formatted'
 
+
 export default () => {
   const history = useHistory();
 
   const [data, setData] = useState();
   const [valor, setValor] = useState({ floatValue: 0 });
   const [descricao, setDescricao] = useState("");
-  const [selectedPagamento, setSelectedPagamento] = useState("A vista");
-  const [parcelas, setParcelas] = useState(1);
+  const [selected, setSelected] = useState("");
+  const [multiplicador, setMultiplicador] = useState(1);
 
-  const [sales, setSales] = useState([]);
+  const [outlays, setOutlays] = useState([]);
 
   useEffect(() => {
     setData(new Date().toISOString().substring(0, 10));
   }, []);
 
   useEffect(() => {
-    if (valor.floatValue && descricao) {
-      let sales = [];
-      const valor_venda = valor.floatValue;
+    if (valor && descricao) {
+      let outlays = [];
+
+      const valor_gasto = valor.floatValue;
       let [ano, mes, dia] = data.split("-").map((item) => parseInt(item));
       mes--;
-      const valor_parcelas = parseFloat((valor_venda / parcelas).toFixed(2));
-
       let index = 0;
       do {
         index++;
-        sales.push({
+        outlays.push({
           index,
           description: descricao,
-          amount: valor_parcelas,
-          all_parcel: parcelas,
-          parcel: index,
-          date_sale: new Date(ano, mes, dia).toISOString().substring(0, 10),
+          amount: valor_gasto,
+          date_outlay: new Date(ano, mes, dia).toISOString().substring(0, 10),
         });
         mes++;
-      } while (index < parcelas);
-
-      setSales(sales);
+      } while (index < multiplicador);
+      setOutlays(outlays);
     }
-  }, [data, valor, descricao, selectedPagamento, parcelas]);
+  }, [data, valor, descricao, multiplicador]);
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const serializedSale = sales.map((item) => {
-      const { index, ...sale } = item;
-      return sale;
+    const serielizedOutlay = outlays.map((item) => {
+      const { index, ...outlay } = item;
+      return outlay;
     });
 
-    const resposta = await api.post("/sale", serializedSale);
+    const resposta = await api.post("/outlay", serielizedOutlay);
 
     if (resposta.status === 200) {
       toast.success(resposta.data.message);
@@ -111,25 +108,25 @@ export default () => {
             />
 
             <SelectFormControl
-              label="Pagamento"
+              label="Vezes"
               id="selectedPagamento"
               name="selectedPagamento"
-              value={selectedPagamento}
-              onChange={(event) => setSelectedPagamento(event.target.value)}
+              value={selected}
+              onChange={(event) => setSelected(event.target.value)}
             >
-              <option>A vista</option>
-              <option>A prazo</option>
+              <option>Uma vez</option>
+              <option>Varias vezes</option>
             </SelectFormControl>
-            {selectedPagamento === "A prazo" ? (
+            {selected === "Varias vezes" ? (
               <InputFormControl
-                label="Parcelas"
+                label="Multiplicador"
                 type="Number"
                 className="form-control form-control-lg"
                 id="inputParcelas"
                 name="inputParcelas"
                 min="1"
-                value={parcelas}
-                onChange={(event) => setParcelas(event.target.value)}
+                value={multiplicador}
+                onChange={(event) => setMultiplicador(event.target.value)}
               />
             ) : (
               ""
@@ -141,34 +138,34 @@ export default () => {
             </Button>
           </Form>
         </div>
-
         <div className="col-9">
-          <BootstrapTable version="4" data={sales} pagination ignoreSinglePage>
-            <TableHeaderColumn dataField="index" isKey={true} width="5%">
+          <BootstrapTable
+            version="4"
+            data={outlays}
+            pagination
+            ignoreSinglePage
+          >
+            <TableHeaderColumn dataField="index" width="5%">
               #
             </TableHeaderColumn>
             <TableHeaderColumn dataField="description" dataSort>
               Descrição
             </TableHeaderColumn>
-            <TableHeaderColumn dataField="parcel" width="5%">
-              De
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="all_parcel" width="5%">
-              Parcelas
-            </TableHeaderColumn>
+
             <TableHeaderColumn
               dataField="amount"
               dataSort
               dataFormat={priceFormatter}
-              width="10%"
+              width="15%"
             >
               Valor
             </TableHeaderColumn>
             <TableHeaderColumn
-              dataField="date_sale"
+              dataField="date_outlay"
               dataSort
               dataFormat={dateFormatter}
-              width="10%"
+              width="15%"
+              isKey={true}
             >
               Data
             </TableHeaderColumn>

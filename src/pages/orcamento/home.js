@@ -5,8 +5,7 @@ import { Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 
 
-import NumberFormat from '../../components/NumberFormat'
-import DateFormat from '../../components/DateFormat'
+import {priceFormatter, dateFormatter} from '../../utils/react-bootstrap-table-formatted'
 
 
 export default () => {
@@ -22,15 +21,6 @@ export default () => {
     }
     fetchData()
   }, []);
-
-  function priceFormatter(cell, row) {
-    return <NumberFormat value={parseFloat(cell)} />
-
-  }
-  function dateFormatter(cell, row) {
-    return <DateFormat value={cell} />
-  }
-
 
   function onRowSelect(row, isSelected) {
     setRowSelected({ row, isSelected })

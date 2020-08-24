@@ -4,7 +4,9 @@ import api from "../../server/api";
 import { Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 
-import NumberFormat from '../../components/NumberFormat'
+
+import {priceFormatter, numberFormatter} from '../../utils/react-bootstrap-table-formatted'
+
 
 export default () => {
   const history = useHistory()
@@ -34,14 +36,7 @@ export default () => {
     clickToSelect: true,
   }
 
-  function priceFormatter(cell, row) {
-    return <NumberFormat value={parseFloat(cell)} />
-  }
-
-  function quantityFormatter(cell, row) {
-    return <NumberFormat value={parseFloat(cell)} prefix='' />
-  }
-
+  
   return (
     <div>
       <div className="d-flex justify-content-center">
@@ -90,7 +85,7 @@ export default () => {
         <TableHeaderColumn dataField="unit" width='5%'>
           UND
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="stock" dataSort width='10%' dataFormat={quantityFormatter}>
+        <TableHeaderColumn dataField="stock" dataSort width='10%' dataFormat={numberFormatter}>
           Estoque
         </TableHeaderColumn>
         <TableHeaderColumn dataField="sale_value" dataSort width='10%' dataFormat={priceFormatter} >

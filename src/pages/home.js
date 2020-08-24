@@ -50,7 +50,7 @@ export default () => {
               <FaPlus size='40px' />
             </Box>
 
-            <Box title='Saida' to='/entrada' >
+            <Box title='Saida' to='/saida' >
               <FaDollarSign size='110px' />
               <FaMinus size='40px' />
             </Box>

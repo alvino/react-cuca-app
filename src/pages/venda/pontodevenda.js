@@ -51,7 +51,7 @@ export default () => {
     async function fetchData() {
       const response = await api.get("/stock")
       const serializeStock = response.data.stocks.filter((item) => (item.sale_amount < item.quantity_purchase))
-      console.log(serializeStock)
+      
       setProdutos(serializeStock)
     }
     fetchData()
@@ -77,8 +77,6 @@ export default () => {
       quantity: quantidade.floatValue,
       amount: parseFloat((selectedProduto.sale_value * quantidade.floatValue).toFixed(2))
     }
-
-    console.log(pedido)
 
     setListaPedido([pedido, ...listaPedido])
     setSelectedProduto({})
