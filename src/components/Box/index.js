@@ -11,7 +11,7 @@ export default function (props) {
         >
 
             <div className='d-flex flex-column justify-content-center align-items-center' >
-                <div class="d-flex">
+                <div className="d-flex">
                     {props.children}
                 </div>
 
