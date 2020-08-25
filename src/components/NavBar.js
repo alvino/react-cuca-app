@@ -14,7 +14,7 @@ function LiNavLink(props) {
 }
 
 
-export default function NavBar() {
+function NavBar() {
     return (
         <Header
             logoWidth='120px'
@@ -27,3 +27,5 @@ export default function NavBar() {
         </Header>
     )
 }
+
+export default React.memo(NavBar)

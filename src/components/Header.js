@@ -4,7 +4,7 @@ import { Navbar, Nav } from "react-bootstrap";
 
 import logoCuca from "../assert/logo_cuca.svg";
 
-export default function Header(props) {
+function Header(props) {
   return (
     <Navbar bg="primary" variant="dark" className="shadow sticky-top mb-5">
       <Link to="/" className='navbar-brand'>
@@ -21,3 +21,5 @@ export default function Header(props) {
 Header.defaultProps = {
   logoWidth: "180px",
 };
+
+export default React.memo(Header)

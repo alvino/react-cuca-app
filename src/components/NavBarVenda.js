@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import logoCuca from '../assert/logo_cuca.svg'
 
 
-export default function NavBarVenda(props) {
+function NavBarVenda(props) {
     return (
         <div className="row p-3 mb-2 bg-primary text-white d-flex justify-content-between align-items-center sticky-top">
             <div>
@@ -26,3 +26,4 @@ export default function NavBarVenda(props) {
     )
 }
 
+export default React.memo(NavBarVenda)
