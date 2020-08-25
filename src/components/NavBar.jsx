@@ -24,6 +24,7 @@ function NavBar() {
             <LiNavLink to='/estoque' title='Estoque' />
             <LiNavLink to='/orcamento' title='Orçamento' />
             <LiNavLink to='/entrada' title='Entrada' />
+            <LiNavLink to='/saida' title='Saida' />
         </Header>
     )
 }
