@@ -213,7 +213,7 @@ export default () => {
           </Button>
 
           <p className="text-right">
-            <DateFormat value={orcamento.created_at} />
+            <DateFormat value={String(orcamento.created_at)} />
           </p>
 
           <p className="font-weight-bold text-uppercase mb-2">
