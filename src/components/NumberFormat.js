@@ -20,5 +20,5 @@ NumberFormat.defaultProps = {
 
 
 NumberFormat.propTypes = {
-    value: PropTypes.object.isRequired
+    value: PropTypes.number.isRequired
 }
