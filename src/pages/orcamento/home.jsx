@@ -42,28 +42,28 @@ export default () => {
 
         {
           rowSelected.isSelected ?
-            <>
+          <div className="btn-group " role="group" >
               <Button
                 variant='primary'
-                className='m-2'
+                className='p-2'
                 size='lg'
                 onClick={() => history.push(`/venda/fechamentodevenda/${rowSelected.row.id}`)}
               > Finalizar Venda </Button>
 
               <Button
                 variant='success'
-                className='m-2'
+                className='p-2'
                 size='lg'
                 onClick={() => history.push(`/orcamento/print/${rowSelected.row.id}`)}
               > Imprimir Orcamento </Button>
 
               <Button
                 variant='danger'
-                className='m-2'
+                className='p-2'
                 size='lg'
                 onClick={() => history.push(`/orcamento/delete/${rowSelected.row.id}`)}
               > Deletar Orcamento</Button>
-            </>
+            </div>
             : ""
         }
 

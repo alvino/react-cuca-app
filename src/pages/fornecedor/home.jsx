@@ -34,10 +34,10 @@ export default () => {
 
       <div className="d-flex justify-content-center">
 
-
+      <div className="btn-group " role="group" >
         <Button
           variant='primary'
-          className='m-2'
+          className='p-2'
           size='lg'
           onClick={() => history.push('/fornecedor/register')}
         > Cadastra Fornecedor </Button>
@@ -47,21 +47,21 @@ export default () => {
             <>
               <Button
                 variant='info'
-                className='m-2'
+                className='p-2'
                 size='lg'
                 onClick={() => history.push(`/fornecedor/register/${rowSelected.row.id}`)}
               >Alterar Fornecedor</Button>
 
               <Button
                 variant='danger'
-                className='m-2'
+                className='p-2'
                 size='lg'
                 onClick={() => history.push(`/fornecedor/delete/${rowSelected.row.id}`)}
               > Deletar Fornecedor</Button>
             </>
             : ""
         }
-
+</div>
       </div>
 
       <BootstrapTable

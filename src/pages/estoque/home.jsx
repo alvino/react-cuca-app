@@ -40,10 +40,10 @@ export default () => {
   return (
     <div>
       <div className="d-flex justify-content-center">
-
+      <div className="btn-group " role="group" >
         <Button
           variant='primary'
-          className='m-2'
+          className='p-2'
           size='lg'
           onClick={() => history.push('/estoque/register')}
         > Cadastra Estoque </Button>
@@ -52,7 +52,7 @@ export default () => {
           rowSelected.isSelected ?
             <Button
               variant='danger'
-              className='m-2'
+              className='p-2'
               size='lg'
               onClick={() => history.push(`/estoque/delete/${rowSelected.row.id}`)}
             > Deletar Estoque</Button>
@@ -60,7 +60,7 @@ export default () => {
             : ""
         }
       </div>
-
+</div>
 
       <BootstrapTable
         version="4"

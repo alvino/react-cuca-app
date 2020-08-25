@@ -38,7 +38,7 @@ export default () => {
         <div className="btn-group " role="group">
           <Button
             variant="primary"
-            className="m-2"
+            className="p-2"
             size="lg"
             onClick={() => history.push("/cliente/register")}
           >
@@ -49,7 +49,7 @@ export default () => {
             <>
               <Button
                 variant="info"
-                className="m-2"
+                className="p-2"
                 size="lg"
                 onClick={() =>
                   history.push(`/cliente/register/${rowSelected.row.id}`)
@@ -60,7 +60,7 @@ export default () => {
 
               <Button
                 variant="danger"
-                className="m-2"
+                className="p-2"
                 size="lg"
                 onClick={() =>
                   history.push(`/cliente/delete/${rowSelected.row.id}`)
