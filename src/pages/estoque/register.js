@@ -197,7 +197,7 @@ export default () => {
         <ModalCenterBootstrapTable
           title='Lista de Fornecedores'
           show={modalShowFornecedor}
-          dataList={providers}
+          data={providers}
           onSelected={handleSelectedFornecedor}
           onHide={() => setModalShowFornecedor(false)}
         >
