@@ -12,13 +12,11 @@ import {
   FaMapMarkedAlt,
 } from "react-icons/fa";
 
-
 import NumberFormat from "../../../components/NumberFormat";
 import DateFormat from "../../../components/DateFormat";
 import logoCuca from "../../../assert/logo_cuca.svg";
 import qrcodeWhats from "../../../assert/whatsapp.png";
 import "./style.css";
-
 
 export default () => {
   const history = useHistory();
@@ -50,16 +48,13 @@ export default () => {
     }
 
     apiShow();
-    // eslint-disable-next-line
-  }, []);
+  }, [history, id]);
 
   useEffect(() => {
-    setDataOrcamento(<DateFormat value={orcamento.created_at} />);
+    setDataOrcamento(<DateFormat value={String(orcamento.created_at)} />);
   }, [orcamento]);
 
-  const handleImprimir = () => {
-    window.print();
-  };
+  const handleImprimir = () => window.print();
 
   return (
     <div>
@@ -142,7 +137,7 @@ export default () => {
           <p className="h1 text-center m-4  ">Orçamento</p>
 
           <p className="h4 my-2">
-            Codigo: <NumberFormat format="###########" value={id} />
+            Codigo: <NumberFormat format="###########" value={Number(id)} />
           </p>
 
           <p className="text-right">Alto Horizonte-GO, {dataOrcamento}</p>
@@ -163,7 +158,7 @@ export default () => {
             <p className="text-right font-weight-bold">
               <span className="h4">
                 {" "}
-                <NumberFormat value={orcamento.amount} />{" "}
+                <NumberFormat value={Number(orcamento.amount)} />{" "}
               </span>
             </p>
             <table className="table">
