@@ -73,7 +73,7 @@ export default () => {
             size="lg"
             onClick={() => history.push(`/saida/print`)}
           >
-            Imprimir Orcamento
+            Relatorio de Gastos
           </Button>
         </div>
 

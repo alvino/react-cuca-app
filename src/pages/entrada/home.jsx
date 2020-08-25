@@ -76,7 +76,7 @@ export default () => {
               size="lg"
               onClick={() => history.push(`/entrada/print`)}
             >
-              Imprimir Orcamento
+              Relatorio de Ganhos
             </Button>
           </div>
 
