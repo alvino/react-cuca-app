@@ -1,8 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import api from "../../server/api";
 import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+
+import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
+
+const columns = [
+  {
+    dataField: "name",
+    text: "Nome",
+    sort: true,
+  },
+  {
+    dataField: "cpf",
+    text: "CPF/CNPJ",
+    headerStyle: { width: "15%" },
+  },
+  {
+    dataField: "email",
+    text: "Email",
+    sort: true,
+  },
+  {
+    dataField: "telephone",
+    text: "Telefone",
+    headerStyle: { width: "10%" },
+  },
+  {
+    dataField: "city",
+    text: "Cidade",
+    sort: true,
+  },
+  {
+    dataField: "uf",
+    text: "Estado",
+    sort: true,
+    headerStyle: { width: "5%" },
+  },
+];
 
 export default () => {
   const history = useHistory();
@@ -21,16 +56,9 @@ export default () => {
     fetchData();
   }, []);
 
-  function onRowSelect(row, isSelected) {
+  function onSelect(row, isSelected) {
     setRowSelected({ row, isSelected });
   }
-
-  const selectRow = {
-    mode: "radio", //"checkbox",
-    bgColor: "rgba(0,123,255,.4)",
-    onSelect: onRowSelect,
-    clickToSelect: true,
-  };
 
   return (
     <div>
@@ -75,34 +103,14 @@ export default () => {
         </div>
       </div>
 
-      <BootstrapTable
-        version="4"
-        data={clients}
-        selectRow={selectRow}
-        pagination
-        search
-        hover
-        exportCSV
-        csvFileName="table-clientes.csv"
-        ignoreSinglePage
-      >
-        <TableHeaderColumn dataField="name" dataSort>
-          Name
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="email" dataSort>
-          Email
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="telephone">Telefone</TableHeaderColumn>
-        <TableHeaderColumn dataField="cpf" isKey={true} width="15%">
-          CPF/CNPJ
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="city" dataSort>
-          Cidade
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="uf" dataSort width="5%">
-          Uf
-        </TableHeaderColumn>
-      </BootstrapTable>
+      <div>
+        <BootstrapPaginationExportSearchDataTable
+          keyField="cpf"
+          data={clients}
+          columns={columns}
+          onSelect={onSelect}
+        />
+      </div>
     </div>
   );
 };

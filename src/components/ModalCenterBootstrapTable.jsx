@@ -1,49 +1,50 @@
-import React from 'react'
-import { BootstrapTable } from 'react-bootstrap-table'
-import {
-    Modal
-} from 'react-bootstrap'
+import React from "react";
+import PropTypes from "prop-types";
+import { Modal } from "react-bootstrap";
 
+import BootstrapPaginationSearchDataTable from "../components/bootstrap/BootstrapPaginationSearchDataTable";
 
-export default function ModalCenterBootstrapTable({onSelected, onHide, data, title, ...props}) {
-    function onRowSelect(row, isSelected) {
-        onSelected(row, isSelected)
-        onHide()
-    }
+export default function ModalCenterBootstrapTable({
+  onSelected,
+  onHide,
+  data,
+  title,
+  keyField,
+  columns,
+  ...props
+}) {
 
-    const selectRow = {
-        mode: "radio",//"checkbox",
-        bgColor: "rgba(0,123,255,.4)",
-        onSelect: onRowSelect,
-        clickToSelect: true,
-    }
+  function onSelect(row, isSelected) {
+    onSelected(row, isSelected);
+    onHide();
+  }
 
-    return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            onHide={onHide}
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter"> {title} </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <BootstrapTable
-                    version="4"
-                    data={data}
-                    selectRow={selectRow}
-                    pagination
-                    search
-                    hover
-                    ignoreSinglePage
-                >
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      onHide={onHide}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter"> {title} </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <BootstrapPaginationSearchDataTable
+          keyField={keyField}
+          data={data}
+          onSelect={onSelect}
+          columns={columns}
+          hover
+        />
+      </Modal.Body>
+    </Modal>
+  );
+}
 
-                    {props.children}
-
-                </BootstrapTable>
-            </Modal.Body>
-        </Modal>
-    );
+ModalCenterBootstrapTable.propTypes = {
+    keyField: PropTypes.string.isRequired,
+    data: PropTypes.array.isRequired,
+    columns: PropTypes.array.isRequired,
 }

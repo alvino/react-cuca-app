@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
+import BootstrapTable from 'react-bootstrap-table-next'
+
 
 import api from "../../server/api";
 import InputFormControl from "../../components/bootstrap/InputFormControl";
@@ -12,6 +13,45 @@ import DateFormat from "../../components/DateFormat";
 import SelectFormControl from "../../components/bootstrap/SelectFormControl";
 import NavBarVenda from "../../components/NavBarVenda";
 import {priceFormatter, numberFormatter} from '../../utils/react-bootstrap-table-formatted'
+
+
+
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+
+
+const columns = [
+  {
+    dataField: "index",
+    text: "#",
+    headerStyle: { width: "5%" },
+  },
+  {
+    dataField: "description",
+    text: "Descrição",
+  },
+  {
+    dataField: "detail",
+    text: "Detalhe",
+  },
+  {
+    dataField: "quantity",
+    text: "Quant.",
+    headerStyle: { width: "10%" },
+    formatter: numberFormatter,
+  },
+  {
+    dataField: "sale_value",
+    text: "Valor Unt.",
+    headerStyle: { width: "15%" },
+    formatter: priceFormatter,
+  },
+  {
+    dataField: "amount",
+    text: "Valor Total",
+    headerStyle: { width: "15%" },
+    formatter: priceFormatter,
+  },
+];
 
 export default () => {
   const history = useHistory();
@@ -236,45 +276,11 @@ export default () => {
 
           <div className="mt-3">
             <BootstrapTable
-              version="4"
+              keyField="index"
               data={listaPedido}
-              pagination
-              ignoreSinglePage
-            >
-              <TableHeaderColumn dataField="index" width="5%">
-                #
-              </TableHeaderColumn>
-              <TableHeaderColumn dataField="description">
-                Descrição
-              </TableHeaderColumn>
-
-              <TableHeaderColumn dataField="detail">Detalhes</TableHeaderColumn>
-
-              <TableHeaderColumn
-                dataField="quantity"
-                width="7%"
-                isKey={true}
-                dataFormat={numberFormatter}
-              >
-                Valor
-              </TableHeaderColumn>
-
-              <TableHeaderColumn
-                dataField="sale_value"
-                dataFormat={priceFormatter}
-                width="15%"
-              >
-                Valor Unit.
-              </TableHeaderColumn>
-
-              <TableHeaderColumn
-                dataField="amount"
-                dataFormat={priceFormatter}
-                width="15%"
-              >
-                Valor Total.
-              </TableHeaderColumn>
-            </BootstrapTable>
+              columns={columns}
+            />
+              
           </div>
         </div>
       </div>

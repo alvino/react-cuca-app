@@ -1,11 +1,49 @@
 import React, { useState, useEffect } from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import api from "../../server/api";
 import { Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 
 
 import {priceFormatter, numberFormatter} from '../../utils/react-bootstrap-table-formatted'
+import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
+
+const columns = [
+  {
+    dataField: "id",
+    text: "Cod",
+    sort: true,
+    headerStyle: { width: "5%" },
+  },
+  {
+    dataField: "description",
+    text: "Descrição",
+    sort: true,
+  },
+  {
+    dataField: "detail",
+    text: "Detalhe",
+    sort: true,
+  },
+  {
+    dataField: "unit",
+    text: "UND",
+    headerStyle: { width: "5%" },
+  },
+  {
+    dataField: "stock",
+    text: "Estoque",
+    sort: true,
+    headerStyle: { width: "7%" },
+    formatter: numberFormatter,
+  },
+  {
+    dataField: "sale_value",
+    text: "Valor de Venda",
+    sort: true,
+    headerStyle: { width: "10%" },
+    formatter: priceFormatter,
+  }
+];
 
 
 export default () => {
@@ -25,17 +63,9 @@ export default () => {
     fetchDataStock()
   }, []);
 
-  function onRowSelect(row, isSelected) {
+  function onSelect(row, isSelected) {
     setRowSelected({ row, isSelected })
   }
-
-  const selectRow = {
-    mode: "radio",
-    bgColor: "rgba(0,123,255,.4)",
-    onSelect: onRowSelect,
-    clickToSelect: true,
-  }
-
   
   return (
     <div>
@@ -62,36 +92,13 @@ export default () => {
       </div>
 </div>
 
-      <BootstrapTable
-        version="4"
+      <BootstrapPaginationExportSearchDataTable
+        keyField='id'
         data={stocks}
-        selectRow={selectRow}
-        pagination
-        search
-        hover
-        exportCSV
-        csvFileName="table-stock.csv"
-        ignoreSinglePage
-      >
-        <TableHeaderColumn dataField="id" isKey={true} dataSort width='5%'>
-          COD
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="description" dataSort>
-          Descrição
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="detail" dataSort>
-          Detalhe
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="unit" width='5%'>
-          UND
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="stock" dataSort width='10%' dataFormat={numberFormatter}>
-          Estoque
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="sale_value" dataSort width='10%' dataFormat={priceFormatter} >
-          Valor de Venda
-        </TableHeaderColumn>
-      </BootstrapTable>
+        onSelect={onSelect}
+        columns={columns}
+      />
+        
     </div>
   );
 }

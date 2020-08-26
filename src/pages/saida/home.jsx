@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
@@ -8,6 +7,34 @@ import {
   priceFormatter,
   dateFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
+import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
+
+const columns = [
+  {
+    dataField: "id",
+    text: "Cod",
+    sort: true,headerStyle: { width: "5%" },
+  },
+  {
+    dataField: "description",
+    text: "Descrição",sort: true,
+  },
+  {
+    dataField: "amount",
+    text: "Valor",
+    sort: true,headerStyle: { width: "10%" },
+    formatter: priceFormatter,
+  },
+  {
+    dataField: "date_outlay",
+    text: "Data",
+    headerStyle: { width: "10%" },
+    formatter: dateFormatter,
+  },
+  
+];
+
+
 
 export default () => {
   const history = useHistory();
@@ -28,19 +55,12 @@ export default () => {
     fetchData();
   }, []);
 
-  function onRowSelect(row, isSelected) {
+  function onSelect(row, isSelected) {
     setRowSelected({
       row,
       isSelected,
     });
   }
-
-  const selectRow = {
-    mode: "radio", //"checkbox",
-    bgColor: "rgba(0,123,255,.4)",
-    onSelect: onRowSelect,
-    clickToSelect: true,
-  };
 
   return (
     <>
@@ -83,41 +103,13 @@ export default () => {
       <div >
         
 
-        <BootstrapTable
-          version="4"
+        <BootstrapPaginationExportSearchDataTable
+          keyField='id'
           data={outlays}
-          selectRow={selectRow}
-          pagination
-          search
-          hover
-          exportCSV
-          csvFileName={`tabela de gastos.csv`}
-          ignoreSinglePage
-        >
-          <TableHeaderColumn dataField="id" isKey={true} width="5%">
-            COD.
-          </TableHeaderColumn>
-          <TableHeaderColumn dataField="description" dataSort>
-            Descrição
-          </TableHeaderColumn>
-
-          <TableHeaderColumn
-            dataField="amount"
-            dataSort
-            dataFormat={priceFormatter}
-            width="10%"
-          >
-            Valor
-          </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField="date_outlay"
-            dataSort
-            dataFormat={dateFormatter}
-            width="10%"
-          >
-            Data
-          </TableHeaderColumn>
-        </BootstrapTable>
+          onSelect={onSelect}
+          columns={columns}
+        />
+         
       </div>
     </>
   );

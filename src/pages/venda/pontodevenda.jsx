@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
-import { TableHeaderColumn } from "react-bootstrap-table";
 import {
   BsListUl as IconList,
   BsTrashFill as IconRemoveList,
@@ -14,6 +13,19 @@ import InputFormControl from "../../components/bootstrap/InputFormControl";
 import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
 import NumberFormat from "../../components/NumberFormat";
 import NavBarVenda from "../../components/NavBarVenda";
+
+const columnsProdutos = [
+  {dataField: 'id', text: '#', headerStyle: {width: '10%'}},
+  {dataField: 'description', text: 'Descrição',},
+  {dataField: 'detail', text: 'Detalhe', headerStyle: {width: '20%'}},
+]
+
+const columnsCliente = [
+  {dataField: 'id', text: '#', headerStyle: {width: '10%'}},
+  {dataField: 'name', text: 'Nome',},
+  {dataField: 'cpf', text: 'CPF/CNPJ', headerStyle: {width: '30%'}},
+]
+
 
 export default () => {
   const history = useHistory();
@@ -159,22 +171,15 @@ export default () => {
             </InputFormControl>
 
             <ModalCenterBootstrapTable
-              title="Lista do Estoque"
+              title="Lista de Produtos"
               show={modalShowProduto}
               data={produtos}
               onSelected={handleSelectedProduto}
               onHide={() => setModalShowProduto(false)}
-            >
-              <TableHeaderColumn dataField="id" isKey width="10%">
-                #
-              </TableHeaderColumn>
-              <TableHeaderColumn dataField="description">
-                Descrição
-              </TableHeaderColumn>
-              <TableHeaderColumn dataField="detail" width="20%">
-                Detalhe
-              </TableHeaderColumn>
-            </ModalCenterBootstrapTable>
+              keyField='id'
+              columns={columnsProdutos}
+            />
+             
 
             <InputNumberFormat
               label="Quantidade"
@@ -253,15 +258,10 @@ export default () => {
             data={clientes}
             onSelected={handleSelectedCliente}
             onHide={() => setModalShowCliente(false)}
-          >
-            <TableHeaderColumn dataField="id" isKey={true} width="10%">
-              #
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="name">Nome</TableHeaderColumn>
-            <TableHeaderColumn dataField="cpf" width="30%">
-              CPF
-            </TableHeaderColumn>
-          </ModalCenterBootstrapTable>
+            keyField='id'
+            columns={columnsCliente}
+          />
+           
 
           <table className="table table-hover table-sm">
             <thead>

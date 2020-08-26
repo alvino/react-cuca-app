@@ -1,11 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import api from "../../server/api";
 import { Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 
 
 import {priceFormatter, dateFormatter} from '../../utils/react-bootstrap-table-formatted'
+import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
+
+const columns = [
+  {
+    dataField: "id",
+    text: "Cod",
+    sort: true,
+    headerStyle: { width: "5%" },
+  },
+  {
+    dataField: "name",
+    text: "Nome",
+    sort: true,
+  },
+  {
+    dataField: "amount",
+    text: "valor Total",
+    formatter: priceFormatter,
+    headerStyle: { width: "10%" },
+  },
+  {
+    dataField: "created_at",
+    text: "Data",
+    sort: true,
+    headerStyle: { width: "10%" },
+    formatter: dateFormatter
+  }
+];
 
 
 export default () => {
@@ -22,17 +49,11 @@ export default () => {
     fetchData()
   }, []);
 
-  function onRowSelect(row, isSelected) {
+  function onSelect(row, isSelected) {
     setRowSelected({ row, isSelected })
   }
 
-  const selectRow = {
-    mode: "radio",
-    bgColor: "rgba(0,123,255,.4)",
-    onSelect: onRowSelect,
-    clickToSelect: true,
-  }
-
+ 
   return (
     <div>
 
@@ -69,30 +90,13 @@ export default () => {
 
       </div>
 
-      <BootstrapTable
-        version="4"
+      <BootstrapPaginationExportSearchDataTable
+        keyField='id'
         data={orcamentos}
-        selectRow={selectRow}
-        pagination
-        search
-        hover
-        exportCSV
-        csvFileName="table-provider.csv"
-        ignoreSinglePage
-      >
-        <TableHeaderColumn dataField="id" isKey={true} dataSort width='5%'>
-          COD.
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="name" dataSort>
-          Cliente
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="amount" dataSort width='15%' dataFormat={priceFormatter}>
-          Valor Total
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="created_at" dataSort width='15%' dataFormat={dateFormatter}>
-          Data
-        </TableHeaderColumn>
-      </BootstrapTable>
+        onSelect={onSelect}
+        columns={columns}
+      />
+        
     </div>
   );
 }
