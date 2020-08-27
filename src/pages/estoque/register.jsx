@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
-import { TableHeaderColumn } from 'react-bootstrap-table'
 import {
   BsListUl as IconList,
   BsTrashFill as IconRemoveList
@@ -15,6 +14,23 @@ import InputFormControl from '../../components/bootstrap/InputFormControl'
 import InputNumberFormat from '../../components/bootstrap/InputNumberFormat'
 import NumberFormat from '../../components/NumberFormat'
 
+
+const columnsProviders =[
+  {
+    dataField: 'id',
+    text: '#',
+    headerStyle: {width: '10%'}
+  },
+  {
+    dataField: 'nickname',
+    text: 'Descrição',
+  },
+  {
+    dataField: 'cnpj',
+    text: 'CNPJ/CPF',
+    headerStyle: {width: '20%'}
+  }
+]
 
 
 export default () => {
@@ -200,11 +216,10 @@ export default () => {
           data={providers}
           onSelected={handleSelectedFornecedor}
           onHide={() => setModalShowFornecedor(false)}
-        >
-          <TableHeaderColumn dataField="id" isKey={true} width='10%' >#</TableHeaderColumn>
-          <TableHeaderColumn dataField="nickname" >Descrição</TableHeaderColumn>
-          <TableHeaderColumn dataField="cnpj" width='20%'>Detalhe</TableHeaderColumn>
-        </ModalCenterBootstrapTable>
+          keyField='id'
+          columns={columnsProviders}
+        />
+         
 
 
         <table className="table table-hover">

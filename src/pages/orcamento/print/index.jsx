@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../../server/api";
@@ -11,12 +11,54 @@ import {
   FaFacebook,
   FaMapMarkedAlt,
 } from "react-icons/fa";
+import BootstrapTable from "react-bootstrap-table-next";
 
 import NumberFormat from "../../../components/NumberFormat";
 import DateFormat from "../../../components/DateFormat";
+import {
+  numberFormatter,
+  priceFormatter,
+} from "../../../utils/react-bootstrap-table-formatted";
+
 import logoCuca from "../../../assert/logo_cuca.svg";
 import qrcodeWhats from "../../../assert/whatsapp.png";
 import "./style.css";
+
+const columns = [
+  {
+    dataField: "index",
+    text: "#",
+    headerStyle: { width: "5%" },
+  },
+  {
+    dataField: "description",
+    text: "Descrição",
+  },
+  {
+    dataField: "detail",
+    text: "Detalhe",
+  },
+  {
+    dataField: "quantity",
+    text: "Quant.",
+    headerStyle: { width: "10%" },
+    formatter: numberFormatter,
+  },
+  {
+    dataField: "sale_value",
+    text: "Valor Unit.",
+    headerStyle: { width: "15%", textAlign: "right" },
+    style: { textAlign: "right" },
+    formatter: priceFormatter,
+  },
+  {
+    dataField: "amount",
+    text: "Valor Total",
+    headerStyle: { width: "15%", textAlign: "right" },
+    style: { textAlign: "right" },
+    formatter: priceFormatter,
+  },
+];
 
 export default () => {
   const history = useHistory();
@@ -42,7 +84,12 @@ export default () => {
         return;
       }
 
-      setListaPedido(response.data.wish_list);
+      const serializedWishList = response.data.wish_list.map((item, index) => ({
+        index: index + 1,
+        ...item,
+      }));
+
+      setListaPedido(serializedWishList);
       setOrcamento(response.data.budget);
       setCliente(response.data.client);
     }
@@ -54,11 +101,22 @@ export default () => {
     setDataOrcamento(<DateFormat value={String(orcamento.created_at)} />);
   }, [orcamento]);
 
+  const dataList = useMemo(() => {
+    return (
+      <BootstrapTable
+        bootstrap4
+        keyField="index"
+        data={listaPedido}
+        columns={columns}
+      />
+    );
+  }, [listaPedido]);
+
   const handleImprimir = () => window.print();
 
   return (
     <div>
-      <div className="btn-group mb-5" role="group">
+      <div className="btn-group mb-5 noprint" role="group">
         <Button variant="secondary" size="lg" onClick={() => history.goBack()}>
           Voltar
         </Button>
@@ -161,44 +219,8 @@ export default () => {
                 <NumberFormat value={Number(orcamento.amount)} />{" "}
               </span>
             </p>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col" style={{ width: "5%" }}>
-                    #
-                  </th>
-                  <th scope="col">Descrição</th>
-                  <th scope="col">Detalhes</th>
-                  <th scope="col" style={{ width: "5%" }}>
-                    Quant.
-                  </th>
-                  <th scope="col" style={{ width: "15%", textAlign: "right" }}>
-                    Valor Unit.
-                  </th>
-                  <th scope="col" style={{ width: "15%", textAlign: "right" }}>
-                    Valor Total.
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {listaPedido.map((produto, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{produto.description}</td>
-                    <td>{produto.detail}</td>
-                    <td>
-                      <NumberFormat value={produto.quantity} prefix="" />
-                    </td>
-                    <td style={{ textAlign: "right" }}>
-                      <NumberFormat value={produto.sale_value} />
-                    </td>
-                    <td style={{ textAlign: "right" }}>
-                      <NumberFormat value={produto.amount} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+
+            {dataList}
           </div>
         </div>
       </div>

@@ -2,13 +2,24 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button, Form } from "react-bootstrap";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
+import BootstrapTable from 'react-bootstrap-table-next'
 
 import InputFormControl from "../../components/bootstrap/InputFormControl";
 import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
 import SelectFormControl from "../../components/bootstrap/SelectFormControl";
 import api from "../../server/api";
 import {priceFormatter, dateFormatter} from '../../utils/react-bootstrap-table-formatted'
+
+
+const columns = [
+  {dataField: 'index', text: '#', headerStyle: {width: '5%'}},
+  {dataField: 'description', text: 'Descrição'},
+  {dataField: 'parcel', text: 'De', headerStyle: {width: '5%'}},
+  {dataField: 'all_parcel', text: 'Parc.',headerStyle: {width: '5%'}},
+  {dataField: 'amount', text: 'Valor', formatter: priceFormatter, headerStyle: {width: '10%'}},
+  {dataField: 'date_sale', text: 'Data', formatter: dateFormatter, headerStyle: {width: '10%'}},
+]
+
 
 export default () => {
   const history = useHistory();
@@ -143,36 +154,13 @@ export default () => {
         </div>
 
         <div className="col-9">
-          <BootstrapTable version="4" data={sales} pagination ignoreSinglePage>
-            <TableHeaderColumn dataField="index" isKey={true} width="5%">
-              #
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="description" dataSort>
-              Descrição
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="parcel" width="5%">
-              De
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="all_parcel" width="5%">
-              Parcelas
-            </TableHeaderColumn>
-            <TableHeaderColumn
-              dataField="amount"
-              dataSort
-              dataFormat={priceFormatter}
-              width="10%"
-            >
-              Valor
-            </TableHeaderColumn>
-            <TableHeaderColumn
-              dataField="date_sale"
-              dataSort
-              dataFormat={dateFormatter}
-              width="10%"
-            >
-              Data
-            </TableHeaderColumn>
-          </BootstrapTable>
+          <BootstrapTable 
+          bootstrap4={true} 
+          keyField='index'
+          data={sales} 
+          columns={columns}
+          />
+            
         </div>
       </div>
     </>

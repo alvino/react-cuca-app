@@ -2,13 +2,34 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button, Form } from "react-bootstrap";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
+import BootstrapTable from "react-bootstrap-table-next";
 
 import InputFormControl from "../../components/bootstrap/InputFormControl";
 import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
 import SelectFormControl from "../../components/bootstrap/SelectFormControl";
 import api from "../../server/api";
 import {priceFormatter, dateFormatter} from '../../utils/react-bootstrap-table-formatted'
+
+
+const columns = [
+  {
+    dataField: 'index', text: '#',
+    headerStyle: {width: '5%'}
+  },
+  {
+    dataField: 'description', text: 'Descrição',
+  },
+  {
+    dataField: 'amount', text: 'Valor',
+    headerStyle: {width: '15%'},
+    formatter: priceFormatter,
+  },
+  {
+    dataField: 'date_outlay', text: 'Data',
+    headerStyle: {width: '15%'},
+    formatter: dateFormatter
+  },
+]
 
 
 export default () => {
@@ -140,36 +161,12 @@ export default () => {
         </div>
         <div className="col-9">
           <BootstrapTable
-            version="4"
+            bootstrap4
             data={outlays}
-            pagination
-            ignoreSinglePage
-          >
-            <TableHeaderColumn dataField="index" width="5%">
-              #
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="description" dataSort>
-              Descrição
-            </TableHeaderColumn>
-
-            <TableHeaderColumn
-              dataField="amount"
-              dataSort
-              dataFormat={priceFormatter}
-              width="15%"
-            >
-              Valor
-            </TableHeaderColumn>
-            <TableHeaderColumn
-              dataField="date_outlay"
-              dataSort
-              dataFormat={dateFormatter}
-              width="15%"
-              isKey={true}
-            >
-              Data
-            </TableHeaderColumn>
-          </BootstrapTable>
+            keyField='index'
+            columns={columns}
+          />
+           
         </div>
       </div>
     </>

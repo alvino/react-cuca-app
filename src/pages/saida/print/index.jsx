@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import api from "../../../server/api";
 import { Button, Form, ToggleButton, ButtonGroup } from "react-bootstrap";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
+import BootstrapTable from "react-bootstrap-table-next";
 
 
 import InputFormControl from "../../../components/bootstrap/InputFormControl";
@@ -16,6 +16,26 @@ import {
 
 import logoCuca from "../../../assert/logo_cuca.svg";
 import "./style.css";
+
+const columns = [
+  {
+    dataField: 'id', text: '#',
+    headerStyle: {width: '5%'}
+  },
+  {
+    dataField: 'description', text: 'Descrição',
+  },
+  {
+    dataField: 'amount', text: 'Valor',
+    headerStyle: {width: '15%'},
+    formatter: priceFormatter,
+  },
+  {
+    dataField: 'date_outlay', text: 'Data',
+    headerStyle: {width: '15%'},
+    formatter: dateFormatter
+  },
+]
 
 
 export default () => {
@@ -229,36 +249,13 @@ export default () => {
                   <NumberFormat value={valorTotal} />
                 </span>
               </p>
-              <BootstrapTable version="4" data={outlays}>
-                <TableHeaderColumn
-                  dataField="id"
-                  isKey={true}
-                  width="5%"
-                  dataSort
-                >
-                  #
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="description" dataSort>
-                  Descrição
-                </TableHeaderColumn>
-
-                <TableHeaderColumn
-                  dataField="amount"
-                  dataSort
-                  dataFormat={priceFormatter}
-                  width="10%"
-                >
-                  Valor
-                </TableHeaderColumn>
-                <TableHeaderColumn
-                  dataField="date_outlay"
-                  dataSort
-                  dataFormat={dateFormatter}
-                  width="10%"
-                >
-                  Data
-                </TableHeaderColumn>
-              </BootstrapTable>
+              <BootstrapTable 
+              bootstrap4 
+              data={outlays}
+                keyField='id'
+                columns={columns}
+                />
+               
             </div>
           </div>
         </div>
