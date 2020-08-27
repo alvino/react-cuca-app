@@ -28,7 +28,7 @@ function BootstrapPaginationExportSearchDataTable({onSelect,...props}) {
   return (
     <ToolkitProvider
       {...props}
-      bootstrap4={true}
+      bootstrap4
       loading={true}
       search
       exportCSV

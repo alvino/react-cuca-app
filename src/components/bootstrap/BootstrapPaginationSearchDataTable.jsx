@@ -26,8 +26,8 @@ function BootstrapPaginationSearchDataTable({onSelect,...props}) {
   return (
     <ToolkitProvider
       {...props}
-      bootstrap4={true}
-      loading={true}
+      bootstrap4
+      loading
       search
     >
       {(props) => (
