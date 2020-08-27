@@ -11,40 +11,29 @@ export default () => {
     const history = useHistory()
     const { id } = useParams(0)
 
-
     const [venda, setVenda] = useState({})
-
 
     useEffect(() => {        
         async function apiShow() {
             const response = await api.get(`/sale/${id}`)
-
             if (response.status === 500) {
                 toast.error('Venda não encontrado')
                 history.push('/entrada')
                 return
             }
-
             setVenda(response.data.sale)
             toast.info(response.data.message)
         }
-
         apiShow()
-        // eslint-disable-next-line
-    }, [id])
+    }, [history, id])
 
-
-    async function handleSubmit(event) {
-
+    const handleSubmit = ( async (event) => {
         event.preventDefault();
-
-
         const response = await api.delete(`/sale/${id}`)
         toast.success(response.data.message);
-
-
         history.push("/entrada");
-    }
+    }, [])
+
 
     return (
         <div>

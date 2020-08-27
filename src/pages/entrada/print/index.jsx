@@ -4,7 +4,6 @@ import api from "../../../server/api";
 import { Button, Form, ToggleButton, ButtonGroup } from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 
-
 import InputFormControl from "../../../components/bootstrap/InputFormControl";
 import SelectFormControl from "../../../components/bootstrap/SelectFormControl";
 import NumberFormat from "../../../components/NumberFormat";
@@ -13,19 +12,28 @@ import {
   dateFormatter,
 } from "../../../utils/react-bootstrap-table-formatted";
 
-
 import logoCuca from "../../../assert/logo_cuca.svg";
 import "./style.css";
+import { useCallback } from "react";
 
 const columns = [
-  {dataField: 'id', text: '#', headerStyle: {width: '5%'}},
-  {dataField: 'description', text: 'Descrição'},
-  {dataField: 'parcel', text: 'De',headerStyle: {width: '5%'}},
-  {dataField: 'all_parcel', text: 'Parc.',headerStyle: {width: '5%'}},
-  {dataField: 'amount', text: 'Valor', formatter: priceFormatter, headerStyle: {width: '15%'}},
-  {dataField: 'date_sale', text: 'Data', formatter: dateFormatter, headerStyle: {width: '10%'}},
-]
-
+  { dataField: "id", text: "#", headerStyle: { width: "5%" } },
+  { dataField: "description", text: "Descrição" },
+  { dataField: "parcel", text: "De", headerStyle: { width: "5%" } },
+  { dataField: "all_parcel", text: "Parc.", headerStyle: { width: "5%" } },
+  {
+    dataField: "amount",
+    text: "Valor",
+    formatter: priceFormatter,
+    headerStyle: { width: "15%" },
+  },
+  {
+    dataField: "date_sale",
+    text: "Data",
+    formatter: dateFormatter,
+    headerStyle: { width: "10%" },
+  },
+];
 
 export default () => {
   const history = useHistory();
@@ -62,9 +70,9 @@ export default () => {
     setValorTotal(sales.reduce((acc, item) => acc + item.amount, 0.0));
   }, [sales]);
 
-  const handleImprimir = () => {
+  const handleImprimir = useCallback(() => {
     window.print();
-  };
+  }, []);
 
   return (
     <div>
@@ -221,7 +229,6 @@ export default () => {
                 </span>
               </div>
             </div>
-
           </div>
 
           <div className=" mb-auto">
@@ -238,11 +245,11 @@ export default () => {
                   <NumberFormat value={valorTotal} />
                 </span>
               </p>
-              <BootstrapTable 
-              bootstrap4 
-              keyField='id'
-              data={sales}
-              columns={columns}
+              <BootstrapTable
+                bootstrap4
+                keyField="id"
+                data={sales}
+                columns={columns}
               />
             </div>
           </div>

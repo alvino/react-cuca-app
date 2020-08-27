@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap'
 
 import NumberFormat from '../../components/NumberFormat'
 import DateFormat from '../../components/DateFormat'
+import { useCallback } from "react";
 
 export default () => {
     const history = useHistory()
@@ -34,17 +35,13 @@ export default () => {
     }, [id])
 
 
-    async function handleSubmit(event) {
-
+     const handleSubmit = useCallback( async event => {
         event.preventDefault();
-
-
         const response = await api.delete(`/outlay/${id}`)
         toast.success(response.data.message);
-
-
         history.push("/saida");
-    }
+    }, [history, id])
+
 
     return (
         <div>

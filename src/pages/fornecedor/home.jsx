@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import api from "../../server/api";
-import { Button } from 'react-bootstrap'
-import { useHistory } from 'react-router-dom'
+import { Button } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 
 import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
 
@@ -39,63 +39,74 @@ const columns = [
   },
   {
     dataField: "bank_data",
-    text: "Dados Bancarios"
-  }
+    text: "Dados Bancarios",
+  },
 ];
 
 export default () => {
-  const history = useHistory()
+  const history = useHistory();
 
   const [providers, setProviders] = useState([]);
-  const [rowSelected, setRowSelected] = useState({ row: {}, isSelected: false })
+  const [rowSelected, setRowSelected] = useState({
+    row: {},
+    isSelected: false,
+  });
 
   useEffect(() => {
     async function fetchData() {
-      const response = await api.get("/provider")
-      setProviders(response.data.providers)
+      const response = await api.get("/provider");
+      setProviders(response.data.providers);
     }
-    fetchData()
+    fetchData();
   }, []);
 
-  function onSelect(row, isSelected) {
-    setRowSelected({ row, isSelected })
-  }
-
- 
+  const onSelect = useCallback((row, isSelected) => {
+    setRowSelected({ row, isSelected });
+  }, []);
 
   return (
     <div>
-
       <div className="d-flex justify-content-center">
+        <div className="btn-group " role="group">
+          <Button
+            variant="primary"
+            className="p-2"
+            size="lg"
+            onClick={() => history.push("/fornecedor/register")}
+          >
+            {" "}
+            Cadastra Fornecedor{" "}
+          </Button>
 
-      <div className="btn-group " role="group" >
-        <Button
-          variant='primary'
-          className='p-2'
-          size='lg'
-          onClick={() => history.push('/fornecedor/register')}
-        > Cadastra Fornecedor </Button>
-
-        {
-          rowSelected.isSelected ?
+          {rowSelected.isSelected ? (
             <>
               <Button
-                variant='info'
-                className='p-2'
-                size='lg'
-                onClick={() => history.push(`/fornecedor/register/${rowSelected.row.id}`)}
-              >Alterar Fornecedor</Button>
+                variant="info"
+                className="p-2"
+                size="lg"
+                onClick={() =>
+                  history.push(`/fornecedor/register/${rowSelected.row.id}`)
+                }
+              >
+                Alterar Fornecedor
+              </Button>
 
               <Button
-                variant='danger'
-                className='p-2'
-                size='lg'
-                onClick={() => history.push(`/fornecedor/delete/${rowSelected.row.id}`)}
-              > Deletar Fornecedor</Button>
+                variant="danger"
+                className="p-2"
+                size="lg"
+                onClick={() =>
+                  history.push(`/fornecedor/delete/${rowSelected.row.id}`)
+                }
+              >
+                {" "}
+                Deletar Fornecedor
+              </Button>
             </>
-            : ""
-        }
-</div>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
 
       <BootstrapPaginationExportSearchDataTable
@@ -104,7 +115,6 @@ export default () => {
         onSelect={onSelect}
         columns={columns}
       />
-       
     </div>
   );
-}
+};

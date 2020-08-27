@@ -4,7 +4,6 @@ import api from "../../../server/api";
 import { Button, Form, ToggleButton, ButtonGroup } from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 
-
 import InputFormControl from "../../../components/bootstrap/InputFormControl";
 import SelectFormControl from "../../../components/bootstrap/SelectFormControl";
 import NumberFormat from "../../../components/NumberFormat";
@@ -13,30 +12,33 @@ import {
   dateFormatter,
 } from "../../../utils/react-bootstrap-table-formatted";
 
-
 import logoCuca from "../../../assert/logo_cuca.svg";
 import "./style.css";
+import { useCallback } from "react";
 
 const columns = [
   {
-    dataField: 'id', text: '#',
-    headerStyle: {width: '5%'}
+    dataField: "id",
+    text: "#",
+    headerStyle: { width: "5%" },
   },
   {
-    dataField: 'description', text: 'Descrição',
+    dataField: "description",
+    text: "Descrição",
   },
   {
-    dataField: 'amount', text: 'Valor',
-    headerStyle: {width: '15%'},
+    dataField: "amount",
+    text: "Valor",
+    headerStyle: { width: "15%" },
     formatter: priceFormatter,
   },
   {
-    dataField: 'date_outlay', text: 'Data',
-    headerStyle: {width: '15%'},
-    formatter: dateFormatter
+    dataField: "date_outlay",
+    text: "Data",
+    headerStyle: { width: "15%" },
+    formatter: dateFormatter,
   },
-]
-
+];
 
 export default () => {
   const history = useHistory();
@@ -49,25 +51,26 @@ export default () => {
   const [outlays, setOutlays] = useState([]);
   const [valorTotal, setValorTotal] = useState();
 
-  useEffect(() => {
-    async function fetchData() {
-      let date_outlay = "";
+  const apiQueryOutlay = useCallback(async () => {
+    let date_outlay = "";
 
-      if (checked) {
-        date_outlay = date_outlay + ano;
-        date_outlay =
-          mes === "" ? date_outlay : [date_outlay, mes, dia].join("-");
-      }
-
-      const query = {
-        date_outlay,
-      };
-
-      const response = await api.get("/outlay", { params: query });
-      setOutlays(response.data.outlays);
+    if (checked) {
+      date_outlay = date_outlay + ano;
+      date_outlay =
+        mes === "" ? date_outlay : [date_outlay, mes, dia].join("-");
     }
-    fetchData();
-  }, [ano, mes, dia, checked]);
+
+    const query = {
+      date_outlay,
+    };
+
+    const response = await api.get("/outlay", { params: query });
+    setOutlays(response.data.outlays);
+  }, [ano, checked, dia, mes]);
+
+  useEffect(() => {
+    apiQueryOutlay();
+  }, [apiQueryOutlay]);
 
   useEffect(() => {
     if (outlays.heigth === 0) return;
@@ -249,13 +252,12 @@ export default () => {
                   <NumberFormat value={valorTotal} />
                 </span>
               </p>
-              <BootstrapTable 
-              bootstrap4 
-              data={outlays}
-                keyField='id'
+              <BootstrapTable
+                bootstrap4
+                data={outlays}
+                keyField="id"
                 columns={columns}
-                />
-               
+              />
             </div>
           </div>
         </div>

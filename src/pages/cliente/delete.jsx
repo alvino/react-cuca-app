@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useHistory, useParams } from 'react-router-dom'
 import { toast } from "react-toastify";
 import api from '../../server/api'
@@ -50,17 +50,13 @@ export default () => {
     }, [])
 
 
-    async function handleSubmit(event) {
-
+    const handleSubmit = useCallback( async (event) => {
         event.preventDefault();
-
 
         const response = await api.delete(`/client/${id}`)
         toast.success(response.data.message);
-
-
         history.push("/cliente");
-    }
+    }, [history, id] )
 
     return (
         <div>

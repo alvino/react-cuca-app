@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
@@ -96,17 +96,16 @@ export default () => {
     }
   }, [selectedPagamento]);
 
-  const handlerOnValueChangeDesconto = (values) => {
+  const handlerOnValueChangeDesconto = useCallback(values => {
     if (values.formattedValue === "") values = { value: 0, floatValue: 0 };
-
     setDesconto(values);
-  };
+  }, [])
 
   const handlerPushImprimir = () => {
     history.push(`/orcamento/print/${id}`);
   };
 
-  const handleConfirmarConclusaoVenda = async () => {
+  const handleConfirmarConclusaoVenda = useCallback( async () => {
     let sales = [];
     let multiplicador = parcelas / 30;
     let [ano, mes, dia] = new Date()
@@ -156,8 +155,6 @@ export default () => {
       mes++;
     }
 
-    
-
     const resposta = await api.post("/sale", sales);
 
     if (resposta.status === 200) {
@@ -166,7 +163,7 @@ export default () => {
     } else {
       toast.error(resposta.data.message);
     }
-  };
+  }, [cliente.name, entrada.floatValue, history, id, parcelas, selectedPagamento, valorTotal])
 
   
 

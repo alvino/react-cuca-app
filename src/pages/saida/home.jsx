@@ -8,6 +8,7 @@ import {
   dateFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
 import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
+import { useCallback } from "react";
 
 const columns = [
   {
@@ -55,12 +56,13 @@ export default () => {
     fetchData();
   }, []);
 
-  function onSelect(row, isSelected) {
+  const onSelect = useCallback( (row, isSelected) => {
     setRowSelected({
       row,
       isSelected,
     });
-  }
+  }, [])
+  
 
   return (
     <>

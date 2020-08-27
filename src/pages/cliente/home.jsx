@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import api from "../../server/api";
 import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
@@ -56,9 +56,9 @@ export default () => {
     fetchData();
   }, []);
 
-  function onSelect(row, isSelected) {
+  const onSelect = useCallback((row, isSelected) => {
     setRowSelected({ row, isSelected });
-  }
+  }, []);
 
   return (
     <div>

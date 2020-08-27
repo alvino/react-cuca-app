@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from 'react-router-dom'
-// eslint-disable-next-line
 import { toast } from "react-toastify";
 import { Button, Form } from 'react-bootstrap'
 
@@ -8,9 +7,9 @@ import InputFormControl from '../../components/bootstrap/InputFormControl'
 import InputNumberFormat from '../../components/bootstrap/InputNumberFormat'
 import SelectFormControl from '../../components/bootstrap/SelectFormControl'
 
-
 import api from '../../server/api'
 import localizacao from '../../server/localizacao'
+import { useCallback } from "react";
 
 export default () => {
 	const history = useHistory()
@@ -29,14 +28,6 @@ export default () => {
 	const [selectedUf, setSelectedUf] = useState('');
 	const [selectedCity, setSelectedCity] = useState('');
 
-	const actionChangeElementsValues = {
-		selectedUf: (value) => setSelectedUf(value),
-		selectedCity: (value) => setSelectedCity(value),
-		name: (value) => setFormData({ ...formData, name: value }),
-		email: (value) => setFormData({ ...formData, email: value }),
-		telephone: (value) => setFormData({ ...formData, telephone: value }),
-		cpf: (value) => setFormData({ ...formData, cpf: value }),
-	};
 
 	useEffect(() => {
 		if (!id) return
@@ -74,32 +65,24 @@ export default () => {
 					nome: uf.estado,
 				};
 			});
-
 			setUfs(ufInitials)
 		}
-
 		apiUfs()
 	}, [])
 
 	// Load Cities
 	useEffect(() => {
 		if (selectedUf === '') return;
-
 		async function apiCities() {
 			const response = await localizacao.get(`/cidades/${selectedUf}.json`);
 			const cityNames = response.data.cidades.map((city) => city.cidade);
-
 			setCities(cityNames);
 		}
-
 		apiCities();
 	}, [selectedUf]);
 
-	function handleChange(event) {
-		actionChangeElementsValues[event.target.name](event.target.value);
-	}
-
-	async function handleSubmit(event) {
+	
+	 const handleSubmit = useCallback( async(event) => {
 		event.preventDefault();
 
 		if (formData.name === '') {
@@ -125,7 +108,7 @@ export default () => {
 
 		if (response.data) toast.success(response.data.message);
 		history.goBack()
-	}
+	}, [formData.cpf, formData.email, formData.name, formData.telephone, history, id, selectedCity, selectedUf])
 
 	return (
 		<>
@@ -139,7 +122,7 @@ export default () => {
 					name="name"
 					placeholder="Nome do Cliente"
 					value={formData.name}
-					onChange={handleChange}
+					onChange={(e) => setFormData({...formData, name: e.target.value})}
 				/>
 
 				<InputFormControl
@@ -149,7 +132,7 @@ export default () => {
 					name="email"
 					placeholder="Email do Cliente"
 					value={formData.email}
-					onChange={handleChange}
+					onChange={(e) => setFormData({...formData, email: e.target.value})}
 				/>
 
 				<InputNumberFormat
@@ -169,7 +152,7 @@ export default () => {
 					name="cpf"
 					placeholder="CPF/CNPJ do Cliente"
 					value={formData.cpf}
-					onChange={handleChange}
+					onChange={(e) => setFormData({...formData, cpf: e.target.value})}
 				/>
 
 				<SelectFormControl
@@ -177,7 +160,7 @@ export default () => {
 					name="selectedUf"
 					id="selectedUf"
 					value={selectedUf}
-					onChange={handleChange}
+					onChange={(e) => setSelectedUf( e.target.value )}
 				>
 					<option>{ufs.length === 0 ? '...Loanding' : 'Selecionar Estado'}</option>
 					{ufs.map((uf, id) => (
@@ -192,7 +175,7 @@ export default () => {
 					name="selectedCity"
 					id="selectedCity"
 					value={selectedCity}
-					onChange={handleChange}
+					onChange={(e) => setSelectedCity(e.target.value)}
 				>
 					<option>{selectedUf === '0' ? 'Selecione um estado primeiro' : 'Selecionar Cidade'}</option>
 					{cities.map((city, id) => (

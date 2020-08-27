@@ -23,6 +23,7 @@ import {
 import logoCuca from "../../../assert/logo_cuca.svg";
 import qrcodeWhats from "../../../assert/whatsapp.png";
 import "./style.css";
+import { useCallback } from "react";
 
 const columns = [
   {
@@ -69,33 +70,32 @@ export default () => {
   const [listaPedido, setListaPedido] = useState([]);
   const [dataOrcamento, setDataOrcamento] = useState("");
 
+  const apiShow = useCallback(async () => {
+    const response = await api.get(`/budget/${id}`);
+    const budget = response.data.budget;
+    if (!budget) {
+      toast.error("orcamento não encontrado");
+      history.push("/orcamento");
+      return;
+    }
+
+    const serializedWishList = response.data.wish_list.map((item, index) => ({
+      index: index + 1,
+      ...item,
+    }));
+
+    setListaPedido(serializedWishList);
+    setOrcamento(response.data.budget);
+    setCliente(response.data.client);
+  }, [history, id]);
+
   useEffect(() => {
     if (!id) {
       history.push("/orcamento");
       return;
     }
-
-    async function apiShow() {
-      const response = await api.get(`/budget/${id}`);
-      const budget = response.data.budget;
-      if (!budget) {
-        toast.error("orcamento não encontrado");
-        history.push("/orcamento");
-        return;
-      }
-
-      const serializedWishList = response.data.wish_list.map((item, index) => ({
-        index: index + 1,
-        ...item,
-      }));
-
-      setListaPedido(serializedWishList);
-      setOrcamento(response.data.budget);
-      setCliente(response.data.client);
-    }
-
     apiShow();
-  }, [history, id]);
+  }, [apiShow, history, id]);
 
   useEffect(() => {
     setDataOrcamento(<DateFormat value={String(orcamento.created_at)} />);
@@ -114,6 +114,7 @@ export default () => {
 
   const handleImprimir = () => window.print();
 
+  
   return (
     <div>
       <div className="btn-group mb-5 noprint" role="group">

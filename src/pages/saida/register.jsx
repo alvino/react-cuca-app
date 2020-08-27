@@ -8,29 +8,35 @@ import InputFormControl from "../../components/bootstrap/InputFormControl";
 import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
 import SelectFormControl from "../../components/bootstrap/SelectFormControl";
 import api from "../../server/api";
-import {priceFormatter, dateFormatter} from '../../utils/react-bootstrap-table-formatted'
-
+import {
+  priceFormatter,
+  dateFormatter,
+} from "../../utils/react-bootstrap-table-formatted";
+import { useCallback } from "react";
 
 const columns = [
   {
-    dataField: 'index', text: '#',
-    headerStyle: {width: '5%'}
+    dataField: "index",
+    text: "#",
+    headerStyle: { width: "5%" },
   },
   {
-    dataField: 'description', text: 'Descrição',
+    dataField: "description",
+    text: "Descrição",
   },
   {
-    dataField: 'amount', text: 'Valor',
-    headerStyle: {width: '15%'},
+    dataField: "amount",
+    text: "Valor",
+    headerStyle: { width: "15%" },
     formatter: priceFormatter,
   },
   {
-    dataField: 'date_outlay', text: 'Data',
-    headerStyle: {width: '15%'},
-    formatter: dateFormatter
+    dataField: "date_outlay",
+    text: "Data",
+    headerStyle: { width: "15%" },
+    formatter: dateFormatter,
   },
-]
-
+];
 
 export default () => {
   const history = useHistory();
@@ -69,24 +75,25 @@ export default () => {
     }
   }, [data, valor, descricao, multiplicador]);
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    async (event) => {
+      event.preventDefault();
+      const serielizedOutlay = outlays.map((item) => {
+        const { index, ...outlay } = item;
+        return outlay;
+      });
+      const resposta = await api.post("/outlay", serielizedOutlay);
+      if (resposta.status === 200) {
+        toast.success(resposta.data.message);
+        history.goBack();
+      } else {
+        toast.error(resposta.data.message);
+      }
+    },
+    [history, outlays]
+  );
 
-    const serielizedOutlay = outlays.map((item) => {
-      const { index, ...outlay } = item;
-      return outlay;
-    });
-
-    const resposta = await api.post("/outlay", serielizedOutlay);
-
-    if (resposta.status === 200) {
-      toast.success(resposta.data.message);
-      history.goBack();
-    } else {
-      toast.error(resposta.data.message);
-    }
-  }
-
+  
   return (
     <>
       <div className="row p-3">
@@ -163,10 +170,9 @@ export default () => {
           <BootstrapTable
             bootstrap4
             data={outlays}
-            keyField='index'
+            keyField="index"
             columns={columns}
           />
-           
         </div>
       </div>
     </>

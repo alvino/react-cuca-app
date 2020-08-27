@@ -9,6 +9,7 @@ import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
 import SelectFormControl from "../../components/bootstrap/SelectFormControl";
 import api from "../../server/api";
 import {priceFormatter, dateFormatter} from '../../utils/react-bootstrap-table-formatted'
+import { useCallback } from "react";
 
 
 const columns = [
@@ -62,7 +63,7 @@ export default () => {
     }
   }, [data, valor, descricao, selectedPagamento, parcelas]);
 
-  async function handleSubmit(event) {
+  const handleSubmit = useCallback( async (event) => {
     event.preventDefault();
 
     const serializedSale = sales.map((item) => {
@@ -78,8 +79,9 @@ export default () => {
     } else {
       toast.error(resposta.data.message);
     }
-  }
+  }, [history, sales])
 
+  
   return (
     <>
       <div className="row p-3">

@@ -3,6 +3,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import api from '../../server/api'
 import { Button } from 'react-bootstrap'
+import { useCallback } from "react";
 
 export default () => {
     const history = useHistory()
@@ -25,7 +26,6 @@ export default () => {
             history.push("/estoque")
             return
         }
-
         async function apiShow() {
             const responseStock = await api.get(`/stock/${id}`)
             const [stock] = responseStock.data.stock
@@ -46,20 +46,16 @@ export default () => {
                 sale_value: stock.sale_value
             })
         }
-
         apiShow()
-        // eslint-disable-next-line
-    }, [])
+    }, [history, id])
 
-
-    async function handleSubmit(event) {
+    const handleSubmit = useCallback( async (event) => {
         event.preventDefault();
-
         const response = await api.delete(`/stock/${id}`)
         toast.success(response.data.message)
-
         history.push("/estoque")
-    }
+    }, [history, id])
+
 
     return (
         <div>

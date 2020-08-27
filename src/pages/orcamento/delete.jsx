@@ -3,6 +3,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { toast } from "react-toastify";
 import api from '../../server/api'
 import { Button } from 'react-bootstrap'
+import { useCallback } from "react";
 
 export default () => {
   const history = useHistory()
@@ -13,14 +14,7 @@ export default () => {
   const [cliente, setCliente] = useState({})
   const [listaPedido, setListaPedido] = useState([])
 
-
-  useEffect(() => {
-    if (!id) {
-      history.push("/orcamento")
-      return
-    }
-
-    async function apiShow() {
+  const apiShow = useCallback( async () => {
       const response = await api.get(`/budget/${id}`)
       const budget = response.data.budget
       if (!budget) {
@@ -34,11 +28,15 @@ export default () => {
       setOrcamento(response.data.budget)
       setCliente(response.data.client)
 
-    }
+    }, [history, id])
 
+  useEffect(() => {
+    if (!id) {
+      history.push("/orcamento")
+      return
+    }
     apiShow()
-    // eslint-disable-next-line
-  }, [])
+  }, [apiShow, history, id])
 
 
   async function handleSubmit(event) {

@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom'
 
 import {priceFormatter, numberFormatter} from '../../utils/react-bootstrap-table-formatted'
 import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
+import { useCallback } from "react";
 
 const columns = [
   {
@@ -63,10 +64,11 @@ export default () => {
     fetchDataStock()
   }, []);
 
-  function onSelect(row, isSelected) {
+  const onSelect = useCallback( (row, isSelected) => {
     setRowSelected({ row, isSelected })
-  }
+  }, [])
   
+
   return (
     <div>
       <div className="d-flex justify-content-center">

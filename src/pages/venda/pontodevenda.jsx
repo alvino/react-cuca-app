@@ -13,19 +13,19 @@ import InputFormControl from "../../components/bootstrap/InputFormControl";
 import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
 import NumberFormat from "../../components/NumberFormat";
 import NavBarVenda from "../../components/NavBarVenda";
+import { useCallback } from "react";
 
 const columnsProdutos = [
-  {dataField: 'id', text: '#', headerStyle: {width: '10%'}},
-  {dataField: 'description', text: 'Descrição',},
-  {dataField: 'detail', text: 'Detalhe', headerStyle: {width: '20%'}},
-]
+  { dataField: "id", text: "#", headerStyle: { width: "10%" } },
+  { dataField: "description", text: "Descrição" },
+  { dataField: "detail", text: "Detalhe", headerStyle: { width: "20%" } },
+];
 
 const columnsCliente = [
-  {dataField: 'id', text: '#', headerStyle: {width: '10%'}},
-  {dataField: 'name', text: 'Nome',},
-  {dataField: 'cpf', text: 'CPF/CNPJ', headerStyle: {width: '30%'}},
-]
-
+  { dataField: "id", text: "#", headerStyle: { width: "10%" } },
+  { dataField: "name", text: "Nome" },
+  { dataField: "cpf", text: "CPF/CNPJ", headerStyle: { width: "30%" } },
+];
 
 export default () => {
   const history = useHistory();
@@ -58,7 +58,6 @@ export default () => {
       const serializeStock = response.data.stocks.filter(
         (item) => item.sale_amount < item.quantity_purchase
       );
-
       setProdutos(serializeStock);
     }
     fetchData();
@@ -77,7 +76,7 @@ export default () => {
     setValorTotal(total);
   }, [listaPedido]);
 
-  const handleAdicionar = () => {
+  const handleAdicionar = useCallback(() => {
     if (!selectedProduto.description) {
       toast.warning(
         "Selecione um produto e confira a quantidade antes de adicionar a lista."
@@ -100,9 +99,9 @@ export default () => {
       formattedValue: "1",
       floatValue: 1,
     });
-  };
+  }, [listaPedido, quantidade.floatValue, selectedProduto]);
 
-  const handleSelectedProduto = (row, isSelected) => {
+  const handleSelectedProduto = useCallback((row, isSelected) => {
     setSelectedProduto(row);
     const estoque = parseFloat(row.quantity_purchase - row.sale_amount);
     setQuantidade({
@@ -110,13 +109,13 @@ export default () => {
       floatValue: parseFloat(estoque),
       value: parseFloat(estoque),
     });
-  };
+  }, []);
 
-  const handleSelectedCliente = (row, isSelected) => {
+  const handleSelectedCliente = useCallback((row, isSelected) => {
     setSelectedCliente(row);
-  };
+  }, []);
 
-  const handleFinalizarPedido = async () => {
+  const handleFinalizarPedido = useCallback( async () => {
     const orcamento = {
       client: selectedCliente,
       created_at: data,
@@ -132,7 +131,8 @@ export default () => {
       toast.error(response.data.message);
       return;
     }
-  };
+  }, [data, history, listaPedido, selectedCliente, valorTotal])
+
 
   return (
     <div className="container-fluid">
@@ -176,10 +176,9 @@ export default () => {
               data={produtos}
               onSelected={handleSelectedProduto}
               onHide={() => setModalShowProduto(false)}
-              keyField='id'
+              keyField="id"
               columns={columnsProdutos}
             />
-             
 
             <InputNumberFormat
               label="Quantidade"
@@ -258,10 +257,9 @@ export default () => {
             data={clientes}
             onSelected={handleSelectedCliente}
             onHide={() => setModalShowCliente(false)}
-            keyField='id'
+            keyField="id"
             columns={columnsCliente}
           />
-           
 
           <table className="table table-hover table-sm">
             <thead>
