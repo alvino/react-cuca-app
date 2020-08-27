@@ -1,7 +1,11 @@
 
 @media print {
-  
   html {
+    visibility: hidden;
+  }
+
+  .noprint {
+    display: none;
     visibility: hidden;
   }
 
@@ -16,5 +20,4 @@
     margin: 5mm 6mm 2mm 6mm;
     page-break-after: always;
   }
-
 }

@@ -2,13 +2,19 @@
 
 
 @media print {
-  .page {
+  html {
+    visibility: hidden;
+  }
+
+  .noprint {
+    display: none;
+    visibility: hidden;
+  }
+
+  .print {
     margin: 0;
     box-shadow: 0;
-  }
-  
-  button {
-    visibility: hidden;
+    visibility: visible;
   }
 
   @page {
@@ -16,5 +22,4 @@
     margin: 5mm 6mm 2mm 6mm;
     page-break-after: always;
   }
-
 }
