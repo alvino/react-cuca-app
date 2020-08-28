@@ -93,7 +93,6 @@ export default () => {
     [history, outlays]
   );
 
-  
   return (
     <>
       <div className="row p-3">
@@ -111,9 +110,9 @@ export default () => {
           <Form>
             <InputFormControl
               label="Data"
-              className="form-control form-control-lg"
               type="date"
               id="inputData"
+              name="inputData"
               value={data}
               onChange={(event) => setData(event.target.value)}
             />

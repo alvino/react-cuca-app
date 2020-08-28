@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import api from "../../server/api";
 import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
 
@@ -53,11 +54,15 @@ export default () => {
   });
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await api.get("/provider");
-      setProviders(response.data.providers);
-    }
-    fetchData();
+    api
+      .get("/provider")
+      .then((response) => {
+        setProviders(response.data.providers);
+      })
+      .catch((error) => {
+        toast.error("Erro ao acessar API");
+        console.error(error);
+      });
   }, []);
 
   const onSelect = useCallback((row, isSelected) => {

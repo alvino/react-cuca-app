@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../../server/api";
 import { Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
+import {toast} from 'react-toastify'
 
 
 import {priceFormatter, dateFormatter} from '../../utils/react-bootstrap-table-formatted'
@@ -43,11 +44,14 @@ export default () => {
   const [rowSelected, setRowSelected] = useState({ row: {}, isSelected: false })
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await api.get("/budget")
+    api.get("/budget")
+    .then( response => {
       setOrcamentos(response.data.budgets)
-    }
-    fetchData()
+    })
+    .catch( error => {
+      toast.error('Erro ao acessar API')
+      console.error(error)
+    })
   }, []);
 
   const onSelect = useCallback( (row, isSelected) => {

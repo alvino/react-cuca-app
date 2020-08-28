@@ -20,24 +20,30 @@ export default () => {
   const [selectedUf, setSelectedUf] = useState("0");
   const [selectedCity, setSelectedCity] = useState("0");
 
-  const apiShow = useCallback(async () => {
-    const response = await api.get(`/provider/${id}`);
-    const [provider] = response.data.provider;
-    if (!provider) {
-      toast.error("fornecedor não encontrado");
-      history.push("/fornecedor/register");
-      return;
-    }
-    toast.info(response.data.message);
-    setFormData({
-      nickname: provider.nickname,
-      email: provider.email,
-      telephone: provider.telephone,
-      cnpj: provider.cnpj,
-      bank_data: provider.bank_data,
-    });
-    setSelectedUf(provider.uf);
-    setSelectedCity(provider.city);
+  const apiShow = useCallback( () => {
+    api.get(`/provider/${id}`)
+    .then( response => {
+      const [provider] = response.data.provider;
+      if (!provider) {
+        toast.error("fornecedor não encontrado");
+        history.push("/fornecedor/register");
+        return;
+      }
+      toast.info(response.data.message);
+      setFormData({
+        nickname: provider.nickname,
+        email: provider.email,
+        telephone: provider.telephone,
+        cnpj: provider.cnpj,
+        bank_data: provider.bank_data,
+      });
+      setSelectedUf(provider.uf);
+      setSelectedCity(provider.city);
+    })
+    .catch( error => {
+      toast.error('Error ao acessar API')
+      console.error(error)
+    })
   }, [history, id]);
 
   useEffect(() => {

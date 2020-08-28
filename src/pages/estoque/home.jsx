@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom'
 import {priceFormatter, numberFormatter} from '../../utils/react-bootstrap-table-formatted'
 import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
 import { useCallback } from "react";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -53,15 +54,18 @@ export default () => {
   const [rowSelected, setRowSelected] = useState({ row: {}, isSelected: false })
 
   useEffect(() => {
-    async function fetchDataStock() {
-      const response = await api.get("/stock")
+    api.get("/stock")
+    .then( response => {
       const serializeStock = response.data.stocks.map(
-        (item) => ({ ...item, stock: Number(item.quantity_purchase - item.sale_amount).toFixed(2) })
-      )
-
-      setStocks(serializeStock.filter((item) => (item.stock > 0)))
-    }
-    fetchDataStock()
+        (item) => {
+          return { ...item, stock: Number(item.quantity_purchase - item.sale_amount).toFixed(2) }
+        })
+        setStocks(serializeStock.filter((item) => (item.stock > 0)))
+    })
+    .catch( error => {
+      toast.error('Erro no acesso a API')
+      console.error(error)
+    })
   }, []);
 
   const onSelect = useCallback( (row, isSelected) => {

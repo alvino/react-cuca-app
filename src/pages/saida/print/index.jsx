@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import api from "../../../server/api";
 import { Button, Form, ToggleButton, ButtonGroup } from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
+import { toast } from "react-toastify";
 
+import api from "../../../server/api";
 import InputFormControl from "../../../components/bootstrap/InputFormControl";
 import SelectFormControl from "../../../components/bootstrap/SelectFormControl";
 import NumberFormat from "../../../components/NumberFormat";
@@ -14,31 +15,35 @@ import {
 
 import logoCuca from "../../../assert/logo_cuca.svg";
 import "./style.css";
-import { useCallback } from "react";
 
 const columns = [
   {
     dataField: "id",
     text: "#",
+    sort: true,
     headerStyle: { width: "5%" },
   },
   {
     dataField: "description",
     text: "Descrição",
+    sort: true,
   },
   {
     dataField: "amount",
     text: "Valor",
+    sort: true,
     headerStyle: { width: "15%" },
     formatter: priceFormatter,
   },
   {
     dataField: "date_outlay",
     text: "Data",
+    sort: true,
     headerStyle: { width: "15%" },
     formatter: dateFormatter,
   },
 ];
+
 
 export default () => {
   const history = useHistory();
@@ -51,7 +56,7 @@ export default () => {
   const [outlays, setOutlays] = useState([]);
   const [valorTotal, setValorTotal] = useState();
 
-  const apiQueryOutlay = useCallback(async () => {
+  useEffect(() => {
     let date_outlay = "";
 
     if (checked) {
@@ -64,13 +69,16 @@ export default () => {
       date_outlay,
     };
 
-    const response = await api.get("/outlay", { params: query });
-    setOutlays(response.data.outlays);
+    api
+      .get("/outlay", { params: query })
+      .then((response) => {
+        setOutlays(response.data.outlays);
+      })
+      .catch((error) => {
+        toast.error("Erro no acesso da API");
+        console.error(error);
+      });
   }, [ano, checked, dia, mes]);
-
-  useEffect(() => {
-    apiQueryOutlay();
-  }, [apiQueryOutlay]);
 
   useEffect(() => {
     if (outlays.heigth === 0) return;

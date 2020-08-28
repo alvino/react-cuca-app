@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import {toast} from 'react-toastify'
 
 
 import api from "../../server/api";
@@ -59,12 +60,14 @@ export default () => {
   });
 
   useEffect(() => {
-    async function fetchData() {
-      
-      const response = await api.get("/sale", { params: {date_sale: ''} });
+    api.get("/sale", { params: {date_sale: ''} })
+    .then( response => {
       setSales(response.data.sales);
-    }
-    fetchData();
+    })
+    .catch((error) => {
+      toast.error("Erro de rede ao acessar API");
+      console.error(error);
+    });
   }, []);
 
 

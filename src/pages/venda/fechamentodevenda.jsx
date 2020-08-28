@@ -68,18 +68,23 @@ export default () => {
   const [valorTotal, setValorTotal] = useState(0.0);
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await api.get(`/budget/${id}`);
+    api.get(`/budget/${id}`)
+    .then( response => {
 
+      
       const serielizedListaPedido = response.data.wish_list.map(
         (item, index) => ({ index: index+1, ...item })
-      );
-
-      setListaPedido(serielizedListaPedido);
-      setOrcamento(response.data.budget);
-      setCliente(response.data.client);
-    }
-    fetchData();
+        );
+        
+        setListaPedido(serielizedListaPedido);
+        setOrcamento(response.data.budget);
+        setCliente(response.data.client);
+      
+    })
+    .catch( error => {
+      toast.error('Erro ao acessa API')
+      console.error(error)
+    })
   }, [id]);
 
   useEffect(() => {

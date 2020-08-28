@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallBack } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
@@ -27,30 +27,33 @@ export default () => {
   const [selectedUf, setSelectedUf] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
 
-  const apiShow = useCallBack(async () => {
-    const response = await api.get(`/provider/${id}`);
-    const [provider] = response.data.provider;
-    if (!provider) {
-      toast.error("fornecedor não encontrado");
-      history.push("/fornecedor/register");
-      return;
-    }
-    toast.info(response.data.message);
-    setFormData({
-      nickname: provider.nickname,
-      email: provider.email,
-      telephone: provider.telephone,
-      cnpj: provider.cnpj,
-      bank_data: provider.bank_data,
-    });
-    setSelectedUf(provider.uf);
-    setSelectedCity(provider.city);
-  }, []);
-
   useEffect(() => {
     if (!id) return;
-    apiShow();
-  }, [apiShow, id]);
+    api
+      .get(`/provider/${id}`)
+      .then((response) => {
+        const [provider] = response.data.provider;
+        if (!provider) {
+          toast.error("fornecedor não encontrado");
+          history.push("/fornecedor/register");
+          return;
+        }
+        toast.info(response.data.message);
+        setFormData({
+          nickname: provider.nickname,
+          email: provider.email,
+          telephone: provider.telephone,
+          cnpj: provider.cnpj,
+          bank_data: provider.bank_data,
+        });
+        setSelectedUf(provider.uf);
+        setSelectedCity(provider.city);
+      })
+      .catch((error) => {
+        toast.error("Erro ao acessar API");
+        console.error(error);
+      });
+  }, [history, id]);
 
   // Load UFs
   useEffect(() => {
@@ -85,7 +88,7 @@ export default () => {
     apiCities();
   }, [selectedUf]);
 
-  const handleSubmit = useCallBack(async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (formData.nickname === "") {
@@ -112,9 +115,8 @@ export default () => {
 
     toast.success(response.data.message);
     history.goBack();
-  }, []);
+  };
 
-  
   return (
     <>
       <Button

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallBack } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import {
@@ -12,7 +12,6 @@ import ModalCenterBootstrapTable from "../../components/ModalCenterBootstrapTabl
 import InputFormControl from "../../components/bootstrap/InputFormControl";
 import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
 import NumberFormat from "../../components/NumberFormat";
-import { useCallback } from "react";
 
 const columnsProviders = [
   {
@@ -62,58 +61,55 @@ export default () => {
     fetchData();
   }, []);
 
-  const handleSubmit = useCallback(
-    async (event) => {
-      event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-      if (!selectedFornecedor.id) {
-        toast.warning("Selecione um fornecedor existente.");
-        return;
-      }
+    if (!selectedFornecedor.id) {
+      toast.warning("Selecione um fornecedor existente.");
+      return;
+    }
 
-      if (
-        formData.description === "" ||
-        formData.quantity_purchase === "" ||
-        formData.purchase_price === "" ||
-        formData.sale_value === ""
-      ) {
-        toast.warning("Preencha os campos para depois adicionar a lista.");
-        return;
-      }
+    if (
+      formData.description === "" ||
+      formData.quantity_purchase === "" ||
+      formData.purchase_price === "" ||
+      formData.sale_value === ""
+    ) {
+      toast.warning("Preencha os campos para depois adicionar a lista.");
+      return;
+    }
 
-      const newStock = {
-        provider_id: selectedFornecedor.id,
-        description: formData.description,
-        detail: formData.detail,
-        unit: formData.unit,
-        quantity_purchase: formData.quantity_purchase.floatValue,
-        purchase_price: formData.purchase_price.floatValue,
-        sale_value: formData.sale_value.floatValue,
-      };
+    const newStock = {
+      provider_id: selectedFornecedor.id,
+      description: formData.description,
+      detail: formData.detail,
+      unit: formData.unit,
+      quantity_purchase: formData.quantity_purchase.floatValue,
+      purchase_price: formData.purchase_price.floatValue,
+      sale_value: formData.sale_value.floatValue,
+    };
 
-      setListStock([newStock, ...listStock]);
-      setFormData({
-        description: "",
-        detail: "",
-        unit: "",
-        quantity_purchase: { value: "0", formattedValue: "" },
-        purchase_price: { value: "0", formattedValue: "" },
-        sale_value: { value: "0", formattedValue: "" },
-      });
-    },
-    [formData, listStock, selectedFornecedor]
-  );
+    setListStock([newStock, ...listStock]);
+    setFormData({
+      description: "",
+      detail: "",
+      unit: "",
+      quantity_purchase: { value: "0", formattedValue: "" },
+      purchase_price: { value: "0", formattedValue: "" },
+      sale_value: { value: "0", formattedValue: "" },
+    });
+  };
 
-  const handleSelectedFornecedor = useCallback((selected) => {
-    setSelectedFornecedor(selected.row);
-  }, []);
+  const handleSelectedFornecedor = (selected) => {
+    setSelectedFornecedor(selected);
+  };
 
-  const handleSaveListStock = useCallBack(async () => {
+  const handleSaveListStock = async () => {
     const res = await api.post("/stock", listStock);
     toast.success(res.data.message);
 
     history.goBack();
-  }, []);
+  };
 
   return (
     <div className="row">
@@ -199,6 +195,7 @@ export default () => {
           label="Fornecedor"
           className="form-control form-control-lg"
           id="inputFornecedor"
+          name="inputFornecedor"
           value={selectedFornecedor.nickname || ""}
           readOnly
         >

@@ -53,14 +53,18 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await api.get("/stock");
-      const serializeStock = response.data.stocks.filter(
-        (item) => item.sale_amount < item.quantity_purchase
-      );
-      setProdutos(serializeStock);
-    }
-    fetchData();
+    api
+      .get("/stock")
+      .then((response) => {
+        const serializeStock = response.data.stocks.filter(
+          (item) => item.sale_amount < item.quantity_purchase
+        );
+        setProdutos(serializeStock);
+      })
+      .catch((error) => {
+        toast.error("Erro ao acessar API");
+        console.error(error);
+      });
   }, []);
 
   useEffect(() => {
@@ -115,7 +119,7 @@ export default () => {
     setSelectedCliente(row);
   }, []);
 
-  const handleFinalizarPedido = useCallback( async () => {
+  const handleFinalizarPedido = useCallback(async () => {
     const orcamento = {
       client: selectedCliente,
       created_at: data,
@@ -131,8 +135,7 @@ export default () => {
       toast.error(response.data.message);
       return;
     }
-  }, [data, history, listaPedido, selectedCliente, valorTotal])
-
+  }, [data, history, listaPedido, selectedCliente, valorTotal]);
 
   return (
     <div className="container-fluid">

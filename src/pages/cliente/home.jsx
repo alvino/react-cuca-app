@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
 import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -49,11 +50,12 @@ export default () => {
   });
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await api.get("/client");
-      setClients(response.data.clients);
-    }
-    fetchData();
+      api.get("/client")
+      .then( response => setClients(response.data.clients) )
+      .catch((error) => {
+        toast.error("Erro de rede ao acessar API");
+        console.error(error);
+      });
   }, []);
 
   const onSelect = useCallback((row, isSelected) => {

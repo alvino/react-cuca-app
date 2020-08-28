@@ -2,25 +2,36 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button, Form } from "react-bootstrap";
-import BootstrapTable from 'react-bootstrap-table-next'
+import BootstrapTable from "react-bootstrap-table-next";
 
 import InputFormControl from "../../components/bootstrap/InputFormControl";
 import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
 import SelectFormControl from "../../components/bootstrap/SelectFormControl";
 import api from "../../server/api";
-import {priceFormatter, dateFormatter} from '../../utils/react-bootstrap-table-formatted'
+import {
+  priceFormatter,
+  dateFormatter,
+} from "../../utils/react-bootstrap-table-formatted";
 import { useCallback } from "react";
 
-
 const columns = [
-  {dataField: 'index', text: '#', headerStyle: {width: '5%'}},
-  {dataField: 'description', text: 'Descrição'},
-  {dataField: 'parcel', text: 'De', headerStyle: {width: '5%'}},
-  {dataField: 'all_parcel', text: 'Parc.',headerStyle: {width: '5%'}},
-  {dataField: 'amount', text: 'Valor', formatter: priceFormatter, headerStyle: {width: '10%'}},
-  {dataField: 'date_sale', text: 'Data', formatter: dateFormatter, headerStyle: {width: '10%'}},
-]
-
+  { dataField: "index", text: "#", headerStyle: { width: "5%" } },
+  { dataField: "description", text: "Descrição" },
+  { dataField: "parcel", text: "De", headerStyle: { width: "5%" } },
+  { dataField: "all_parcel", text: "Parc.", headerStyle: { width: "5%" } },
+  {
+    dataField: "amount",
+    text: "Valor",
+    formatter: priceFormatter,
+    headerStyle: { width: "10%" },
+  },
+  {
+    dataField: "date_sale",
+    text: "Data",
+    formatter: dateFormatter,
+    headerStyle: { width: "10%" },
+  },
+];
 
 export default () => {
   const history = useHistory();
@@ -63,25 +74,27 @@ export default () => {
     }
   }, [data, valor, descricao, selectedPagamento, parcelas]);
 
-  const handleSubmit = useCallback( async (event) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    async (event) => {
+      event.preventDefault();
 
-    const serializedSale = sales.map((item) => {
-      const { index, ...sale } = item;
-      return sale;
-    });
+      const serializedSale = sales.map((item) => {
+        const { index, ...sale } = item;
+        return sale;
+      });
 
-    const resposta = await api.post("/sale", serializedSale);
+      const resposta = await api.post("/sale", serializedSale);
 
-    if (resposta.status === 200) {
-      toast.success(resposta.data.message);
-      history.goBack();
-    } else {
-      toast.error(resposta.data.message);
-    }
-  }, [history, sales])
+      if (resposta.status === 200) {
+        toast.success(resposta.data.message);
+        history.goBack();
+      } else {
+        toast.error(resposta.data.message);
+      }
+    },
+    [history, sales]
+  );
 
-  
   return (
     <>
       <div className="row p-3">
@@ -99,9 +112,9 @@ export default () => {
           <Form>
             <InputFormControl
               label="Data"
-              className="form-control form-control-lg"
               type="date"
               id="inputData"
+              name="inputData"
               value={data}
               onChange={(event) => setData(event.target.value)}
             />
@@ -156,13 +169,12 @@ export default () => {
         </div>
 
         <div className="col-9">
-          <BootstrapTable 
-          bootstrap4={true} 
-          keyField='index'
-          data={sales} 
-          columns={columns}
+          <BootstrapTable
+            bootstrap4={true}
+            keyField="index"
+            data={sales}
+            columns={columns}
           />
-            
         </div>
       </div>
     </>

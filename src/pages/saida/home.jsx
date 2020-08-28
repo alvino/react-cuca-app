@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import {toast} from 'react-toastify'
 
 import api from "../../server/api";
 import {
@@ -47,13 +48,17 @@ export default () => {
   });
 
   useEffect(() => {
-    async function fetchData() {
+    
       const query = { date_outlay: "" };
 
-      const response = await api.get("/outlay", { params: query });
-      setOutlays(response.data.outlays);
-    }
-    fetchData();
+      api.get("/outlay", { params: query })
+      .then( response => {
+        setOutlays(response.data.outlays);
+      })
+      .catch( error => {
+        toast.error('Erro ao acessar API')
+        console.error(error)
+      })
   }, []);
 
   const onSelect = useCallback( (row, isSelected) => {

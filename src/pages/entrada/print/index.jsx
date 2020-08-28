@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import api from "../../../server/api";
 import { Button, Form, ToggleButton, ButtonGroup } from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
+import { toast } from "react-toastify";
 
 import InputFormControl from "../../../components/bootstrap/InputFormControl";
 import SelectFormControl from "../../../components/bootstrap/SelectFormControl";
@@ -14,22 +15,40 @@ import {
 
 import logoCuca from "../../../assert/logo_cuca.svg";
 import "./style.css";
-import { useCallback } from "react";
 
 const columns = [
-  { dataField: "id", text: "#", headerStyle: { width: "5%" } },
-  { dataField: "description", text: "Descrição" },
-  { dataField: "parcel", text: "De", headerStyle: { width: "5%" } },
-  { dataField: "all_parcel", text: "Parc.", headerStyle: { width: "5%" } },
+  {
+    dataField: "id",
+    text: "#",
+    sort: true,
+    headerStyle: { width: "5%" },
+  },
+  {
+    dataField: "description",
+    text: "Descrição",
+    sort: true,
+  },
+  {
+    dataField: "parcel",
+    text: "De",
+    headerStyle: { width: "5%" },
+  },
+  {
+    dataField: "all_parcel",
+    text: "Parc.",
+    headerStyle: { width: "5%" },
+  },
   {
     dataField: "amount",
     text: "Valor",
+    sort: true,
     formatter: priceFormatter,
     headerStyle: { width: "15%" },
   },
   {
     dataField: "date_sale",
     text: "Data",
+    sort: true,
     formatter: dateFormatter,
     headerStyle: { width: "10%" },
   },
@@ -47,22 +66,26 @@ export default () => {
   const [valorTotal, setValorTotal] = useState();
 
   useEffect(() => {
-    async function fetchData() {
-      let date_sale = "";
+    let date_sale = "";
 
-      if (checked) {
-        date_sale = date_sale + ano;
-        date_sale = mes === "" ? date_sale : [date_sale, mes, dia].join("-");
-      }
-
-      const query = {
-        date_sale,
-      };
-
-      const response = await api.get("/sale", { params: query });
-      setSales(response.data.sales);
+    if (checked) {
+      date_sale = date_sale + ano;
+      date_sale = mes === "" ? date_sale : [date_sale, mes, dia].join("-");
     }
-    fetchData();
+
+    const query = {
+      date_sale,
+    };
+
+    api
+      .get("/sale", { params: query })
+      .then((response) => {
+        setSales(response.data.sales);
+      })
+      .catch((error) => {
+        toast.error("Erro de rede ao acessar API");
+        console.error(error);
+      });
   }, [ano, mes, dia, checked]);
 
   useEffect(() => {
@@ -70,9 +93,9 @@ export default () => {
     setValorTotal(sales.reduce((acc, item) => acc + item.amount, 0.0));
   }, [sales]);
 
-  const handleImprimir = useCallback(() => {
+  const handleImprimir = () => {
     window.print();
-  }, []);
+  };
 
   return (
     <div>
