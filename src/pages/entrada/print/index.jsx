@@ -103,12 +103,11 @@ export default () => {
         <div className="btn-group mb-2" role="group">
           <Button
             variant="secondary"
-            size="lg"
             onClick={() => history.goBack()}
           >
             Voltar
           </Button>
-          <Button size="lg" onClick={handleImprimir}>
+          <Button onClick={handleImprimir}>
             Imprimir
           </Button>
         </div>
@@ -210,7 +209,6 @@ export default () => {
                     checked={checked}
                     value="1"
                     onChange={(e) => setChecked(e.currentTarget.checked)}
-                    size="lg"
                   >
                     {checked ? "Todos" : "Filtrar"}
                   </ToggleButton>
@@ -278,7 +276,7 @@ export default () => {
           </div>
         </div>
 
-        <Button className="mt-5" size="lg" onClick={handleImprimir}>
+        <Button className="mt-5" onClick={handleImprimir}>
           Imprimir
         </Button>
       </div>

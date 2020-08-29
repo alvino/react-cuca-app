@@ -75,7 +75,6 @@ export default () => {
         <div className="btn-group " role="group">
           <Button
             variant="primary"
-            size="lg"
             onClick={() => history.push("/saida/register")}
           >
             Cadastra Saida
@@ -84,7 +83,6 @@ export default () => {
           {rowSelected.isSelected ? (
             <Button
               variant="danger"
-              size="lg"
               onClick={() =>
                 history.push(`/saida/delete/${rowSelected.row.id}`)
               }
@@ -97,7 +95,6 @@ export default () => {
 
           <Button
             variant="success"
-            size="lg"
             onClick={() => history.push(`/saida/print`)}
           >
             Relatorio de Gastos

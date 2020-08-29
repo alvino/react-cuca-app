@@ -19,7 +19,7 @@ function BootstrapPaginationExportSearchDataTable({onSelect,...props}) {
   const selectRow = {
     mode: "radio",
     bgColor: "rgba(0,123,255,.4)",
-    onSelect,
+    onSelect: onSelect,
     clickToSelect: true,
   };
 

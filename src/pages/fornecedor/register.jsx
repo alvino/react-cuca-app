@@ -121,7 +121,6 @@ export default () => {
     <>
       <Button
         variant="secondary"
-        size="lg"
         className="mb-4"
         onClick={() => history.goBack()}
       >
@@ -207,7 +206,7 @@ export default () => {
         <div className="form-group">
           <label for="textareaBankData">Dados Bancarios</label>
           <textarea
-            className="form-control form-control-lg"
+            className='form-control'
             id="textareaBankData"
             name="bank_data"
             rows="3"
@@ -218,7 +217,7 @@ export default () => {
           />
         </div>
 
-        <Button variant="primary" size="lg" onClick={handleSubmit}>
+        <Button variant="primary" onClick={handleSubmit}>
           {" "}
           Salvar Cadastro{" "}
         </Button>

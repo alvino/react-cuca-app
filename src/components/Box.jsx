@@ -12,12 +12,14 @@ export default function (props) {
 
             <div className='d-flex flex-column justify-content-center align-items-center' >
                 <div className="d-flex">
-                    {props.children}
+                    {
+                       props.children
+                    }
                 </div>
 
-                <h3 className='mt-2'>
+                <div className='mt-2 h4'>
                     {props.title}
-                </h3>
+                </div>
             </div>
         </Link >
     )

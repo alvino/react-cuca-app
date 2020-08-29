@@ -126,10 +126,10 @@ export default () => {
   return (
     <div>
       <div className="btn-group mb-5 noprint" role="group">
-        <Button variant="secondary" size="lg" onClick={() => history.goBack()}>
+        <Button variant="secondary" onClick={() => history.goBack()}>
           Voltar
         </Button>
-        <Button size="lg" onClick={handleImprimir}>
+        <Button onClick={handleImprimir}>
           Imprimir
         </Button>
       </div>
@@ -234,7 +234,7 @@ export default () => {
         </div>
       </div>
 
-      <Button className="mt-5" size="lg" onClick={handleImprimir}>
+      <Button className="mt-5" onClick={handleImprimir}>
         Imprimir
       </Button>
     </div>

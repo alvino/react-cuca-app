@@ -100,7 +100,6 @@ export default () => {
       <div className="row p-3">
         <Button
           variant="secondary"
-          size="lg"
           className="mb-4"
           onClick={() => history.goBack()}
         >
@@ -129,7 +128,6 @@ export default () => {
 
             <InputNumberFormat
               label="Valor"
-              className="form-control form-control-lg"
               id="inputValor"
               name="inputValor"
               value={valor.formattedValue}
@@ -150,7 +148,6 @@ export default () => {
               <InputFormControl
                 label="Parcelas"
                 type="Number"
-                className="form-control form-control-lg"
                 id="inputParcelas"
                 name="inputParcelas"
                 min="1"
@@ -161,7 +158,7 @@ export default () => {
               ""
             )}
 
-            <Button variant="primary" size="lg" onClick={handleSubmit}>
+            <Button variant="primary" onClick={handleSubmit}>
               {" "}
               Salvar Cadastro{" "}
             </Button>

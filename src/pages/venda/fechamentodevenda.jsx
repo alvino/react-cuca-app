@@ -192,7 +192,6 @@ export default () => {
         <div className="col-3">
           <InputNumberFormat
             label="Desconto"
-            className="form-control form-control-lg"
             id="inputDesconto"
             name="inputDesconto"
             value={desconto.formattedValue}
@@ -236,7 +235,6 @@ export default () => {
 
           <Button
             variant="primary"
-            size="lg"
             onClick={handleConfirmarConclusaoVenda}
           >
             
@@ -247,7 +245,6 @@ export default () => {
           <Button
             variant="success"
             className="m-2"
-            size="lg"
             onClick={handlerPushImprimir}
           >
             

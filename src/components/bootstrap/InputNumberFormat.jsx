@@ -28,7 +28,7 @@ export default function InputNumberFormat(props) {
 
 
 InputNumberFormat.defaultProps = {
-  className: 'form-control form-control-lg',
+  className: 'form-control',
   type: 'text',
   prefix: 'R$ ',
   decimalSeparator: ',',

@@ -5,10 +5,8 @@ import {
   FaWarehouse,
   FaShoppingCart,
   FaClipboardList,
-  FaDollarSign,
-  FaPlus,
-  FaMinus,
 } from 'react-icons/fa'
+import { GiReceiveMoney, GiPayMoney } from "react-icons/gi";
 
 // import NavBar from '../components/NavBar'
 import Header from '../components/Header'
@@ -26,33 +24,31 @@ export default () => {
           <div className='row w-75 mx-auto'>
 
             <Box title='Ponto de Venda' to='/venda' >
-              <FaShoppingCart size='110px' />
+              <FaShoppingCart />
             </Box>
 
             <Box title='Orçamentos' to='/orcamento' >
-              <FaClipboardList size='110px' />
+              <FaClipboardList  />
             </Box>
 
             <Box title='Estoque' to='/estoque' >
-              <FaWarehouse size='110px' />
+              <FaWarehouse  />
             </Box>
 
             <Box title='Clientes' to='/cliente' >
-              <FaUser size='110px' />
+              <FaUser  />
             </Box>
 
             <Box title='Fornecedores' to='/fornecedor' >
-              <FaTruck size='110px' />
+              <FaTruck  />
             </Box>
 
             <Box title='Entrada' to='/entrada' >
-              <FaDollarSign size='110px' />
-              <FaPlus size='40px' />
+              <GiReceiveMoney />
             </Box>
 
             <Box title='Saida' to='/saida' >
-              <FaDollarSign size='110px' />
-              <FaMinus size='40px' />
+              <GiPayMoney />
             </Box>
 
 

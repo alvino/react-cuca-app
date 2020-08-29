@@ -86,7 +86,7 @@ export default () => {
           <div className="btn-group " role="group" >
             <Button
               variant="primary"
-              size="lg"
+              
               onClick={() => history.push("/entrada/register")}
             >
               Cadastra Entrada
@@ -95,7 +95,7 @@ export default () => {
             {rowSelected.isSelected && !rowSelected.row.budget_id ? (
               <Button
                 variant="danger"
-                size="lg"
+                
                 onClick={() =>
                   history.push(`/entrada/delete/${rowSelected.row.id}`)
                 }
@@ -108,7 +108,7 @@ export default () => {
           
             <Button
               variant="success"
-              size="lg"
+              
               onClick={() => history.push(`/entrada/print`)}
             >
               Relatorio de Ganhos

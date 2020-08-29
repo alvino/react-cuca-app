@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 InputFormControl.defaultProps = {
-  className: "form-control form-control-lg ",
+  className: "form-control ",
   type: "text",
 };
 

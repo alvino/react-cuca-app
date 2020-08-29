@@ -177,7 +177,7 @@ export default () => {
           />
 
           <div className="d-flex justify-content-end">
-            <Button variant="success" size="lg" onClick={handleSubmit}>
+            <Button variant="success" onClick={handleSubmit}>
               Adicionar
             </Button>
           </div>
@@ -185,7 +185,7 @@ export default () => {
         {listStock.length === 0 ? (
           ""
         ) : (
-          <Button variant="primary" size="lg" onClick={handleSaveListStock}>
+          <Button variant="primary" onClick={handleSaveListStock}>
             Salvar Lista de Produtos
           </Button>
         )}
@@ -193,7 +193,6 @@ export default () => {
       <div className="col-8">
         <InputFormControl
           label="Fornecedor"
-          className="form-control form-control-lg"
           id="inputFornecedor"
           name="inputFornecedor"
           value={selectedFornecedor.nickname || ""}
@@ -208,7 +207,6 @@ export default () => {
           </Button>
           <Button
             variant="secondary"
-            size="lg"
             onClick={() => history.push("/fornecedor/register")}
           >
             Criar

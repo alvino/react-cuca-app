@@ -75,7 +75,7 @@ export default () => {
 
         <p>Cidade: {selectedCity}</p>
       </div>
-      <Button variant="danger" size="lg" onClick={handleSubmit}>
+      <Button variant="danger" onClick={handleSubmit}>
         Confirmar remoção
       </Button>
     </div>

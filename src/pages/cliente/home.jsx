@@ -69,7 +69,7 @@ export default () => {
           <Button
             variant="primary"
             className="p-2"
-            size="lg"
+            
             onClick={() => history.push("/cliente/register")}
           >
             Cadastra Cliente
@@ -80,7 +80,7 @@ export default () => {
               <Button
                 variant="info"
                 className="p-2"
-                size="lg"
+                
                 onClick={() =>
                   history.push(`/cliente/register/${rowSelected.row.id}`)
                 }
@@ -91,7 +91,7 @@ export default () => {
               <Button
                 variant="danger"
                 className="p-2"
-                size="lg"
+                
                 onClick={() =>
                   history.push(`/cliente/delete/${rowSelected.row.id}`)
                 }

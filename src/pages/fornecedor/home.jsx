@@ -28,6 +28,10 @@ const columns = [
     headerStyle: { width: "10%" },
   },
   {
+    dataField: "bank_data",
+    text: "Dados Bancarios",
+  },
+  {
     dataField: "city",
     text: "Cidade",
     sort: true,
@@ -36,11 +40,7 @@ const columns = [
     dataField: "uf",
     text: "Estado",
     sort: true,
-    headerStyle: { width: "5%" },
-  },
-  {
-    dataField: "bank_data",
-    text: "Dados Bancarios",
+    headerStyle: { width: "10%" },
   },
 ];
 
@@ -76,7 +76,6 @@ export default () => {
           <Button
             variant="primary"
             className="p-2"
-            size="lg"
             onClick={() => history.push("/fornecedor/register")}
           >
             {" "}
@@ -88,7 +87,6 @@ export default () => {
               <Button
                 variant="info"
                 className="p-2"
-                size="lg"
                 onClick={() =>
                   history.push(`/fornecedor/register/${rowSelected.row.id}`)
                 }
@@ -99,7 +97,6 @@ export default () => {
               <Button
                 variant="danger"
                 className="p-2"
-                size="lg"
                 onClick={() =>
                   history.push(`/fornecedor/delete/${rowSelected.row.id}`)
                 }

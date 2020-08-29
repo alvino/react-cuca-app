@@ -63,7 +63,7 @@ export default () => {
           Data de criação: <DateFormat value={gasto.created_at} />
         </p>
       </div>
-      <Button variant="danger" size="lg" onClick={handleSubmit}>
+      <Button variant="danger" onClick={handleSubmit}>
         Confirmar remoção
       </Button>
     </div>

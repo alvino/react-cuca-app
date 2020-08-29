@@ -72,21 +72,18 @@ export default () => {
               <Button
                 variant='primary'
                 className='p-2'
-                size='lg'
                 onClick={() => history.push(`/venda/fechamentodevenda/${rowSelected.row.id}`)}
               > Finalizar Venda </Button>
 
               <Button
                 variant='success'
                 className='p-2'
-                size='lg'
                 onClick={() => history.push(`/orcamento/print/${rowSelected.row.id}`)}
               > Imprimir Orcamento </Button>
 
               <Button
                 variant='danger'
                 className='p-2'
-                size='lg'
                 onClick={() => history.push(`/orcamento/delete/${rowSelected.row.id}`)}
               > Deletar Orcamento</Button>
             </div>

@@ -16,7 +16,7 @@ export default function SelectFormControl(props) {
 
 
 SelectFormControl.defaultProps = {
-    className: 'form-control form-control-lg form-control-sm',
+    className: 'form-control ',
     type: 'select',
 }
 

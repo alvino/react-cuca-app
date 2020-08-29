@@ -22,7 +22,6 @@ export default function ModalCenterBootstrapTable({
   return (
     <Modal
       {...props}
-      size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       onHide={onHide}

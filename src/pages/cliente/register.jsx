@@ -134,7 +134,7 @@ export default () => {
     <>
       <Button
         variant="secondary"
-        size="lg"
+        
         className="mb-4"
         onClick={() => history.goBack()}
       >
@@ -217,7 +217,7 @@ export default () => {
           ))}
         </SelectFormControl>
 
-        <Button variant="primary" size="lg" onClick={handleSubmit}>
+        <Button variant="primary" onClick={handleSubmit}>
           {" "}
           Salvar Cadastro{" "}
         </Button>

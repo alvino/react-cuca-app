@@ -166,7 +166,6 @@ export default () => {
             >
               <Button
                 variant="secondary"
-                size="lg"
                 onClick={() => setModalShowProduto(true)}
               >
                 <IconList size="22px" title="Pesquisar Produto" />
@@ -207,7 +206,7 @@ export default () => {
             </h2>
           </div>
           <div className="d-flex justify-content-end">
-            <Button variant="success" size="lg" onClick={handleAdicionar}>
+            <Button variant="success" onClick={handleAdicionar}>
               {" "}
               Adicionar{" "}
             </Button>
@@ -219,7 +218,6 @@ export default () => {
             <div className="btn-group d-flex justify-content-end mt-5">
               <Button
                 variant="primary"
-                size="lg"
                 onClick={handleFinalizarPedido}
               >
                 Finalizar o Pedido
@@ -231,7 +229,6 @@ export default () => {
         <div className="col-9">
           <InputFormControl
             label="Cliente"
-            className="form-control form-control-lg"
             id="inputCliente"
             name="inputCliente"
             value={selectedCliente.name || ""}
@@ -239,7 +236,6 @@ export default () => {
           >
             <Button
               variant="secondary"
-              size="lg"
               className="px-4"
               onClick={() => setModalShowCliente(true)}
             >
@@ -247,7 +243,6 @@ export default () => {
             </Button>
             <Button
               variant="secondary"
-              size="lg"
               onClick={() => history.push("/cliente/register")}
             >
               Criar

@@ -80,7 +80,6 @@ export default () => {
         <Button
           variant='primary'
           className='p-2'
-          size='lg'
           onClick={() => history.push('/estoque/register')}
         > Cadastra Estoque </Button>
 
@@ -89,7 +88,6 @@ export default () => {
             <Button
               variant='danger'
               className='p-2'
-              size='lg'
               onClick={() => history.push(`/estoque/delete/${rowSelected.row.id}`)}
             > Deletar Estoque</Button>
 
