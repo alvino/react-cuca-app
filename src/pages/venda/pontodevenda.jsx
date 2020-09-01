@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
@@ -6,6 +6,7 @@ import {
   BsListUl as IconList,
   BsTrashFill as IconRemoveList,
 } from "react-icons/bs";
+import { TableHeaderColumn } from "react-bootstrap-table";
 
 import api from "../../server/api";
 import ModalCenterBootstrapTable from "../../components/ModalCenterBootstrapTable";
@@ -13,19 +14,11 @@ import InputFormControl from "../../components/bootstrap/InputFormControl";
 import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
 import NumberFormat from "../../components/NumberFormat";
 import NavBarVenda from "../../components/NavBarVenda";
-import { useCallback } from "react";
-
-const columnsProdutos = [
-  { dataField: "id", text: "#", headerStyle: { width: "10%" } },
-  { dataField: "description", text: "Descrição" },
-  { dataField: "detail", text: "Detalhe", headerStyle: { width: "20%" } },
-];
-
-const columnsCliente = [
-  { dataField: "id", text: "#", headerStyle: { width: "10%" } },
-  { dataField: "name", text: "Nome" },
-  { dataField: "cpf", text: "CPF/CNPJ", headerStyle: { width: "30%" } },
-];
+import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import {
+  numberFormatter,
+  priceFormatter,
+} from "../../utils/react-bootstrap-table-formatted";
 
 export default () => {
   const history = useHistory();
@@ -89,8 +82,11 @@ export default () => {
     }
 
     const pedido = {
+      index: listaPedido.length + 1,
       stock: selectedProduto,
+      description: selectedProduto.description,
       quantity: quantidade.floatValue,
+      sale_value: selectedProduto.sale_value,
       amount: parseFloat(
         (selectedProduto.sale_value * quantidade.floatValue).toFixed(2)
       ),
@@ -178,9 +174,17 @@ export default () => {
               data={produtos}
               onSelected={handleSelectedProduto}
               onHide={() => setModalShowProduto(false)}
-              keyField="id"
-              columns={columnsProdutos}
-            />
+            >
+              <TableHeaderColumn dataField="id" isKey width="10%">
+                #
+              </TableHeaderColumn>
+              <TableHeaderColumn dataField="description">
+                Descrição
+              </TableHeaderColumn>
+              <TableHeaderColumn dataField="detail" width="20%">
+                Detahe
+              </TableHeaderColumn>
+            </ModalCenterBootstrapTable>
 
             <InputNumberFormat
               label="Quantidade"
@@ -216,10 +220,7 @@ export default () => {
             ""
           ) : (
             <div className="btn-group d-flex justify-content-end mt-5">
-              <Button
-                variant="primary"
-                onClick={handleFinalizarPedido}
-              >
+              <Button variant="primary" onClick={handleFinalizarPedido}>
                 Finalizar o Pedido
               </Button>
             </div>
@@ -255,58 +256,69 @@ export default () => {
             data={clientes}
             onSelected={handleSelectedCliente}
             onHide={() => setModalShowCliente(false)}
-            keyField="id"
-            columns={columnsCliente}
-          />
+          >
+            <TableHeaderColumn dataField="id" isKey width="10%">
+              "#"
+            </TableHeaderColumn>
+            <TableHeaderColumn dataField="name">Nome</TableHeaderColumn>
+            <TableHeaderColumn dataField="cpf" width="30%">
+              CPF/CNPJ
+            </TableHeaderColumn>
+          </ModalCenterBootstrapTable>
 
-          <table className="table table-hover table-sm">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Produto (descrição)</th>
-                <th scope="col" className="text-right">
-                  Qt.
-                </th>
-                <th scope="col" className="text-right">
-                  Valor Unit.
-                </th>
-                <th scope="col" className="text-right">
-                  Valor Total
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {listaPedido.map((item, index) => (
-                <tr key={index}>
-                  <th scope="row">
-                    <Button
-                      variant="danger"
-                      onClick={() =>
-                        setListaPedido(
-                          listaPedido.filter((pedido) => pedido !== item)
-                        )
-                      }
-                    >
-                      <IconRemoveList
-                        size="15px"
-                        title="Revomer produto da lista"
-                      />
-                    </Button>
-                  </th>
-                  <td>{item.stock.description}</td>
-                  <td className="text-right">
-                    <NumberFormat prefix="" value={item.quantity} />
-                  </td>
-                  <td className="text-right">
-                    <NumberFormat value={item.stock.sale_value} />
-                  </td>
-                  <td className="text-right">
-                    <NumberFormat value={item.amount} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <BootstrapDataTable
+            data={listaPedido}
+            pagination={false}
+            search={false}
+            exportCSV={false}
+            
+          >
+            <TableHeaderColumn
+              dataField="index"
+              width="5%"
+              isKey
+              dataFormat={(cell, row) => (
+                <Button
+                  variant="danger"
+                  onClick={() =>
+                    setListaPedido(
+                      listaPedido.filter((pedido) => pedido !== row)
+                    )
+                  }
+                >
+                  <IconRemoveList
+                    title="Revomer produto da lista"
+                  />
+                </Button>
+              )}
+            >
+              #
+            </TableHeaderColumn>
+            <TableHeaderColumn dataField="description">
+              Produto (descrição)
+            </TableHeaderColumn>
+            <TableHeaderColumn
+              dataField="quantity"
+              width="10%"
+              dataFormat={numberFormatter}
+            >
+              Qt.
+            </TableHeaderColumn>
+            <TableHeaderColumn
+              dataField="sale_value"
+              width="15%"
+              dataFormat={priceFormatter}
+            >
+              Valor Unit.
+            </TableHeaderColumn>
+            <TableHeaderColumn
+              dataField="amount"
+              width="15%"
+              dataFormat={priceFormatter}
+            >
+              Valor Total
+            </TableHeaderColumn>
+          </BootstrapDataTable>
         </div>
       </div>
     </div>

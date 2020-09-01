@@ -2,9 +2,9 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
-import BootstrapTable from 'react-bootstrap-table-next'
+import { TableHeaderColumn } from "react-bootstrap-table";
 
-
+import BootstrapDataTable from "../../components/bootstrap/DataTable";
 import api from "../../server/api";
 import InputFormControl from "../../components/bootstrap/InputFormControl";
 import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
@@ -12,46 +12,10 @@ import NumberFormat from "../../components/NumberFormat";
 import DateFormat from "../../components/DateFormat";
 import SelectFormControl from "../../components/bootstrap/SelectFormControl";
 import NavBarVenda from "../../components/NavBarVenda";
-import {priceFormatter, numberFormatter} from '../../utils/react-bootstrap-table-formatted'
-
-
-
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-
-
-const columns = [
-  {
-    dataField: "index",
-    text: "#",
-    headerStyle: { width: "5%" },
-  },
-  {
-    dataField: "description",
-    text: "Descrição",
-  },
-  {
-    dataField: "detail",
-    text: "Detalhe",
-  },
-  {
-    dataField: "quantity",
-    text: "Quant.",
-    headerStyle: { width: "10%" },
-    formatter: numberFormatter,
-  },
-  {
-    dataField: "sale_value",
-    text: "Valor Unt.",
-    headerStyle: { width: "15%" },
-    formatter: priceFormatter,
-  },
-  {
-    dataField: "amount",
-    text: "Valor Total",
-    headerStyle: { width: "15%" },
-    formatter: priceFormatter,
-  },
-];
+import {
+  priceFormatter,
+  numberFormatter,
+} from "../../utils/react-bootstrap-table-formatted";
 
 export default () => {
   const history = useHistory();
@@ -68,23 +32,21 @@ export default () => {
   const [valorTotal, setValorTotal] = useState(0.0);
 
   useEffect(() => {
-    api.get(`/budget/${id}`)
-    .then( response => {
-
-      
-      const serielizedListaPedido = response.data.wish_list.map(
-        (item, index) => ({ index: index+1, ...item })
+    api
+      .get(`/budget/${id}`)
+      .then((response) => {
+        const serielizedListaPedido = response.data.wish_list.map(
+          (item, index) => ({ index: index + 1, ...item })
         );
-        
+
         setListaPedido(serielizedListaPedido);
         setOrcamento(response.data.budget);
         setCliente(response.data.client);
-      
-    })
-    .catch( error => {
-      toast.error('Erro ao acessa API')
-      console.error(error)
-    })
+      })
+      .catch((error) => {
+        toast.error("Erro ao acessa API");
+        console.error(error);
+      });
   }, [id]);
 
   useEffect(() => {
@@ -93,7 +55,7 @@ export default () => {
       orcamento.amount - (desconto.floatValue + entrada.floatValue);
     setValorTotal(parseFloat((montante / dividendo).toFixed(2)));
   }, [id, desconto, entrada, parcelas, orcamento]);
- 
+
   useEffect(() => {
     if (selectedPagamento === "A vista") {
       setParcelas(30);
@@ -101,16 +63,16 @@ export default () => {
     }
   }, [selectedPagamento]);
 
-  const handlerOnValueChangeDesconto = useCallback(values => {
+  const handlerOnValueChangeDesconto = useCallback((values) => {
     if (values.formattedValue === "") values = { value: 0, floatValue: 0 };
     setDesconto(values);
-  }, [])
+  }, []);
 
   const handlerPushImprimir = () => {
     history.push(`/orcamento/print/${id}`);
   };
 
-  const handleConfirmarConclusaoVenda = useCallback( async () => {
+  const handleConfirmarConclusaoVenda = useCallback(async () => {
     let sales = [];
     let multiplicador = parcelas / 30;
     let [ano, mes, dia] = new Date()
@@ -168,9 +130,15 @@ export default () => {
     } else {
       toast.error(resposta.data.message);
     }
-  }, [cliente.name, entrada.floatValue, history, id, parcelas, selectedPagamento, valorTotal])
-
-  
+  }, [
+    cliente.name,
+    entrada.floatValue,
+    history,
+    id,
+    parcelas,
+    selectedPagamento,
+    valorTotal,
+  ]);
 
   return (
     <div className="container-fluid">
@@ -233,11 +201,7 @@ export default () => {
             ""
           )}
 
-          <Button
-            variant="primary"
-            onClick={handleConfirmarConclusaoVenda}
-          >
-            
+          <Button variant="primary" onClick={handleConfirmarConclusaoVenda}>
             Confirmar Conclusão da Venda
           </Button>
         </div>
@@ -247,7 +211,6 @@ export default () => {
             className="m-2"
             onClick={handlerPushImprimir}
           >
-            
             Imprimir Orcamento
           </Button>
 
@@ -274,12 +237,42 @@ export default () => {
           )}
 
           <div className="mt-3">
-            <BootstrapTable
-              keyField="index"
+            <BootstrapDataTable
               data={listaPedido}
-              columns={columns}
-            />
-              
+              keyField="index"
+              pagination={false}
+              search={false}
+              exportCSV={false}
+            >
+              <TableHeaderColumn dataField="index" width="5%">
+                #
+              </TableHeaderColumn>
+              <TableHeaderColumn dataField="description">
+                Descrição
+              </TableHeaderColumn>
+              <TableHeaderColumn dataField="detail">Detalhe</TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="quantity"
+                width="10%"
+                dataFormat={numberFormatter}
+              >
+                Quant.
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="sale_value"
+                width="15%"
+                dataFormat={priceFormatter}
+              >
+                Valor Unit.
+              </TableHeaderColumn>
+              <TableHeaderColumn
+                dataField="amount"
+                width="15%"
+                dataFormat={priceFormatter}
+              >
+                Valor Total
+              </TableHeaderColumn>
+            </BootstrapDataTable>
           </div>
         </div>
       </div>

@@ -13,30 +13,7 @@ import {
   dateFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
 import { useCallback } from "react";
-
-const columns = [
-  {
-    dataField: "index",
-    text: "#",
-    headerStyle: { width: "5%" },
-  },
-  {
-    dataField: "description",
-    text: "Descrição",
-  },
-  {
-    dataField: "amount",
-    text: "Valor",
-    headerStyle: { width: "15%" },
-    formatter: priceFormatter,
-  },
-  {
-    dataField: "date_outlay",
-    text: "Data",
-    headerStyle: { width: "15%" },
-    formatter: dateFormatter,
-  },
-];
+import { TableHeaderColumn } from "react-bootstrap-table";
 
 export default () => {
   const history = useHistory();
@@ -163,12 +140,28 @@ export default () => {
           </Form>
         </div>
         <div className="col-9">
-          <BootstrapTable
-            bootstrap4
-            data={outlays}
-            keyField="index"
-            columns={columns}
-          />
+          <BootstrapTable bootstrap4 data={outlays} keyField="index">
+            <TableHeaderColumn dataField="index"  width="5%">
+              #
+            </TableHeaderColumn>
+            <TableHeaderColumn dataField="description">
+              Descrição
+            </TableHeaderColumn>
+            <TableHeaderColumn
+              dataField="amount"
+              width="15%"
+              dataFormat={priceFormatter}
+            >
+              Valor
+            </TableHeaderColumn>
+            <TableHeaderColumn
+              dataField="date_outlay"
+              width="15%"
+              dataFormat={dateFormatter}
+            >
+              Data
+            </TableHeaderColumn>
+          </BootstrapTable>
         </div>
       </div>
     </>

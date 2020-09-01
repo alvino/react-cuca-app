@@ -1,42 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
 
 import api from "../../server/api";
 import {
   priceFormatter,
   dateFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
-import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
+
 import { useCallback } from "react";
+import { TableHeaderColumn } from "react-bootstrap-table";
 
-const columns = [
-  {
-    dataField: "id",
-    text: "Cod",
-    sort: true,headerStyle: { width: "5%" },
-  },
-  {
-    dataField: "description",
-    text: "Descrição",sort: true,
-  },
-  {
-    dataField: "amount",
-    text: "Valor",
-    sort: true,headerStyle: { width: "10%" },
-    formatter: priceFormatter,
-  },
-  {
-    dataField: "date_outlay",
-    text: "Data",
-    headerStyle: { width: "10%" },
-    formatter: dateFormatter,
-  },
-  
-];
-
-
+import BootstrapDataTable from "../../components/bootstrap/DataTable";
 
 export default () => {
   const history = useHistory();
@@ -48,26 +24,25 @@ export default () => {
   });
 
   useEffect(() => {
-    
-      const query = { date_outlay: "" };
+    const query = { date_outlay: "" };
 
-      api.get("/outlay", { params: query })
-      .then( response => {
+    api
+      .get("/outlay", { params: query })
+      .then((response) => {
         setOutlays(response.data.outlays);
       })
-      .catch( error => {
-        toast.error('Erro ao acessar API')
-        console.error(error)
-      })
+      .catch((error) => {
+        toast.error("Erro ao acessar API");
+        console.error(error);
+      });
   }, []);
 
-  const onSelect = useCallback( (row, isSelected) => {
+  const onSelect = useCallback((row, isSelected) => {
     setRowSelected({
       row,
       isSelected,
     });
-  }, [])
-  
+  }, []);
 
   return (
     <>
@@ -100,20 +75,37 @@ export default () => {
             Relatorio de Gastos
           </Button>
         </div>
-
-        
       </div>
 
-      <div >
-        
-
-        <BootstrapPaginationExportSearchDataTable
-          keyField='id'
+      <div>
+        <BootstrapDataTable
           data={outlays}
           onSelect={onSelect}
-          columns={columns}
-        />
-         
+          keyField='id'
+        >
+          <TableHeaderColumn dataField="id" dataSort width="5%">
+            #
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="description" dataSort>
+            Descrição
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField="amount"
+            dataSort
+            width="10%"
+            dataFormat={priceFormatter}
+          >
+            Valor
+          </TableHeaderColumn>
+          <TableHeaderColumn
+            dataField="date_outlay"
+            dataSort
+            width="10%"
+            dataFormat={dateFormatter}
+          >
+            Data
+          </TableHeaderColumn>
+        </BootstrapDataTable>
       </div>
     </>
   );

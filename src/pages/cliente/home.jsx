@@ -2,43 +2,10 @@ import React, { useState, useEffect, useCallback } from "react";
 import api from "../../server/api";
 import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import { TableHeaderColumn } from "react-bootstrap-table";
 
-import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
+import BootstrapDataTable from "../../components/bootstrap/DataTable";
 import { toast } from "react-toastify";
-
-const columns = [
-  {
-    dataField: "name",
-    text: "Nome",
-    sort: true,
-  },
-  {
-    dataField: "cpf",
-    text: "CPF/CNPJ",
-    headerStyle: { width: "15%" },
-  },
-  {
-    dataField: "email",
-    text: "Email",
-    sort: true,
-  },
-  {
-    dataField: "telephone",
-    text: "Telefone",
-    headerStyle: { width: "10%" },
-  },
-  {
-    dataField: "city",
-    text: "Cidade",
-    sort: true,
-  },
-  {
-    dataField: "uf",
-    text: "Estado",
-    sort: true,
-    headerStyle: { width: "5%" },
-  },
-];
 
 export default () => {
   const history = useHistory();
@@ -50,8 +17,9 @@ export default () => {
   });
 
   useEffect(() => {
-      api.get("/client")
-      .then( response => setClients(response.data.clients) )
+    api
+      .get("/client")
+      .then((response) => setClients(response.data.clients))
       .catch((error) => {
         toast.error("Erro de rede ao acessar API");
         console.error(error);
@@ -69,7 +37,6 @@ export default () => {
           <Button
             variant="primary"
             className="p-2"
-            
             onClick={() => history.push("/cliente/register")}
           >
             Cadastra Cliente
@@ -80,7 +47,6 @@ export default () => {
               <Button
                 variant="info"
                 className="p-2"
-                
                 onClick={() =>
                   history.push(`/cliente/register/${rowSelected.row.id}`)
                 }
@@ -91,7 +57,6 @@ export default () => {
               <Button
                 variant="danger"
                 className="p-2"
-                
                 onClick={() =>
                   history.push(`/cliente/delete/${rowSelected.row.id}`)
                 }
@@ -106,12 +71,30 @@ export default () => {
       </div>
 
       <div>
-        <BootstrapPaginationExportSearchDataTable
-          keyField="cpf"
+        <BootstrapDataTable
+          keyField='cpf'
           data={clients}
-          columns={columns}
           onSelect={onSelect}
-        />
+        >
+          <TableHeaderColumn dataField="name" dataSort>
+            Nome
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="cpf"  width="15%">
+            CPF/CNPJ
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="email" dataSort>
+            Email
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="telephone" width="10%">
+            Telefone
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="city" dataSort>
+            Cidade
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="uf" dataSort width="5%">
+            Estado
+          </TableHeaderColumn>
+        </BootstrapDataTable>
       </div>
     </div>
   );

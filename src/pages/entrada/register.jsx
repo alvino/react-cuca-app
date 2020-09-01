@@ -13,25 +13,7 @@ import {
   dateFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
 import { useCallback } from "react";
-
-const columns = [
-  { dataField: "index", text: "#", headerStyle: { width: "5%" } },
-  { dataField: "description", text: "Descrição" },
-  { dataField: "parcel", text: "De", headerStyle: { width: "5%" } },
-  { dataField: "all_parcel", text: "Parc.", headerStyle: { width: "5%" } },
-  {
-    dataField: "amount",
-    text: "Valor",
-    formatter: priceFormatter,
-    headerStyle: { width: "10%" },
-  },
-  {
-    dataField: "date_sale",
-    text: "Data",
-    formatter: dateFormatter,
-    headerStyle: { width: "10%" },
-  },
-];
+import { TableHeaderColumn } from "react-bootstrap-table";
 
 export default () => {
   const history = useHistory();
@@ -166,12 +148,34 @@ export default () => {
         </div>
 
         <div className="col-9">
-          <BootstrapTable
-            bootstrap4={true}
-            keyField="index"
-            data={sales}
-            columns={columns}
-          />
+          <BootstrapTable data={sales}>
+            <TableHeaderColumn dataField="index" width="5%">
+              #
+            </TableHeaderColumn>
+            <TableHeaderColumn dataField="description">
+              Descrição
+            </TableHeaderColumn>
+            <TableHeaderColumn dataField="parcel" width="5%">
+              De
+            </TableHeaderColumn>
+            <TableHeaderColumn dataField="all_parcel" width="5%">
+              Parc.
+            </TableHeaderColumn>
+            <TableHeaderColumn
+              dataField="amount"
+              width="10%"
+              dataFormat={priceFormatter}
+            >
+              Valor
+            </TableHeaderColumn>
+            <TableHeaderColumn
+              dataField="date_sale"
+              width="10%"
+              dataFormat={dateFormatter}
+            >
+              Data
+            </TableHeaderColumn>
+          </BootstrapTable>
         </div>
       </div>
     </>

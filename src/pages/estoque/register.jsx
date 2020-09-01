@@ -12,23 +12,7 @@ import ModalCenterBootstrapTable from "../../components/ModalCenterBootstrapTabl
 import InputFormControl from "../../components/bootstrap/InputFormControl";
 import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
 import NumberFormat from "../../components/NumberFormat";
-
-const columnsProviders = [
-  {
-    dataField: "id",
-    text: "#",
-    headerStyle: { width: "10%" },
-  },
-  {
-    dataField: "nickname",
-    text: "Descrição",
-  },
-  {
-    dataField: "cnpj",
-    text: "CNPJ/CPF",
-    headerStyle: { width: "20%" },
-  },
-];
+import { TableHeaderColumn } from "react-bootstrap-table";
 
 export default () => {
   const history = useHistory();
@@ -219,9 +203,15 @@ export default () => {
           data={providers}
           onSelected={handleSelectedFornecedor}
           onHide={() => setModalShowFornecedor(false)}
-          keyField="id"
-          columns={columnsProviders}
-        />
+        >
+          <TableHeaderColumn dataField="id" isKey width="10%">
+            #
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="nickname">Descrição</TableHeaderColumn>
+          <TableHeaderColumn dataField="cnpj" width="20%">
+            CNPJ/CPF
+          </TableHeaderColumn>
+        </ModalCenterBootstrapTable>
 
         <table className="table table-hover">
           <thead>

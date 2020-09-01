@@ -4,45 +4,8 @@ import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import BootstrapPaginationExportSearchDataTable from "../../components/bootstrap/BootstrapPaginationExportSearchDataTable";
-
-const columns = [
-  {
-    dataField: "nickname",
-    text: "Empresa",
-    sort: true,
-  },
-  {
-    dataField: "cnpj",
-    text: "CNPJ/CPF",
-    headerStyle: { width: "15%" },
-  },
-  {
-    dataField: "email",
-    text: "Email",
-    sort: true,
-  },
-  {
-    dataField: "telephone",
-    text: "Telefone",
-    headerStyle: { width: "10%" },
-  },
-  {
-    dataField: "bank_data",
-    text: "Dados Bancarios",
-  },
-  {
-    dataField: "city",
-    text: "Cidade",
-    sort: true,
-  },
-  {
-    dataField: "uf",
-    text: "Estado",
-    sort: true,
-    headerStyle: { width: "10%" },
-  },
-];
+import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import { TableHeaderColumn } from "react-bootstrap-table";
 
 export default () => {
   const history = useHistory();
@@ -70,7 +33,7 @@ export default () => {
   }, []);
 
   return (
-    <div>
+    <>
       <div className="d-flex justify-content-center">
         <div className="btn-group " role="group">
           <Button
@@ -111,12 +74,33 @@ export default () => {
         </div>
       </div>
 
-      <BootstrapPaginationExportSearchDataTable
+      <BootstrapDataTable
         keyField="cnpj"
         data={providers}
         onSelect={onSelect}
-        columns={columns}
-      />
-    </div>
+      >
+        <TableHeaderColumn dataField="nickname" dataSort>
+          Empresa
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="cnpj" width="15%">
+          CNPJ/CPF
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="email" dataSort>
+          Email
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="telephone" width="10%">
+          Telefone
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="bank_data">
+          Dados Bancarios
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="city" dataSort>
+          Cidade
+        </TableHeaderColumn>
+        <TableHeaderColumn dataField="uf" dataSort width="10%">
+          UF
+        </TableHeaderColumn>
+      </BootstrapDataTable>
+    </>
   );
 };

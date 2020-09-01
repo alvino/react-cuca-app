@@ -2,15 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
 
-import BootstrapPaginationSearchDataTable from "../components/bootstrap/BootstrapPaginationSearchDataTable";
+import BootstrapDataTable from "../components/bootstrap/DataTable";
 
 export default function ModalCenterBootstrapTable({
   onSelected,
   onHide,
   data,
   title,
-  keyField,
-  columns,
+  children,
   ...props
 }) {
 
@@ -22,6 +21,7 @@ export default function ModalCenterBootstrapTable({
   return (
     <Modal
       {...props}
+      size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
       onHide={onHide}
@@ -30,20 +30,14 @@ export default function ModalCenterBootstrapTable({
         <Modal.Title id="contained-modal-title-vcenter"> {title} </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <BootstrapPaginationSearchDataTable
-          keyField={keyField}
-          data={data}
-          onSelect={onSelect}
-          columns={columns}
-          hover
-        />
+        <BootstrapDataTable data={data} onSelect={onSelect}>
+          {children}
+        </BootstrapDataTable>
       </Modal.Body>
     </Modal>
   );
 }
 
 ModalCenterBootstrapTable.propTypes = {
-    keyField: PropTypes.string.isRequired,
     data: PropTypes.array.isRequired,
-    columns: PropTypes.array.isRequired,
 }
