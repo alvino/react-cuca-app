@@ -5,23 +5,23 @@ import CurrencyFormat from 'react-currency-format'
 
 export default function InputNumberFormat(props) {
   const { id, label, prefix, ...restProps } = props
+
+  const Imput = () =>
+    prefix === "" ? (
+      <CurrencyFormat {...restProps} />
+    ) : (
+      <InputGroup className="mb-3">
+        <InputGroup.Prepend>
+          <InputGroup.Text>{prefix}</InputGroup.Text>
+        </InputGroup.Prepend>
+        <CurrencyFormat {...restProps} />
+      </InputGroup>
+    ); 
+
   return (
     <Form.Group controlId={id}>
       <Form.Label>{label}</Form.Label>
-      {
-        prefix === '' ?
-          <CurrencyFormat  {...restProps} />
-          :
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text >{prefix}</InputGroup.Text>
-            </InputGroup.Prepend>
-            <CurrencyFormat  {...restProps} />
-          </InputGroup>
-      }
-
-
-
+      <Imput />
     </Form.Group>
   )
 }
