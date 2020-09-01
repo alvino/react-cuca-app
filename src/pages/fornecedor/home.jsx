@@ -41,11 +41,11 @@ export default () => {
             className="p-2"
             onClick={() => history.push("/fornecedor/register")}
           >
-            {" "}
-            Cadastra Fornecedor{" "}
+            
+            Cadastra Fornecedor
           </Button>
 
-          {rowSelected.isSelected ? (
+          {rowSelected.isSelected && (
             <>
               <Button
                 variant="info"
@@ -64,13 +64,11 @@ export default () => {
                   history.push(`/fornecedor/delete/${rowSelected.row.id}`)
                 }
               >
-                {" "}
+                
                 Deletar Fornecedor
               </Button>
             </>
-          ) : (
-            ""
-          )}
+          ) }
         </div>
       </div>
 

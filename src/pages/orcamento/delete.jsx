@@ -67,8 +67,8 @@ export default () => {
         ))}
       </div>
       <Button variant="danger" onClick={handleSubmit}>
-        {" "}
-        Confirmar remoção{" "}
+        
+        Confirmar remoção
       </Button>
     </div>
   );

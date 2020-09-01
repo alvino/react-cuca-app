@@ -51,11 +51,11 @@ export default () => {
         <p>Parcela: {`${venda.parcel} de ${venda.all_parcel}`}</p>
 
         <p>
-          Valor: <NumberFormat value={venda.amount} />{" "}
+          Valor: <NumberFormat value={venda.amount} />
         </p>
 
         <p>
-          Data para receber: <DateFormat value={venda.date_sale} />{" "}
+          Data para receber: <DateFormat value={venda.date_sale} />
         </p>
 
         <p>

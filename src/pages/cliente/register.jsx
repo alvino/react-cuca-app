@@ -218,8 +218,8 @@ export default () => {
         </SelectFormControl>
 
         <Button variant="primary" onClick={handleSubmit}>
-          {" "}
-          Salvar Cadastro{" "}
+          
+          Salvar Cadastro
         </Button>
       </Form>
     </>

@@ -55,7 +55,7 @@ export default () => {
             Cadastra Saida
           </Button>
 
-          {rowSelected.isSelected ? (
+          {rowSelected.isSelected && (
             <Button
               variant="danger"
               onClick={() =>
@@ -64,9 +64,7 @@ export default () => {
             >
               Deletar Saida
             </Button>
-          ) : (
-            ""
-          )}
+          ) }
 
           <Button
             variant="success"

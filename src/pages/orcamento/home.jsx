@@ -40,7 +40,7 @@ export default () => {
   return (
     <div>
       <div className="d-flex justify-content-center">
-        {rowSelected.isSelected ? (
+        {rowSelected.isSelected && (
           <div className="btn-group " role="group">
             <Button
               variant="primary"
@@ -49,8 +49,8 @@ export default () => {
                 history.push(`/venda/fechamentodevenda/${rowSelected.row.id}`)
               }
             >
-              {" "}
-              Finalizar Venda{" "}
+              
+              Finalizar Venda
             </Button>
 
             <Button
@@ -60,8 +60,8 @@ export default () => {
                 history.push(`/orcamento/print/${rowSelected.row.id}`)
               }
             >
-              {" "}
-              Imprimir Orcamento{" "}
+             
+              Imprimir Orcamento
             </Button>
 
             <Button
@@ -71,13 +71,11 @@ export default () => {
                 history.push(`/orcamento/delete/${rowSelected.row.id}`)
               }
             >
-              {" "}
+              
               Deletar Orcamento
             </Button>
           </div>
-        ) : (
-          ""
-        )}
+        ) }
       </div>
 
       <BootstrapDataTable

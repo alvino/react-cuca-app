@@ -211,14 +211,12 @@ export default () => {
           </div>
           <div className="d-flex justify-content-end">
             <Button variant="success" onClick={handleAdicionar}>
-              {" "}
-              Adicionar{" "}
+              
+              Adicionar
             </Button>
           </div>
 
-          {listaPedido.length === 0 || !selectedCliente.name ? (
-            ""
-          ) : (
+          {(listaPedido.length === 0 || !selectedCliente.name) || (
             <div className="btn-group d-flex justify-content-end mt-5">
               <Button variant="primary" onClick={handleFinalizarPedido}>
                 Finalizar o Pedido

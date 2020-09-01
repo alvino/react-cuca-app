@@ -176,7 +176,7 @@ export default () => {
             <option>A vista</option>
             <option>A prazo</option>
           </SelectFormControl>
-          {selectedPagamento === "A prazo" ? (
+          {selectedPagamento === "A prazo" && (
             <>
               <InputFormControl
                 label="Parcelas"
@@ -197,8 +197,6 @@ export default () => {
                 onValueChange={(values) => setEntrada(values)}
               />
             </>
-          ) : (
-            ""
           )}
 
           <Button variant="primary" onClick={handleConfirmarConclusaoVenda}>
@@ -228,12 +226,10 @@ export default () => {
           <p className="text-right">
             Desconto: <NumberFormat value={desconto.floatValue || 0} />
           </p>
-          {selectedPagamento === "A prazo" ? (
+          {selectedPagamento === "A prazo" && (
             <p className="text-right">
               Entrada: <NumberFormat value={entrada.floatValue || 0} />
             </p>
-          ) : (
-            ""
           )}
 
           <div className="mt-3">

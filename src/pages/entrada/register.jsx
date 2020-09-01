@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button, Form } from "react-bootstrap";
-import BootstrapTable from "react-bootstrap-table-next";
+import { TableHeaderColumn } from "react-bootstrap-table";
 
+
+import BootstrapDataTable from "../../components/bootstrap/DataTable";
 import InputFormControl from "../../components/bootstrap/InputFormControl";
 import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
 import SelectFormControl from "../../components/bootstrap/SelectFormControl";
@@ -12,8 +14,7 @@ import {
   priceFormatter,
   dateFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
-import { useCallback } from "react";
-import { TableHeaderColumn } from "react-bootstrap-table";
+
 
 export default () => {
   const history = useHistory();
@@ -126,7 +127,7 @@ export default () => {
               <option>A vista</option>
               <option>A prazo</option>
             </SelectFormControl>
-            {selectedPagamento === "A prazo" ? (
+            {selectedPagamento === "A prazo" && (
               <InputFormControl
                 label="Parcelas"
                 type="Number"
@@ -136,20 +137,18 @@ export default () => {
                 value={parcelas}
                 onChange={(event) => setParcelas(event.target.value)}
               />
-            ) : (
-              ""
-            )}
+            ) }
 
             <Button variant="primary" onClick={handleSubmit}>
-              {" "}
-              Salvar Cadastro{" "}
+              
+              Salvar Cadastro
             </Button>
           </Form>
         </div>
 
         <div className="col-9">
-          <BootstrapTable data={sales}>
-            <TableHeaderColumn dataField="index" width="5%">
+          <BootstrapDataTable data={sales}>
+            <TableHeaderColumn dataField="index" isKey width="5%">
               #
             </TableHeaderColumn>
             <TableHeaderColumn dataField="description">
@@ -175,7 +174,7 @@ export default () => {
             >
               Data
             </TableHeaderColumn>
-          </BootstrapTable>
+          </BootstrapDataTable>
         </div>
       </div>
     </>

@@ -166,13 +166,11 @@ export default () => {
             </Button>
           </div>
         </form>
-        {listStock.length === 0 ? (
-          ""
-        ) : (
+        {(listStock.length === 0) || (
           <Button variant="primary" onClick={handleSaveListStock}>
             Salvar Lista de Produtos
-          </Button>
-        )}
+          </Button>)
+        }
       </div>
       <div className="col-8">
         <InputFormControl

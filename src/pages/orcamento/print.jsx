@@ -11,8 +11,9 @@ import {
   FaFacebook,
   FaMapMarkedAlt,
 } from "react-icons/fa";
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import { TableHeaderColumn } from "react-bootstrap-table";
 
+import BootstrapDataTable from "../../components/bootstrap/DataTable";
 import NumberFormat from "../../components/NumberFormat";
 import DateFormat from "../../components/DateFormat";
 import {
@@ -22,8 +23,7 @@ import {
 
 import logoCuca from "../../assert/logo_cuca.svg";
 import qrcodeWhats from "../../assert/whatsapp.png";
-import "../../css/print.css";
-import { TableHeaderColumn } from "react-bootstrap-table";
+import Print from "../../styles/Print";
 
 export default () => {
   const history = useHistory();
@@ -117,7 +117,7 @@ export default () => {
   const handleImprimir = () => window.print();
 
   return (
-    <div>
+    <Print>
       <div className="btn-group mb-5 noprint" role="group">
         <Button variant="secondary" onClick={() => history.goBack()}>
           Voltar
@@ -203,20 +203,17 @@ export default () => {
             Valido por 30 dias (ou ate dura o estoque)
           </p>
 
-          {cliente.name ? (
-            <p className="font-weight-bold text-uppercase mb-2">
-              Cliente: {cliente.name}
-            </p>
-          ) : (
-            ""
-          )}
-          {cliente.cpf ? <p className="mb-2">CPF/CNPJ: {cliente.cpf}</p> : ""}
+          <p className="font-weight-bold text-uppercase mb-2">
+            Cliente: {cliente.name}
+          </p>
+
+          <p className="mb-2">CPF/CNPJ: {cliente.cpf}</p>
 
           <div className="mt-3">
             <p className="text-right font-weight-bold">
               <span className="h4">
-                {" "}
-                <NumberFormat value={Number(orcamento.amount)} />{" "}
+                
+                <NumberFormat value={Number(orcamento.amount)} />
               </span>
             </p>
 
@@ -225,9 +222,9 @@ export default () => {
         </div>
       </div>
 
-      <Button className="mt-5" onClick={handleImprimir}>
+      <Button className="mt-5 noprint" onClick={handleImprimir}>
         Imprimir
       </Button>
-    </div>
+    </Print>
   );
 };

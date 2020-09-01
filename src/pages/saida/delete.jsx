@@ -52,11 +52,11 @@ export default () => {
         <p>Descrição: {gasto.description}</p>
 
         <p>
-          Valor: <NumberFormat value={gasto.amount} />{" "}
+          Valor: <NumberFormat value={gasto.amount} />
         </p>
 
         <p>
-          Vencimento: <DateFormat value={gasto.date_outlay} />{" "}
+          Vencimento: <DateFormat value={gasto.date_outlay} />
         </p>
 
         <p>

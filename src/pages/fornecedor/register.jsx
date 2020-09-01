@@ -218,8 +218,8 @@ export default () => {
         </div>
 
         <Button variant="primary" onClick={handleSubmit}>
-          {" "}
-          Salvar Cadastro{" "}
+          
+          Salvar Cadastro
         </Button>
       </form>
     </>

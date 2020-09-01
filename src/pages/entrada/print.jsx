@@ -7,15 +7,19 @@ import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
 import InputFormControl from "../../components/bootstrap/InputFormControl";
-import SelectFormControl from "../../components/bootstrap/SelectFormControl";
+import SelectFormControl, {
+  OptionMeses,
+  OptionDias,
+} from "../../components/bootstrap/SelectFormControl";
 import NumberFormat from "../../components/NumberFormat";
 import {
   priceFormatter,
   dateFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
+import {ButtonHandlePrint} from '../../components/bootstrap/Buttons'
+import Cabecalho from "../../components/print/Cabecalho";
 
-import logoCuca from "../../assert/logo_cuca.svg";
-import "../../css/print.css";
+import Print from "../../styles/Print";
 
 export default () => {
   const history = useHistory();
@@ -56,18 +60,15 @@ export default () => {
     setValorTotal(sales.reduce((acc, item) => acc + item.amount, 0.0));
   }, [sales]);
 
-  const handleImprimir = () => {
-    window.print();
-  };
 
   return (
-    <div>
+    <Print>
       <div className="mb-5 noprint">
         <div className="btn-group mb-2" role="group">
           <Button variant="secondary" onClick={() => history.goBack()}>
             Voltar
           </Button>
-          <Button onClick={handleImprimir}>Imprimir</Button>
+          <ButtonHandlePrint />
         </div>
         <div>
           <Form className="mt-2">
@@ -93,19 +94,7 @@ export default () => {
                       value={mes}
                       onChange={(event) => setMes(event.target.value)}
                     >
-                      <option value="">Selecione um mes</option>
-                      <option value="01">Janeiro</option>
-                      <option value="02">Fevereiro</option>
-                      <option value="03">Março</option>
-                      <option value="04">Abril</option>
-                      <option value="05">Maio</option>
-                      <option value="06">Junho</option>
-                      <option value="07">Julho</option>
-                      <option value="08">Agosto</option>
-                      <option value="09">Setembro</option>
-                      <option value="10">Outubro</option>
-                      <option value="11">Novembro</option>
-                      <option value="12">Dezembro</option>
+                      <OptionMeses />
                     </SelectFormControl>
                   </div>
 
@@ -118,38 +107,7 @@ export default () => {
                         value={dia}
                         onChange={(event) => setDia(event.target.value)}
                       >
-                        <option></option>
-                        <option>01</option>
-                        <option>02</option>
-                        <option>03</option>
-                        <option>04</option>
-                        <option>05</option>
-                        <option>06</option>
-                        <option>07</option>
-                        <option>08</option>
-                        <option>09</option>
-                        <option>10</option>
-                        <option>11</option>
-                        <option>12</option>
-                        <option>13</option>
-                        <option>14</option>
-                        <option>15</option>
-                        <option>16</option>
-                        <option>17</option>
-                        <option>18</option>
-                        <option>19</option>
-                        <option>20</option>
-                        <option>21</option>
-                        <option>22</option>
-                        <option>23</option>
-                        <option>24</option>
-                        <option>25</option>
-                        <option>26</option>
-                        <option>27</option>
-                        <option>28</option>
-                        <option>29</option>
-                        <option>30</option>
-                        <option>31</option>
+                        <OptionDias />
                       </SelectFormControl>
                     </div>
                   ) : (
@@ -178,37 +136,7 @@ export default () => {
       </div>
       <div>
         <div className="print">
-          <div
-            className="bg-primary 
-          d-flex-column 
-          text-white d-flex 
-          justify-content-between 
-          align-items-center p-3 header"
-          >
-            <div className="justify-content-center">
-              <div className="d-flex justify-content-center">
-                <img src={logoCuca} height="100px" alt="logo" />
-              </div>
-            </div>
-            <div className="text-center ml-2">
-              <span className="h5 font-italic">Para Crescer,</span>
-              <span className="h5 font-weight-bold"> Use a Cuca.</span>
-            </div>
-
-            <div>
-              <div className="text-center">
-                <span className="">MARKETING & PROPAGANDA</span>
-              </div>
-              <div className="text-center">
-                <span className="">FOTOS & FILMAGENS</span>
-              </div>
-              <div className="text-center">
-                <span className="h5 font-weight-bold">
-                  CNPJ: 28.110.511/0001-85
-                </span>
-              </div>
-            </div>
-          </div>
+          <Cabecalho />
 
           <div className=" mb-auto">
             <p className="h2 text-center m-4  ">
@@ -254,7 +182,7 @@ export default () => {
                 <TableHeaderColumn
                   dataField="date_sale"
                   dataSort
-                  width="10%"
+                  width="15%"
                   dataFormat={dateFormatter}
                 >
                   Data
@@ -264,10 +192,8 @@ export default () => {
           </div>
         </div>
 
-        <Button className="mt-5" onClick={handleImprimir}>
-          Imprimir
-        </Button>
+        <ButtonHandlePrint />
       </div>
-    </div>
+    </Print>
   );
 };
