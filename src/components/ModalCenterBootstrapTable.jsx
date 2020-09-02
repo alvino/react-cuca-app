@@ -30,7 +30,7 @@ export default function ModalCenterBootstrapTable({
         <Modal.Title id="contained-modal-title-vcenter"> {title} </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <BootstrapDataTable data={data} onSelect={onSelect}>
+        <BootstrapDataTable data={data} onSelect={onSelect} exportCSV={false} >
           {children}
         </BootstrapDataTable>
       </Modal.Body>

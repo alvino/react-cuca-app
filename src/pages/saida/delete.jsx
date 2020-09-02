@@ -25,7 +25,6 @@ export default () => {
         }
         console.log(response.data);
         setGasto(response.data.outlay);
-        toast.info(response.data.message);
       })
       .catch((error) => {
         toast.error("Erro ao acessar API");

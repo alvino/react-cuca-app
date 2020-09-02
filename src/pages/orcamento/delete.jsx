@@ -27,7 +27,6 @@ export default () => {
           history.push("/orcamento");
           return;
         }
-        toast.info(response.data.message);
 
         setListaPedido(response.data.wish_list);
         setOrcamento(response.data.budget);

@@ -17,7 +17,7 @@ import {
   dateFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
 import { ButtonHandlePrint } from "../../components/bootstrap/Buttons";
-import Cabecalho from '../../components/print/Cabecalho'
+import BannerSimples from '../../components/print/BannerSimples'
 
 import Print from "../../styles/Print";
 
@@ -64,17 +64,11 @@ export default () => {
   
   return (
     <Print>
-      <div className="mb-5 noprint">
-        <div className="btn-group mb-2" role="group">
-          <Button variant="secondary" onClick={() => history.goBack()}>
-            Voltar
-          </Button>
-          <ButtonHandlePrint />
-        </div>
+      <div className="my-2 noprint">
         <div>
-          <Form className="mt-2">
+          <Form>
             <div className="row d-flex justify-content-start align-items-center">
-              {checked || (
+              {checked && (
                 <>
                   <div className="col-2">
                     <InputFormControl
@@ -99,7 +93,7 @@ export default () => {
                     </SelectFormControl>
                   </div>
 
-                  {mes !== "" || (
+                  {mes !== "" && (
                     <div className="col-2">
                       <SelectFormControl
                         label="Dia"
@@ -113,7 +107,7 @@ export default () => {
                     </div>
                   )}
                 </>
-              ) }
+              )}
               <div className="col-2">
                 <ButtonGroup toggle>
                   <ToggleButton
@@ -129,11 +123,17 @@ export default () => {
               </div>
             </div>
           </Form>
+          <div className="btn-group my-2" role="group">
+            <Button variant="secondary" onClick={() => history.goBack()}>
+              Voltar
+            </Button>
+            <ButtonHandlePrint />
+          </div>
         </div>
       </div>
       <div>
         <div className="print">
-          <Cabecalho />
+          <BannerSimples />
 
           <div className=" mb-auto">
             <p className="h2 text-center m-4  ">
@@ -156,7 +156,7 @@ export default () => {
                 exportCSV={false}
                 keyField="id"
               >
-                <TableHeaderColumn dataField="id" dataSort width="5%">
+                <TableHeaderColumn dataField="id" dataSort width="8%">
                   #
                 </TableHeaderColumn>
                 <TableHeaderColumn dataField="description" dataSort>
@@ -165,7 +165,7 @@ export default () => {
                 <TableHeaderColumn
                   dataField="amount"
                   dataSort
-                  width="15%"
+                  width="20%"
                   dataFormat={priceFormatter}
                 >
                   Valor

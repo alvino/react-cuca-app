@@ -23,7 +23,6 @@ export default () => {
           return;
         }
         setVenda(response.data.sale);
-        toast.info(response.data.message);
       })
       .catch((error) => {
         toast.error("Erro de rede ao acessar API venda");

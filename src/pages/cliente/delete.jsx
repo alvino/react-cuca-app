@@ -33,7 +33,6 @@ export default () => {
           history.push("/cliente/register");
           return;
         }
-        toast.info(response.data.message);
         setFormData({
           name: client.name,
           email: client.email,

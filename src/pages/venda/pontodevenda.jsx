@@ -92,7 +92,19 @@ export default () => {
       ),
     };
 
-    setListaPedido([pedido, ...listaPedido]);
+    let flagRepetido = false;
+    listaPedido.forEach((item) => {
+      if (item.stock === pedido.stock) {
+        flagRepetido = true;
+      }
+    });
+
+    if(flagRepetido) {
+      toast.warning('Este item já esta na lista de pedidos')
+    } else {
+      setListaPedido([pedido, ...listaPedido]);
+    }
+
     setSelectedProduto({});
     setQuantidade({
       value: "1",
@@ -211,12 +223,11 @@ export default () => {
           </div>
           <div className="d-flex justify-content-end">
             <Button variant="success" onClick={handleAdicionar}>
-              
               Adicionar
             </Button>
           </div>
 
-          {(listaPedido.length === 0 || !selectedCliente.name) || (
+          {listaPedido.length === 0 || !selectedCliente.name || (
             <div className="btn-group d-flex justify-content-end mt-5">
               <Button variant="primary" onClick={handleFinalizarPedido}>
                 Finalizar o Pedido
@@ -256,7 +267,7 @@ export default () => {
             onHide={() => setModalShowCliente(false)}
           >
             <TableHeaderColumn dataField="id" isKey width="10%">
-              "#"
+              #
             </TableHeaderColumn>
             <TableHeaderColumn dataField="name">Nome</TableHeaderColumn>
             <TableHeaderColumn dataField="cpf" width="30%">
@@ -269,7 +280,6 @@ export default () => {
             pagination={false}
             search={false}
             exportCSV={false}
-            
           >
             <TableHeaderColumn
               dataField="index"
@@ -284,9 +294,7 @@ export default () => {
                     )
                   }
                 >
-                  <IconRemoveList
-                    title="Revomer produto da lista"
-                  />
+                  <IconRemoveList title="Revomer produto da lista" />
                 </Button>
               )}
             >

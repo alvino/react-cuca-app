@@ -6,8 +6,11 @@ import CurrencyFormat from 'react-currency-format'
 export default function InputNumberFormat(props) {
   const { id, label, prefix, ...restProps } = props
 
-  const Imput = () =>
-    prefix === "" ? (
+
+  return (
+    <Form.Group controlId={id}>
+      <Form.Label>{label}</Form.Label>
+      { prefix === "" ? (
       <CurrencyFormat {...restProps} />
     ) : (
       <InputGroup className="mb-3">
@@ -16,12 +19,7 @@ export default function InputNumberFormat(props) {
         </InputGroup.Prepend>
         <CurrencyFormat {...restProps} />
       </InputGroup>
-    ); 
-
-  return (
-    <Form.Group controlId={id}>
-      <Form.Label>{label}</Form.Label>
-      <Imput />
+    ) }
     </Form.Group>
   )
 }

@@ -13,21 +13,18 @@ InputFormControl.propTypes = {
 
 export default function InputFormControl(props) {
   const { children, label, ...restProps } = props;
-
-  const Input = () =>
-    children ? (
+  
+  return (
+    <div className="form-group">
+      <label htmlFor={restProps.id}>{label}</label>
+      {children ? (
       <div className="input-group mb-3">
         <input {...restProps} />
         <div className="input-group-append">{children}</div>
       </div>
     ) : (
       <input {...restProps} />
-    )
-
-  return (
-    <div className="form-group">
-      <label htmlFor={restProps.id}>{label}</label>
-      <Input />
+    )}
     </div>
   );
 }

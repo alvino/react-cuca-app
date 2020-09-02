@@ -4,17 +4,17 @@ import styled from "styled-components";
 
 // import './Box.css'
 const Anchor = styled.a`
+  opacity: 0.6;
   width: 12rem;
   height: 12rem;
-  background-color: rgba(0, 123, 255, 0.6);
   -moz-transition: all 0.3s;
   -webkit-transition: all 0.3s;
   transition: all 0.35s;
   text-decoration: none;
 
   &:hover {
+    opacity: 1;
     text-decoration: none;
-    background-color: rgb(0, 123, 255);
     -moz-transform: scale(1.2);
     -webkit-transform: scale(1.2);
     transform: scale(1.2);
@@ -33,7 +33,7 @@ export default function (props) {
     <Anchor
       as={Link}
       to={props.to}
-      className="m-3 text-white d-flex rounded justify-content-center align-items-center shadow"
+      className="m-3 text-white d-flex rounded justify-content-center align-items-center shadow bg-primary"
     >
       <div className="d-flex flex-column justify-content-center align-items-center">
         <div className="d-flex size-box">{props.children}</div>

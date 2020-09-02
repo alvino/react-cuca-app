@@ -33,7 +33,6 @@ export default () => {
           history.push("/estoque/register");
           return;
         }
-        toast.info(response.data.message);
         console.info(stock);
         setFormData({
           nickname: stock.nickname,

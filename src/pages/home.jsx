@@ -15,50 +15,42 @@ import Box from '../components/Box'
 export default () => {
 
   return (
-    <div className='mb-5'>
+    <div className="mb-5">
       <Header />
 
-      <div className='container-fluid'>
-        <main className='d-flex sm:flex-column  align-items-center'>
-
-          <div className='row w-75 mx-auto'>
-
-            <Box title='Ponto de Venda' to='/venda' >
+      <div className="container-fluid">
+        <main className="d-flex justify-content-around  align-items-center">
+          <div className="row w-75 mx-auto">
+            <Box title="Ponto de Venda" to="/venda">
               <FaShoppingCart />
             </Box>
 
-            <Box title='Orçamentos' to='/orcamento' >
-              <FaClipboardList  />
+            <Box title="Orçamentos" to="/orcamento">
+              <FaClipboardList />
             </Box>
 
-            <Box title='Estoque' to='/estoque' >
-              <FaWarehouse  />
+            <Box title="Estoque" to="/estoque">
+              <FaWarehouse />
             </Box>
 
-            <Box title='Clientes' to='/cliente' >
-              <FaUser  />
+            <Box title="Clientes" to="/cliente">
+              <FaUser />
             </Box>
 
-            <Box title='Fornecedores' to='/fornecedor' >
-              <FaTruck  />
+            <Box title="Fornecedores" to="/fornecedor">
+              <FaTruck />
             </Box>
 
-            <Box title='Entrada' to='/entrada' >
+            <Box title="Entrada" to="/entrada">
               <GiReceiveMoney />
             </Box>
 
-            <Box title='Saida' to='/saida' >
+            <Box title="Saida" to="/saida">
               <GiPayMoney />
             </Box>
-
-
-
-
           </div>
-
         </main>
       </div>
     </div>
-
-  )
+  );
 }

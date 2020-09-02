@@ -29,7 +29,6 @@ export default () => {
         history.push("/fornecedor/register");
         return;
       }
-      toast.info(response.data.message);
       setFormData({
         nickname: provider.nickname,
         email: provider.email,
