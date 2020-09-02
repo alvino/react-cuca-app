@@ -4,25 +4,15 @@ import styled from "styled-components";
 
 // import './Box.css'
 const Anchor = styled.a`
-  border-radius: 0.3rem;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
-  color: #fff;
-  display: flex;
-  margin: 1rem;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
-  overflow: hidden;
-  justify-content: center;
-  align-items: center;
   width: 12rem;
   height: 12rem;
-  background-color: rgba(0, 123, 255, 0.7);
+  background-color: rgba(0, 123, 255, 0.6);
   -moz-transition: all 0.3s;
   -webkit-transition: all 0.3s;
-  transition: all 0.3s;
+  transition: all 0.35s;
   text-decoration: none;
 
   &:hover {
-    color: #fff;
     text-decoration: none;
     background-color: rgb(0, 123, 255);
     -moz-transform: scale(1.2);
@@ -36,11 +26,15 @@ const Anchor = styled.a`
   }
 `;
 
-//className = "d-flex m-3 rounded-lg shadow-lg text-white";
+
 
 export default function (props) {
   return (
-    <Anchor as={Link} to={props.to}>
+    <Anchor
+      as={Link}
+      to={props.to}
+      className="m-3 text-white d-flex rounded justify-content-center align-items-center shadow"
+    >
       <div className="d-flex flex-column justify-content-center align-items-center">
         <div className="d-flex size-box">{props.children}</div>
 
