@@ -193,8 +193,9 @@ export default () => {
               <TableHeaderColumn dataField="description">
                 Descrição
               </TableHeaderColumn>
+              <TableHeaderColumn dataField="unit">Und.</TableHeaderColumn>
               <TableHeaderColumn dataField="detail" width="20%">
-                Detahe
+                Detalhe
               </TableHeaderColumn>
             </ModalCenterBootstrapTable>
 
