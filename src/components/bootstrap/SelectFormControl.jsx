@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default function SelectFormControl(props) {
+export default function SelectFormControl({label, ...props}) {
   return (
     <div className="form-group">
-      <label htmlFor={props.id}>{props.label}</label>
-      <select {...props}>{props.children}</select>
+      <label htmlFor={props.id}>{label}</label>
+      <select {...props} value>{props.children}</select>
     </div>
   );
 }
