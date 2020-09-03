@@ -1,10 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Button } from "react-bootstrap";
-
-import InputFormControl from "../../components/bootstrap/InputFormControl";
-import SelectFormControl from "../../components/bootstrap/SelectFormControl";
 
 import api from "../../server/api";
 import localizacao from "../../server/localizacao";
@@ -15,19 +11,20 @@ export default () => {
 
   const [ufs, setUfs] = useState([]);
   const [cities, setCities] = useState([]);
-
-  const [formData, setFormData] = useState({
-    nickname: "",
-    email: "",
-    telephone: "",
-    cnpj: "",
-    bank_data: "",
-  });
-
   const [selectedUf, setSelectedUf] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
+
+  const nicknameInputRef = useRef();
+  const emailInputRef = useRef();
+  const telephoneInputRef = useRef();
+  const cnpjInputRef = useRef();
+  const bankdataInputRef = useRef();
+  const citySelectRef = useRef();
+  const ufSelectRef = useRef();
 
   useEffect(() => {
+
+    nicknameInputRef.current.focus()
+
     if (!id) return;
     api
       .get(`/provider/${id}`)
@@ -39,15 +36,14 @@ export default () => {
           return;
         }
         toast.info(response.data.message);
-        setFormData({
-          nickname: provider.nickname,
-          email: provider.email,
-          telephone: provider.telephone,
-          cnpj: provider.cnpj,
-          bank_data: provider.bank_data,
-        });
-        setSelectedUf(provider.uf);
-        setSelectedCity(provider.city);
+
+        nicknameInputRef.current.value = provider.nickname;
+        emailInputRef.current.value = provider.email;
+        telephoneInputRef.current.value = provider.telephone;
+        cnpjInputRef.current.value = provider.cnpj;
+        bankdataInputRef.current.value = provider.bank_data;
+        ufSelectRef.current.value = provider.uf;
+        citySelectRef.current.value = provider.city;
       })
       .catch((error) => {
         toast.error("Erro ao acessar API");
@@ -91,20 +87,20 @@ export default () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (formData.nickname === "") {
+    const provider = {
+      uf: ufSelectRef.current.value,
+      city: citySelectRef.current.value,
+      nickname: nicknameInputRef.current.value,
+      email: emailInputRef.current.value,
+      telephone: telephoneInputRef.current.value,
+      cnpj: cnpjInputRef.current.value,
+      bank_data: bankdataInputRef.current.value,
+    };
+
+    if (provider.nickname === "") {
       toast.warning("Preencha no minimo a razão social");
       return;
     }
-
-    const provider = {
-      uf: selectedUf,
-      city: selectedCity,
-      nickname: formData.nickname,
-      email: formData.email,
-      telephone: formData.telephone,
-      cnpj: formData.cnpj,
-      bank_data: formData.bank_data,
-    };
 
     let response = {};
     if (id) {
@@ -119,108 +115,89 @@ export default () => {
 
   return (
     <>
-      <Button
-        variant="secondary"
-        className="mb-4"
-        onClick={() => history.goBack()}
-      >
-        Voltar
-      </Button>
-      <form>
-        <InputFormControl
-          label="Razão"
-          id="nickname"
-          name="nickname"
-          placeholder="Razão social"
-          value={formData.nickname}
-          onChange={(e) =>
-            setFormData({ ...formData, nickname: e.target.value })
-          }
-        />
-
-        <InputFormControl
-          label="Email"
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email do Fornecedor"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        />
-
-        <InputFormControl
-          label="Telefone"
-          type="tel"
-          id="telephone"
-          name="telephone"
-          placeholder="Telefone do Fornecedor"
-          value={formData.telephone}
-          onChange={(e) =>
-            setFormData({ ...formData, telephone: e.target.value })
-          }
-        />
-
-        <InputFormControl
-          label="CNPJ"
-          id="cnpj"
-          name="cnpj"
-          placeholder="CNPJ do Fornecedor"
-          value={formData.cnpj}
-          onChange={(e) => setFormData({ ...formData, cnpj: e.target.value })}
-        />
-
-        <SelectFormControl
-          label="Estado"
-          name="selectedUf"
-          id="selectedUf"
-          value={selectedUf}
-          onChange={(e) => setSelectedUf(e.target.value)}
-        >
-          <option>
-            {ufs.length === 0 ? "...Loanding" : "Selecionar Estado"}
-          </option>
-          {ufs.map((uf, id) => (
-            <option key={id} value={uf.sigla}>
-              {uf.nome}
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="nicknameInput">Razão</label>
+          <input
+            type="text"
+            className="form-control"
+            id="nicknameInput"
+            ref={nicknameInputRef}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="emailInput">Email</label>
+          <input
+            type="email"
+            className="form-control"
+            id="emailInput"
+            ref={emailInputRef}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="telephoneInput">Telefone</label>
+          <input
+            type="tel"
+            className="form-control"
+            id="telephoneInput"
+            ref={telephoneInputRef}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="cnpjInput">CNPJ/CPF</label>
+          <input
+            type="text"
+            className="form-control"
+            id="cnpjInput"
+            ref={cnpjInputRef}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="ufSelect">Estado</label>
+          <select
+            id="ufSelect"
+            className="form-control"
+            ref={ufSelectRef}
+            onChange={(e) => setSelectedUf(e.target.value)}
+          >
+            <option>
+              {ufs.length === 0 ? "...Loanding" : "Selecionar Estado"}
             </option>
-          ))}
-        </SelectFormControl>
-
-        <SelectFormControl
-          label="Cidade"
-          name="selectedCity"
-          id="selectedCity"
-          value={selectedCity}
-          onChange={(e) => setSelectedCity(e.target.value)}
-        >
-          <option>
-            {selectedUf === "0"
-              ? "Selecione um estado primeiro"
-              : "Selecionar Cidade"}
-          </option>
-          {cities.map((city, id) => (
-            <option key={id}>{city}</option>
-          ))}
-        </SelectFormControl>
+            {ufs.map((uf, id) => (
+              <option key={id} value={uf.sigla}>
+                {uf.nome}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="citySelect">Cidade</label>
+          <select id="citySelect" className="form-control" ref={citySelectRef}>
+            <option>
+              {selectedUf === "0"
+                ? "Selecione um estado primeiro"
+                : "Selecionar Cidade"}
+            </option>
+            {cities.map((city, id) => (
+              <option key={id}>{city}</option>
+            ))}
+          </select>
+        </div>
 
         <div className="form-group">
-          <label for="textareaBankData">Dados Bancarios</label>
+          <label htmlFor="textareaBankData">Dados Bancarios</label>
           <textarea
-            className='form-control'
+            className="form-control"
             id="textareaBankData"
             name="bank_data"
             rows="3"
-            value={formData.bank_data}
-            onChange={(e) =>
-              setFormData({ ...formData, bank_data: e.target.value })
-            }
+            ref={bankdataInputRef}
           />
         </div>
 
-        <Button variant="primary" onClick={handleSubmit}>
-          
+        <button type="submit" className="btn btn-primary">
           Salvar Cadastro
-        </Button>
+        </button>
       </form>
     </>
   );

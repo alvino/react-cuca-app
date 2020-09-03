@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Button, Form } from "react-bootstrap";
-
-import InputFormControl from "../../components/bootstrap/InputFormControl";
-import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
-import SelectFormControl from "../../components/bootstrap/SelectFormControl";
 
 import api from "../../server/api";
 import localizacao from "../../server/localizacao";
-import { useCallback } from "react";
+import {} from "react";
 
 export default () => {
   const history = useHistory();
@@ -17,20 +12,22 @@ export default () => {
 
   const [ufs, setUfs] = useState([]);
   const [cities, setCities] = useState([]);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    telephone: "",
-    cpf: "",
-  });
-
   const [selectedUf, setSelectedUf] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
+
+  const nameInputRef = useRef();
+  const emailInputRef = useRef();
+  const telephoneInputRef = useRef();
+  const cpfInputRef = useRef();
+  const citySelectRef = useRef();
+  const ufSelectRef = useRef();
+
+
 
   useEffect(() => {
-    if (!id) return;
 
+    nameInputRef.current.focus()
+
+    if (!id) return;
     api
       .get(`/client/${id}`)
       .then((response) => {
@@ -41,14 +38,13 @@ export default () => {
           return;
         }
         toast.info(response.data.message);
-        setFormData({
-          name: client.name,
-          email: client.email,
-          telephone: client.telephone,
-          cpf: client.cpf,
-        });
-        setSelectedUf(client.uf);
-        setSelectedCity(client.city);
+
+        nameInputRef.current.value = client.name;
+        emailInputRef.current.value = client.email;
+        telephoneInputRef.current.value = client.telephone;
+        cpfInputRef.current.value = client.cpf;
+        citySelectRef.current.value = client.city;
+        ufSelectRef.current.value = client.uf;
       })
       .catch((error) => {
         toast.error("Erro de rede ao acessar API");
@@ -78,6 +74,7 @@ export default () => {
   // Load Cities
   useEffect(() => {
     if (selectedUf === "") return;
+
     localizacao
       .get(`/cidades/${selectedUf}.json`)
       .then((response) => {
@@ -94,19 +91,19 @@ export default () => {
     async (event) => {
       event.preventDefault();
 
-      if (formData.name === "") {
+      const client = {
+        uf: ufSelectRef.current.value,
+        city: citySelectRef.current.value,
+        name: nameInputRef.current.value,
+        email: emailInputRef.current.value,
+        telephone: telephoneInputRef.current.value,
+        cpf: cpfInputRef.current.value,
+      };
+
+      if (client.name === "") {
         toast.warning("Preencha no minimo o nome");
         return;
       }
-
-      const client = {
-        uf: selectedUf,
-        city: selectedCity,
-        name: formData.name,
-        email: formData.email,
-        telephone: formData.telephone,
-        cpf: formData.cpf,
-      };
 
       let response = {};
       if (id) {
@@ -118,110 +115,83 @@ export default () => {
       if (response.data) toast.success(response.data.message);
       history.goBack();
     },
-    [
-      formData.cpf,
-      formData.email,
-      formData.name,
-      formData.telephone,
-      history,
-      id,
-      selectedCity,
-      selectedUf,
-    ]
+    [history, id]
   );
 
   return (
     <>
-      <Button
-        variant="secondary"
-        
-        className="mb-4"
-        onClick={() => history.goBack()}
-      >
-        Voltar
-      </Button>
-
-      <Form>
-        <InputFormControl
-          label="Nome"
-          id="name"
-          name="name"
-          placeholder="Nome do Cliente"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-        />
-
-        <InputFormControl
-          label="Email"
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email do Cliente"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        />
-
-        <InputNumberFormat
-          label="Telefone"
-          type="tel"
-          id="telephone"
-          name="telephone"
-          format="(##) # ####-####"
-          prefix=""
-          value={formData.telephone}
-          onValueChange={(values) =>
-            setFormData({ ...formData, telephone: values.formattedValue })
-          }
-        />
-
-        <InputFormControl
-          label="CPF/CNPJ"
-          id="cpf"
-          name="cpf"
-          placeholder="CPF/CNPJ do Cliente"
-          value={formData.cpf}
-          onChange={(e) => setFormData({ ...formData, cpf: e.target.value })}
-        />
-
-        <SelectFormControl
-          label="Estado"
-          name="selectedUf"
-          id="selectedUf"
-          value={selectedUf}
-          onChange={(e) => setSelectedUf(e.target.value)}
-        >
-          <option>
-            {ufs.length === 0 ? "...Loanding" : "Selecionar Estado"}
-          </option>
-          {ufs.map((uf, id) => (
-            <option key={id} value={uf.sigla}>
-              {uf.nome}
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="nameInput">Name</label>
+          <input
+            type="text"
+            className="form-control"
+            id="nameInput"
+            ref={nameInputRef}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="emailInput">Email</label>
+          <input
+            type="email"
+            className="form-control"
+            id="emailInput"
+            ref={emailInputRef}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="telephoneInput">Telefone</label>
+          <input
+            type="tel"
+            className="form-control"
+            id="telephoneInput"
+            ref={telephoneInputRef}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="cpfInput">CPF/CNPJ</label>
+          <input
+            type="text"
+            className="form-control"
+            id="cpfInput"
+            ref={cpfInputRef}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="ufSelect">Estado</label>
+          <select
+            id="ufSelect"
+            className="form-control"
+            ref={ufSelectRef}
+            onChange={(e) => setSelectedUf(e.target.value)}
+          >
+            <option>
+              {ufs.length === 0 ? "...Loanding" : "Selecionar Estado"}
             </option>
-          ))}
-        </SelectFormControl>
-
-        <SelectFormControl
-          label="Cidade"
-          name="selectedCity"
-          id="selectedCity"
-          value={selectedCity}
-          onChange={(e) => setSelectedCity(e.target.value)}
-        >
-          <option>
-            {selectedUf === "0"
-              ? "Selecione um estado primeiro"
-              : "Selecionar Cidade"}
-          </option>
-          {cities.map((city, id) => (
-            <option key={id}>{city}</option>
-          ))}
-        </SelectFormControl>
-
-        <Button variant="primary" onClick={handleSubmit}>
-          
+            {ufs.map((uf, id) => (
+              <option key={id} value={uf.sigla}>
+                {uf.nome}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="citySelect">Cidade</label>
+          <select id="citySelect" className="form-control" ref={citySelectRef}>
+            <option>
+              {selectedUf === "0"
+                ? "Selecione um estado primeiro"
+                : "Selecionar Cidade"}
+            </option>
+            {cities.map((city, id) => (
+              <option key={id}>{city}</option>
+            ))}
+          </select>
+        </div>
+        <button type="submit" className="btn btn-primary">
           Salvar Cadastro
-        </Button>
-      </Form>
+        </button>
+      </form>
     </>
   );
 };
