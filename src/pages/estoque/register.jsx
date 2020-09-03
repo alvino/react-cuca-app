@@ -100,6 +100,46 @@ export default () => {
       <div className="col-4">
         <form>
           <InputFormControl
+            label="Fornecedor"
+            id="inputFornecedor"
+            name="inputFornecedor"
+            value={selectedFornecedor.nickname || ""}
+            readOnly
+          >
+            <Button
+              variant="secondary"
+              className="px-4"
+              onClick={() => setModalShowFornecedor(true)}
+            >
+              <IconList size="22px" title="Pesquisar Fornecedor" />
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => history.push("/fornecedor/register")}
+            >
+              Criar
+            </Button>
+          </InputFormControl>
+
+          <ModalCenterBootstrapTable
+            title="Lista de Fornecedores"
+            show={modalShowFornecedor}
+            data={providers}
+            onSelected={handleSelectedFornecedor}
+            onHide={() => setModalShowFornecedor(false)}
+          >
+            <TableHeaderColumn dataField="id" isKey width="10%">
+              #
+            </TableHeaderColumn>
+            <TableHeaderColumn dataField="nickname">
+              Descrição
+            </TableHeaderColumn>
+            <TableHeaderColumn dataField="cnpj" width="20%">
+              CNPJ/CPF
+            </TableHeaderColumn>
+          </ModalCenterBootstrapTable>
+
+          <InputFormControl
             label="Descrição"
             id="description"
             name="description"
@@ -166,51 +206,13 @@ export default () => {
             </Button>
           </div>
         </form>
-        {(listStock.length === 0) || (
+        {listStock.length === 0 || (
           <Button variant="primary" onClick={handleSaveListStock}>
             Salvar Lista de Produtos
-          </Button>)
-        }
+          </Button>
+        )}
       </div>
       <div className="col-8">
-        <InputFormControl
-          label="Fornecedor"
-          id="inputFornecedor"
-          name="inputFornecedor"
-          value={selectedFornecedor.nickname || ""}
-          readOnly
-        >
-          <Button
-            variant="secondary"
-            className="px-4"
-            onClick={() => setModalShowFornecedor(true)}
-          >
-            <IconList size="22px" title="Pesquisar Fornecedor" />
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => history.push("/fornecedor/register")}
-          >
-            Criar
-          </Button>
-        </InputFormControl>
-
-        <ModalCenterBootstrapTable
-          title="Lista de Fornecedores"
-          show={modalShowFornecedor}
-          data={providers}
-          onSelected={handleSelectedFornecedor}
-          onHide={() => setModalShowFornecedor(false)}
-        >
-          <TableHeaderColumn dataField="id" isKey width="10%">
-            #
-          </TableHeaderColumn>
-          <TableHeaderColumn dataField="nickname">Descrição</TableHeaderColumn>
-          <TableHeaderColumn dataField="cnpj" width="20%">
-            CNPJ/CPF
-          </TableHeaderColumn>
-        </ModalCenterBootstrapTable>
-
         <table className="table table-hover">
           <thead>
             <tr>
