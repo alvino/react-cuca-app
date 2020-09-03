@@ -38,7 +38,7 @@ export default () => {
         const serielizedListaPedido = response.data.wish_list.map(
           (item, index) => ({ index: index + 1, ...item })
         );
-
+        
         setListaPedido(serielizedListaPedido);
         setOrcamento(response.data.budget);
         setCliente(response.data.client);
