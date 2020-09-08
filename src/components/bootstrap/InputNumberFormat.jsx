@@ -1,26 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, InputGroup } from 'react-bootstrap'
 import CurrencyFormat from 'react-currency-format'
 
 export default function InputNumberFormat(props) {
-  const { id, label, prefix, ...restProps } = props
-
+  const { label, prefix, ...restProps } = props
 
   return (
-    <Form.Group controlId={id}>
-      <Form.Label>{label}</Form.Label>
+    <div className="form-group">
+      <label htmlFor={restProps.id}>{label}</label>
       { prefix === "" ? (
       <CurrencyFormat {...restProps} />
     ) : (
-      <InputGroup className="mb-3">
-        <InputGroup.Prepend>
-          <InputGroup.Text>{prefix}</InputGroup.Text>
-        </InputGroup.Prepend>
+      <div className="input-group mb-3">
+       
+        <div className="input-group-prepend">
+          <span className="input-group-text">{prefix}</span>
+        </div>
         <CurrencyFormat {...restProps} />
-      </InputGroup>
+      </div>
     ) }
-    </Form.Group>
+    </div>
   )
 }
 
