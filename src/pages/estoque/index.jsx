@@ -10,6 +10,7 @@ import NavBar from '../../components/NavBar'
 import Home from './home'
 import Register from './register'
 import Delete from './delete'
+import Print from './print'
 
 export default () => {
 
@@ -28,6 +29,9 @@ export default () => {
             </Route>
             <Route exact path={`${path}/register`}>
               <Register />
+            </Route>
+            <Route exact path={`${path}/print`}>
+              <Print />
             </Route>
             <Route exact path={`${path}/delete/:id`}>
               <Delete />
