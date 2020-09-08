@@ -21,7 +21,7 @@ export default () => {
       <div className="container-fluid">
         <main className="d-flex justify-content-around  align-items-center">
           <div className="row w-75 mx-auto">
-            <Box title="Ponto de Venda" to="/venda">
+            <Box title="Ponto de Venda" to="/venda/0">
               <FaShoppingCart />
             </Box>
 
