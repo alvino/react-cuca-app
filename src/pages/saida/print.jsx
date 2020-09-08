@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import { Button, Form, ToggleButton, ButtonGroup } from "react-bootstrap";
+import { Button, ToggleButton, ButtonGroup } from "react-bootstrap";
 import BootstrapDataTable from "../../components/bootstrap/DataTable";
 import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
 import api from "../../server/api";
-import InputFormControl from "../../components/bootstrap/InputFormControl";
-import SelectFormControl, {
+import  {
   OptionMeses,
   OptionDias,
 } from "../../components/bootstrap/SelectFormControl";
@@ -30,80 +29,100 @@ export default () => {
   const [checked, setChecked] = useState(true);
 
   const [outlays, setOutlays] = useState([]);
+  const [listaOutlay, setListaOutlay] = useState([])
   const [valorTotal, setValorTotal] = useState();
 
   useEffect(() => {
-    let date_outlay = "";
-
-    if (checked) {
-      date_outlay = date_outlay + ano;
-      date_outlay =
-        mes === "" ? date_outlay : [date_outlay, mes, dia].join("-");
-    }
-
-    const query = {
-      date_outlay,
-    };
-
-    api
-      .get("/outlay", { params: query })
-      .then((response) => {
+    async function fetch(){
+      try{
+        const response = await api.get("/outlay")
         setOutlays(response.data.outlays);
-      })
-      .catch((error) => {
+      } catch(error) {
         toast.error("Erro no acesso da API");
         console.error(error);
-      });
-  }, [ano, checked, dia, mes]);
+      }
+    }
+
+    fetch()
+  }, []);
 
   useEffect(() => {
-    if (outlays.heigth === 0) return;
-    setValorTotal(outlays.reduce((acc, item) => acc + item.amount, 0.0));
-  }, [outlays]);
+    let date_sale = "";
 
-  
+    if (checked) {
+      date_sale = date_sale + ano;
+      date_sale = mes === "" ? date_sale : [date_sale, mes, dia].join("-");
+    }
+
+    const filterOutlays = outlays.filter((item) =>
+      item.date_sale.includes(date_sale)
+    );
+    setListaOutlay(filterOutlays);
+  }, [ano, checked, dia, mes, outlays]);
+
+
+  useEffect(() => {
+    setValorTotal(listaOutlay.reduce((acc, item) => acc + item.amount, 0.0));
+  }, [listaOutlay]);
+
+  const handleButtonFiltrar = useCallback(
+    (e) => {
+      setChecked(e.currentTarget.checked);
+
+      if (checked) {
+        setMes("");
+        setDia("");
+      }
+    }, [checked])
+
   return (
     <Print>
       <div className="my-2 noprint">
         <div>
-          <Form>
+         
             <div className="row d-flex justify-content-start align-items-center">
               {checked && (
                 <>
                   <div className="col-2">
-                    <InputFormControl
-                      label="Ano"
-                      type="Number"
-                      id="inputAno"
-                      name="inputAno"
-                      value={ano}
-                      onChange={(event) => setAno(event.target.value)}
-                    />
+                    <div className="form-group">
+                      <label htmlFor="inputAno">Ano</label>
+                      <input
+                        className="form-control"
+                        type="Number"
+                        id="inputAno"
+                        value={ano}
+                        onChange={(event) => setAno(event.target.value)}
+                      />
+                    </div>
                   </div>
 
                   <div className="col-2">
-                    <SelectFormControl
-                      label="Mês"
-                      id="selectMes"
-                      name="selectMes"
-                      value={mes}
-                      onChange={(event) => setMes(event.target.value)}
-                    >
-                      <OptionMeses />
-                    </SelectFormControl>
+                    <div className="form-group">
+                      <label htmlFor="selectMes">Mês</label>
+                      <select
+                        id="selectMes"
+                        className="form-control"
+                        value={mes}
+                        onChange={(event) => setMes(event.target.value)}
+                      >
+                        <OptionMeses />
+                      </select>
+                    </div>
                   </div>
 
                   {mes !== "" && (
                     <div className="col-2">
-                      <SelectFormControl
-                        label="Dia"
-                        id="selectDia"
-                        name="selectDia"
-                        value={dia}
-                        onChange={(event) => setDia(event.target.value)}
-                      >
-                        <OptionDias />
-                      </SelectFormControl>
+                      <div className="form-group">
+                        <label htmlFor="selectDia">Dia</label>
+                        <select
+                          className="form-control"
+                          id="selectDia"
+                          value={dia}
+                          onChange={(event) => setDia(event.target.value)}
+                        >
+                          <OptionDias />
+                        </select>
+                      </div>
                     </div>
                   )}
                 </>
@@ -115,14 +134,14 @@ export default () => {
                     variant="secondary"
                     checked={checked}
                     value="1"
-                    onChange={(e) => setChecked(e.currentTarget.checked)}
+                    onChange={handleButtonFiltrar}
                   >
                     {checked ? "Todos" : "Filtrar"}
                   </ToggleButton>
                 </ButtonGroup>
               </div>
             </div>
-          </Form>
+      
           <div className="btn-group my-2" role="group">
             <Button variant="secondary" onClick={() => history.goBack()}>
               Voltar

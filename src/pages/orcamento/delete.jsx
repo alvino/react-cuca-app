@@ -6,42 +6,96 @@ import { Button } from "react-bootstrap";
 
 export default () => {
   const history = useHistory();
-  const { id } = useParams(0);
+  const { id: orcamento_id } = useParams(0);
 
   const [orcamento, setOrcamento] = useState({});
   const [cliente, setCliente] = useState({});
   const [listaPedido, setListaPedido] = useState([]);
 
   useEffect(() => {
-    if (!id) {
+    if (!orcamento_id) {
       history.push("/orcamento");
       return;
     }
 
-    api
-      .get(`/budget/${id}`)
-      .then((response) => {
-        const budget = response.data.budget;
+    async function fetch() {
+      try {
+        const response = await api.get(`/budget/${orcamento_id}`);
+
+        const { budget } = response.data;
         if (!budget) {
           toast.error("orcamento não encontrado");
           history.push("/orcamento");
           return;
         }
 
-        setListaPedido(response.data.wish_list);
-        setOrcamento(response.data.budget);
-        setCliente(response.data.client);
-      })
-      .catch((error) => {
+        setOrcamento(budget);
+      } catch (error) {
         toast.error("Erro ao acessar API");
         console.error(error);
-      });
-  }, [history, id]);
+      }
+    }
+
+    fetch();
+  }, [history, orcamento_id]);
+
+  useEffect(() => {
+    if (!orcamento_id) {
+      history.push("/orcamento");
+      return;
+    }
+
+    async function fetch() {
+      try {
+        const response = await api.get(`/requested_budget/${orcamento_id}`);
+
+        const { requested_budgets } = response.data;
+        if (!requested_budgets) {
+          toast.error("orcamento não encontrado");
+          history.push("/orcamento");
+          return;
+        }
+
+        setListaPedido(requested_budgets);
+      } catch (error) {
+        toast.error("Erro ao acessar API");
+        console.error(error);
+      }
+    }
+
+    fetch();
+  }, [history, orcamento_id]);
+
+  useEffect(() => {
+    if (!orcamento.client_id) {
+      return;
+    }
+
+    async function fetch() {
+      try {
+        const response = await api.get(`/client/${orcamento.client_id}`);
+
+        const { client } = response.data;
+        if (!client) {
+          toast.error("orcamento não encontrado");
+          history.push("/orcamento");
+          return;
+        }
+
+        setCliente(client);
+      } catch (error) {
+        toast.error("Erro ao acessar API");
+        console.error(error);
+      }
+    }
+
+    fetch();
+  }, [history, orcamento]);
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const response = await api.delete(`/budget/${id}`);
+    const response = await api.delete(`/budget/${orcamento_id}`);
     toast.success(response.data.message);
 
     history.push("/orcamento");
@@ -66,7 +120,6 @@ export default () => {
         ))}
       </div>
       <Button variant="danger" onClick={handleSubmit}>
-        
         Confirmar remoção
       </Button>
     </div>

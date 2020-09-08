@@ -23,7 +23,6 @@ export default () => {
           history.push("/saida");
           return;
         }
-        console.log(response.data);
         setGasto(response.data.outlay);
       })
       .catch((error) => {

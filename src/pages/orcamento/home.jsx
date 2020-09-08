@@ -46,11 +46,11 @@ export default () => {
               variant="primary"
               className="p-2"
               onClick={() =>
-                history.push(`/venda/fechamentodevenda/${rowSelected.row.id}`)
+                history.push(`/venda/${rowSelected.row.id}`)
               }
             >
               
-              Finalizar Venda
+              Abrir o Orçamento
             </Button>
 
             <Button

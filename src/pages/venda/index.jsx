@@ -14,16 +14,14 @@ export default () => {
   let { path } = useRouteMatch();
 
   return (
-
     <Switch>
-      <Route exact path={path}>
+      <Route exact path={`${path}/:id`}>
         <PontoDeVenda />
       </Route>
       <Route exact path={`${path}/fechamentodevenda/:id`}>
         <FechamentoDeVenda />
       </Route>
     </Switch>
-
-  )
+  );
 }
 
