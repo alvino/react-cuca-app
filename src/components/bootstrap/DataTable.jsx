@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { BootstrapTable } from "react-bootstrap-table";
 
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css";
@@ -11,11 +11,11 @@ DataTable.defaultProps = {
   search: true,
   exportCSV: true,
   size: "sm",
+  onRowClick: null,
 };
 
-function DataTable({ onSelect, children, ...props }) {
-  const tableRef = useRef(null);
-
+function DataTable({ onSelect, children, onRowClick, ...props }) {
+  
   if (onSelect) {
     props.selectRow = {
       mode: "radio",
@@ -26,7 +26,13 @@ function DataTable({ onSelect, children, ...props }) {
   }
 
   return (
-    <BootstrapTable ref={tableRef} {...props}>
+    <BootstrapTable
+      {...props}
+      options={{
+        noDataText: "Não possui dados para mostra.",
+        onRowClick,
+      }}
+    >
       {children}
     </BootstrapTable>
   );
