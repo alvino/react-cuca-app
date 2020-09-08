@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import api from "../../server/api";
-import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
 import {
@@ -21,21 +20,26 @@ export default () => {
   });
 
   useEffect(() => {
-    api
-      .get("/stock")
-      .then((response) => {
-        const serializeStock = response.data.stocks.map((item) => {
-          return {
-            ...item,
-            stock: Number(item.quantity_purchase - item.sale_amount).toFixed(2),
-          };
-        });
+
+    async function fetch(){
+      try {
+        const response = await  api.get("/stock")
+        const serializeStock = response.data.stocks.map(
+          (item) => ({
+              ...item,
+              stock: Number(item.quantity - item.quantity_of).toFixed(2),
+            }
+          )
+        )
         setStocks(serializeStock.filter((item) => item.stock > 0));
-      })
-      .catch((error) => {
+        
+      } catch(error) {
         toast.error("Erro no acesso a API");
         console.error(error);
-      });
+      }
+    }
+
+    fetch()
   }, []);
 
   const onSelect = useCallback((row, isSelected) => {
@@ -46,35 +50,35 @@ export default () => {
     <div>
       <div className="d-flex justify-content-center">
         <div className="btn-group " role="group">
-          <Button
-            variant="primary"
-            className="p-2"
+          <button
+            className="p-2 btn btn-primary"
             onClick={() => history.push("/estoque/register")}
           >
-            
             Cadastra Estoque
-          </Button>
+          </button>
 
           {rowSelected.isSelected && (
-            <Button
-              variant="danger"
-              className="p-2"
+            <button
+              className="p-2 btn btn-danger"
               onClick={() =>
                 history.push(`/estoque/delete/${rowSelected.row.id}`)
               }
             >
               Deletar Estoque
-            </Button>
-          ) }
+            </button>
+          )}
+
+          <button
+            className="btn btn-success p-2w"
+            onClick={() => history.push(`/estoque/print`)}
+          >
+            Relatorio de Estoque
+          </button>
         </div>
       </div>
 
-      <BootstrapDataTable
-        data={stocks}
-        onSelect={onSelect}
-        keyField='id'
-      >
-        <TableHeaderColumn dataField="id"  dataSort width="5%">
+      <BootstrapDataTable data={stocks} onSelect={onSelect} keyField="id">
+        <TableHeaderColumn dataField="id" dataSort width="5%">
           Cod
         </TableHeaderColumn>
         <TableHeaderColumn dataField="description" dataSort>
@@ -84,7 +88,7 @@ export default () => {
           Detalhe
         </TableHeaderColumn>
         <TableHeaderColumn dataField="unit" width="5%">
-          UNID.
+          Unid.
         </TableHeaderColumn>
         <TableHeaderColumn
           dataField="stock"
