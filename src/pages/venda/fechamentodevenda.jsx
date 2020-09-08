@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Button } from "react-bootstrap";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
 import BootstrapDataTable from "../../components/bootstrap/DataTable";
@@ -32,13 +31,18 @@ export default () => {
   const [valorTotal, setValorTotal] = useState(0.0);
 
   useEffect(() => {
+    const total = listaPedido.reduce((acc, item) => acc + item.amount, 0);
+    setValorTotal(total);
+  }, [listaPedido]);
+
+  useEffect(() => {
     api
       .get(`/budget/${id}`)
       .then((response) => {
         const serielizedListaPedido = response.data.wish_list.map(
           (item, index) => ({ index: index + 1, ...item })
         );
-        
+
         setListaPedido(serielizedListaPedido);
         setOrcamento(response.data.budget);
         setCliente(response.data.client);
@@ -48,13 +52,6 @@ export default () => {
         console.error(error);
       });
   }, [id]);
-
-  useEffect(() => {
-    const dividendo = parcelas / 30;
-    const montante =
-      orcamento.amount - (desconto.floatValue + entrada.floatValue);
-    setValorTotal(parseFloat((montante / dividendo).toFixed(2)));
-  }, [id, desconto, entrada, parcelas, orcamento]);
 
   useEffect(() => {
     if (selectedPagamento === "A vista") {
@@ -82,11 +79,19 @@ export default () => {
       .map((item) => parseInt(item));
     mes--;
 
+    const description = cliente.name;
+
+    const valor_venda = parseFloat(
+      (
+        (valorTotal - (desconto.floatValue + entrada.floatValue)) /
+        (parcelas / 30)
+      ).toFixed(2)
+    );
+
     let index = 0;
 
     if (entrada.floatValue) {
       const description = `${cliente.name} - entrada`;
-      const valor_venda = entrada.floatValue;
 
       multiplicador++;
       index++;
@@ -94,7 +99,7 @@ export default () => {
       sales.push({
         budget_id: id,
         description,
-        amount: valor_venda,
+        amount: entrada.floatValue,
         all_parcel: multiplicador,
         parcel: index,
         date_sale: new Date(ano, mes, dia).toISOString().substring(0, 10),
@@ -105,10 +110,6 @@ export default () => {
 
     while (index < multiplicador) {
       index++;
-
-      const description = cliente.name;
-
-      const valor_venda = parseFloat(valorTotal);
 
       sales.push({
         budget_id: id,
@@ -126,12 +127,13 @@ export default () => {
 
     if (resposta.status === 200) {
       toast.success(resposta.data.message);
-      history.goBack();
+      history.push("/venda/0");
     } else {
       toast.error(resposta.data.message);
     }
   }, [
     cliente.name,
+    desconto.floatValue,
     entrada.floatValue,
     history,
     id,
@@ -150,7 +152,15 @@ export default () => {
             <NumberFormat value={valorTotal} />
           ) : (
             <div>
-              <span>{parcelas} X </span> <NumberFormat value={valorTotal} />
+              <span>{parcelas} X </span>{" "}
+              <NumberFormat
+                value={parseFloat(
+                  (
+                    (valorTotal - (desconto.floatValue + entrada.floatValue)) /
+                    (parcelas / 30)
+                  ).toFixed(2)
+                )}
+              />
             </div>
           )
         }
@@ -199,18 +209,20 @@ export default () => {
             </>
           )}
 
-          <Button variant="primary" onClick={handleConfirmarConclusaoVenda}>
+          <button
+            className="btn btn-primary"
+            onClick={handleConfirmarConclusaoVenda}
+          >
             Confirmar Conclusão da Venda
-          </Button>
+          </button>
         </div>
         <div className="col-9">
-          <Button
-            variant="success"
-            className="m-2"
+          <button
+            className="btn btn-success m-2"
             onClick={handlerPushImprimir}
           >
             Imprimir Orcamento
-          </Button>
+          </button>
 
           <p className="text-right">
             <DateFormat value={String(orcamento.created_at)} />
@@ -221,7 +233,14 @@ export default () => {
           </p>
           <p className="text-right">
             Valor Total:
-            <NumberFormat value={orcamento.amount - desconto.floatValue} />
+            <NumberFormat
+              value={parseFloat(
+                (
+                  valorTotal -
+                  (desconto.floatValue + entrada.floatValue)
+                ).toFixed(2)
+              )}
+            />
           </p>
           <p className="text-right">
             Desconto: <NumberFormat value={desconto.floatValue || 0} />

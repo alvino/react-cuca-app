@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
-import {
-  BsListUl as IconList,
-  BsTrashFill as IconRemoveList,
-} from "react-icons/bs";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
 import api from "../../server/api";
-import ModalCenterBootstrapTable from "../../components/ModalCenterBootstrapTable";
+import ModalCenterBootstrapTable from "../../components/bootstrap/ModalCenterBootstrapTable";
 import InputFormControl from "../../components/bootstrap/InputFormControl";
 import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
 import NumberFormat from "../../components/NumberFormat";
@@ -22,14 +18,14 @@ import {
 
 export default () => {
   const history = useHistory();
+  const { id } = useParams(0);
 
-  const [modalShowProduto, setModalShowProduto] = React.useState(false);
-  const [modalShowCliente, setModalShowCliente] = React.useState(false);
+  const [orcamento, setOrcamento] = useState(null);
 
-  const [produtos, setProdutos] = useState([]);
+  const [dataProdutos, setDataProdutos] = useState([]);
   const [selectedProduto, setSelectedProduto] = useState({});
 
-  const [clientes, setClientes] = useState([]);
+  const [DataClientes, setDataClientes] = useState([]);
   const [selectedCliente, setSelectedCliente] = useState({});
 
   const [quantidade, setQuantidade] = useState({
@@ -41,29 +37,71 @@ export default () => {
   const [data, setData] = useState();
   const [valorTotal, setValorTotal] = useState(0);
 
+  const [isSelected, setIsSelect] = useState(false);
+  const [rowSelect, setRowSelect] = useState({});
+
+  useEffect(() => {
+    if (id === "0") return;
+
+    async function fetch() {
+      const response_budget = await api.get(`budget/${id}`);
+      const { budget } = response_budget.data;
+      setOrcamento(budget);
+      setData(budget.created_at);
+    }
+
+    fetch();
+  }, [id]);
+
+  useEffect(() => {
+    if (orcamento === null) return;
+
+    async function fetch() {
+      const response = await api.get(`requested_budget/${orcamento.id}`);
+      const { requested_budgets } = response.data;
+      setListaPedido(requested_budgets);
+    }
+
+    fetch();
+  }, [orcamento]);
+
+  useEffect(() => {
+    if (orcamento === null) return;
+
+    async function fetch() {
+      const response_client = await api.get(`client/${orcamento.client_id}`);
+      const { client } = response_client.data;
+      setSelectedCliente(client);
+    }
+
+    fetch();
+  }, [orcamento]);
+
   useEffect(() => {
     setData(new Date().toISOString().substring(0, 10));
   }, []);
 
   useEffect(() => {
-    api
-      .get("/stock")
-      .then((response) => {
+    async function fetch() {
+      try {
+        const response = await api.get("/stock");
         const serializeStock = response.data.stocks.filter(
-          (item) => item.sale_amount < item.quantity_purchase
+          (item) => item.quantity_of < item.quantity
         );
-        setProdutos(serializeStock);
-      })
-      .catch((error) => {
+        setDataProdutos(serializeStock);
+      } catch (error) {
         toast.error("Erro ao acessar API");
         console.error(error);
-      });
+      }
+    }
+
+    fetch();
   }, []);
 
   useEffect(() => {
     async function fetchData() {
       const response = await api.get("/client");
-      setClientes(response.data.clients);
+      setDataClientes(response.data.clients);
     }
     fetchData();
   }, []);
@@ -73,7 +111,45 @@ export default () => {
     setValorTotal(total);
   }, [listaPedido]);
 
-  const handleAdicionar = useCallback(() => {
+  useEffect(() => {
+    if (!isSelected) return;
+
+    async function fetch() {
+      const response = await api.get(`stock/${rowSelect.stock_id}`);
+      const { stock } = response.data;
+      setSelectedProduto(stock);
+      setQuantidade({
+        value: String(rowSelect.quantity),
+        formattedValue: String(rowSelect.quantity).replaceAll(".", ","),
+        floatValue: rowSelect.quantity,
+      });
+    }
+    fetch();
+  }, [isSelected, rowSelect]);
+
+  const handleInciaCamposListaProduto = useCallback(() => {
+    setSelectedProduto({});
+    setQuantidade({
+      value: "1",
+      formattedValue: "1",
+      floatValue: 1,
+    });
+    setRowSelect({});
+    setIsSelect(false);
+  }, []);
+
+  const handleRemover = useCallback(async () => {
+    try {
+      const newListaPedido = listaPedido.filter((item) => item !== rowSelect);
+      await api.delete(`requested_budget/${rowSelect.id}`);
+      setListaPedido(newListaPedido);
+      handleInciaCamposListaProduto();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [handleInciaCamposListaProduto, listaPedido, rowSelect]);
+
+  const handleAdicionar = useCallback(async () => {
     if (!selectedProduto.description) {
       toast.warning(
         "Selecione um produto e confira a quantidade antes de adicionar a lista."
@@ -81,41 +157,90 @@ export default () => {
       return;
     }
 
-    const pedido = {
-      index: listaPedido.length + 1,
-      stock: selectedProduto,
-      description: selectedProduto.description,
-      quantity: quantidade.floatValue,
-      sale_value: selectedProduto.sale_value,
-      amount: parseFloat(
-        (selectedProduto.sale_value * quantidade.floatValue).toFixed(2)
-      ),
-    };
+    let newPedido = {};
 
-    let flagRepetido = false;
-    listaPedido.forEach((item) => {
-      if (item.stock === pedido.stock) {
-        flagRepetido = true;
-      }
-    });
-
-    if(flagRepetido) {
-      toast.warning('Este item já esta na lista de pedidos')
+    if (isSelected) {
+      newPedido = {
+        ...rowSelect,
+        sale_value: selectedProduto.sale_value,
+        amount: parseFloat(
+          (selectedProduto.sale_value * quantidade.floatValue).toFixed(2)
+        ),
+        quantity: quantidade.floatValue,
+      };
     } else {
-      setListaPedido([pedido, ...listaPedido]);
+      newPedido = {
+        budget_id: id,
+        created_at: data,
+        description: selectedProduto.description,
+        detail: selectedProduto.detail,
+        stock_id: selectedProduto.id,
+        sale_value: selectedProduto.sale_value,
+        stock: selectedProduto.quantity - selectedProduto.quantity_of,
+        amount: parseFloat(
+          (selectedProduto.sale_value * quantidade.floatValue).toFixed(2)
+        ),
+        quantity: quantidade.floatValue,
+      };
     }
 
-    setSelectedProduto({});
-    setQuantidade({
-      value: "1",
-      formattedValue: "1",
-      floatValue: 1,
-    });
-  }, [listaPedido, quantidade.floatValue, selectedProduto]);
+    if (listaPedido.includes(rowSelect)) {
+      const newListaPedido = listaPedido.filter((item) => item !== rowSelect);
 
-  const handleSelectedProduto = useCallback((row, isSelected) => {
+      try {
+        const { id, amount, quantity } = newPedido;
+        await api.put(`requested_budget/${id}`, {
+          amount,
+          quantity,
+        });
+        newListaPedido.push(newPedido);
+        setListaPedido(newListaPedido);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      if (
+        listaPedido.find((produto) => produto.stock_id === newPedido.stock_id)
+      ) {
+        toast.info("Este produto já esta na lista de pedidos");
+        handleInciaCamposListaProduto();
+        return;
+      }
+
+      try {
+        const { budget_id, stock_id, amount, quantity } = newPedido;
+        await api.post(`requested_budget`, {
+          budget_id,
+          stock_id,
+          amount,
+          quantity,
+        });
+        setListaPedido([...listaPedido, newPedido]);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    handleInciaCamposListaProduto();
+  }, [
+    selectedProduto.description,
+    selectedProduto.quantity,
+    selectedProduto.quantity_of,
+    selectedProduto.sale_value,
+    selectedProduto.detail,
+    selectedProduto.id,
+    quantidade.floatValue,
+    isSelected,
+    listaPedido,
+    rowSelect,
+    handleInciaCamposListaProduto,
+    id,
+    data,
+  ]);
+
+  const handleSelectedProduto = useCallback((row) => {
     setSelectedProduto(row);
-    const estoque = parseFloat(row.quantity_purchase - row.sale_amount);
+    const estoque = parseFloat(row.quantity - row.quantity_of);
     setQuantidade({
       formattedValue: estoque,
       floatValue: parseFloat(estoque),
@@ -123,27 +248,50 @@ export default () => {
     });
   }, []);
 
-  const handleSelectedCliente = useCallback((row, isSelected) => {
+  const handleSelectedCliente = useCallback((row) => {
     setSelectedCliente(row);
   }, []);
 
+  const onSelect = useCallback(async (row, isSelected) => {
+    setRowSelect(row);
+    setIsSelect(isSelected);
+  }, []);
+
   const handleFinalizarPedido = useCallback(async () => {
-    const orcamento = {
-      client: selectedCliente,
-      created_at: data,
-      amount: valorTotal,
-      wish_list: listaPedido,
-    };
-    const response = await api.post("/budget", orcamento);
+    if (listaPedido.find((item) => item.stock - item.quantity < 0)) {
+      toast.warning("Remova os itens em vermelho para continuar");
+      return;
+    }
+
+    const amount =  parseFloat(valorTotal.toFixed(2) )
+
+
+    const response = await api.put(`budget/${orcamento.id}`, {...orcamento, amount});
 
     if (response.status === 200) {
       toast.success(response.data.message);
-      history.push(`/venda/fechamentodevenda/${response.data.id}`);
+      history.push(`/venda/fechamentodevenda/${id}`);
     } else {
       toast.error(response.data.message);
       return;
     }
-  }, [data, history, listaPedido, selectedCliente, valorTotal]);
+  }, [history, id, listaPedido, orcamento, valorTotal]);
+
+  const handleRegistraPedido = useCallback(async () => {
+    const orcamento = {
+      client_id: selectedCliente.id,
+      amount: valorTotal,
+      created_at: data,
+    };
+
+    const response = await api.post(`budget`, orcamento);
+
+    history.push(`/venda/${response.data.id}`);
+  }, [data, history, selectedCliente.id, valorTotal]);
+
+  const rowClassCheckFormat = (row, rowIdx) => {
+    if (row.stock - row.quantity < 0) return "bg-danger text-white";
+  };
 
   return (
     <div className="container-fluid">
@@ -154,79 +302,124 @@ export default () => {
       />
 
       <div className="row">
-        <div className="col-3">
-          <form>
-            <InputFormControl
-              label="Data"
-              type="date"
-              id="inputData"
-              name="inputData"
-              defaultValue={data}
-              onChange={(event) => setData(event.target.value)}
-            />
-
-            <InputFormControl
-              label="Produto"
-              id="inputProduto"
-              name="inputProduto"
-              value={selectedProduto.description || ""}
-              readOnly
-            >
-              <Button
-                variant="secondary"
-                onClick={() => setModalShowProduto(true)}
-              >
-                <IconList size="22px" title="Pesquisar Produto" />
-              </Button>
-            </InputFormControl>
-
+        <div className="col-4">
+          <InputFormControl
+            label="Cliente"
+            id="inputCliente"
+            name="inputCliente"
+            value={selectedCliente.name || ""}
+            readOnly
+          >
             <ModalCenterBootstrapTable
-              title="Lista de Produtos"
-              show={modalShowProduto}
-              data={produtos}
-              onSelected={handleSelectedProduto}
-              onHide={() => setModalShowProduto(false)}
+              title="Lista de Clientes"
+              data={DataClientes}
+              onSelected={handleSelectedCliente}
+              isShow={id === 0}
             >
               <TableHeaderColumn dataField="id" isKey width="10%">
                 #
               </TableHeaderColumn>
-              <TableHeaderColumn dataField="description">
-                Descrição
-              </TableHeaderColumn>
-              <TableHeaderColumn dataField="unit">Und.</TableHeaderColumn>
-              <TableHeaderColumn dataField="detail" width="20%">
-                Detalhe
+              <TableHeaderColumn dataField="name">Nome</TableHeaderColumn>
+              <TableHeaderColumn dataField="cpf" width="30%">
+                CPF/CNPJ
               </TableHeaderColumn>
             </ModalCenterBootstrapTable>
+            <button
+              className="btn btn-secondary"
+              onClick={() => history.push("/cliente/register")}
+            >
+              Criar
+            </button>
+          </InputFormControl>
+          <InputFormControl
+            label="Data"
+            type="date"
+            id="inputData"
+            name="inputData"
+            defaultValue={data}
+            onChange={(event) => setData(event.target.value)}
+          />
 
-            <InputNumberFormat
-              label="Quantidade"
-              id="inputQuantidade"
-              name="inputQuantidade"
-              prefix=""
-              value={quantidade.formattedValue}
-              onValueChange={(values) => setQuantidade(values)}
-            />
-          </form>
-          <div className="row justify-content-between p-3">
-            <label>Valor Unit.</label>
-            <h3 className="text-muted">
-              <NumberFormat value={selectedProduto.sale_value || 0} />
-            </h3>
-          </div>
-          <div className="row justify-content-between p-3">
-            <label>Valor</label>
-            <h2>
-              <NumberFormat
-                value={selectedProduto.sale_value * quantidade.floatValue || 0}
+          {orcamento === null && (
+            <button className="btn btn-primary" onClick={handleRegistraPedido}>
+              Registra o pedido
+            </button>
+          )}
+
+          {orcamento && (
+            <>
+              <InputFormControl
+                label="Produto"
+                id="inputProduto"
+                name="inputProduto"
+                value={selectedProduto.description || ""}
+                readOnly
+              >
+                <ModalCenterBootstrapTable
+                  title="Lista de Produtos"
+                  data={dataProdutos}
+                  onSelected={handleSelectedProduto}
+                  disable={isSelected}
+                >
+                  <TableHeaderColumn dataField="id" isKey width="10%">
+                    #
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="description">
+                    Descrição
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="unit">Und.</TableHeaderColumn>
+                  <TableHeaderColumn dataField="detail" width="20%">
+                    Detalhe
+                  </TableHeaderColumn>
+                </ModalCenterBootstrapTable>
+              </InputFormControl>
+
+              <InputNumberFormat
+                label="Quantidade"
+                id="inputQuantidade"
+                name="inputQuantidade"
+                prefix=""
+                value={quantidade.formattedValue}
+                onValueChange={(values) => setQuantidade(values)}
               />
-            </h2>
-          </div>
-          <div className="d-flex justify-content-end">
-            <Button variant="success" onClick={handleAdicionar}>
-              Adicionar
-            </Button>
-          </div>
+              <div className="row justify-content-between p-3">
+                <label>Valor Unit.</label>
+                <h3 className="text-muted">
+                  <NumberFormat value={selectedProduto.sale_value || 0} />
+                </h3>
+              </div>
+              <div className="row justify-content-between p-3">
+                <label>Valor</label>
+                <h2>
+                  <NumberFormat
+                    value={
+                      selectedProduto.sale_value * quantidade.floatValue || 0
+                    }
+                  />
+                </h2>
+              </div>
+              <div className="d-flex justify-content-end">
+                <div className="btn-group " role="group">
+                  <Button variant="success" onClick={handleAdicionar}>
+                    Adicionar
+                  </Button>
+                  {isSelected && (
+                    <>
+                      <Button variant="danger" onClick={handleRemover}>
+                        Remover
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        onClick={handleInciaCamposListaProduto}
+                      >
+                        Cancelar
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
 
           {listaPedido.length === 0 || !selectedCliente.name || (
             <div className="btn-group d-flex justify-content-end mt-5">
@@ -237,69 +430,18 @@ export default () => {
           )}
         </div>
 
-        <div className="col-9">
-          <InputFormControl
-            label="Cliente"
-            id="inputCliente"
-            name="inputCliente"
-            value={selectedCliente.name || ""}
-            readOnly
-          >
-            <Button
-              variant="secondary"
-              className="px-4"
-              onClick={() => setModalShowCliente(true)}
-            >
-              <IconList size="22px" title="Pesquisar Cliente" />
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => history.push("/cliente/register")}
-            >
-              Criar
-            </Button>
-          </InputFormControl>
-
-          <ModalCenterBootstrapTable
-            title="Lista de Clientes"
-            show={modalShowCliente}
-            data={clientes}
-            onSelected={handleSelectedCliente}
-            onHide={() => setModalShowCliente(false)}
-          >
-            <TableHeaderColumn dataField="id" isKey width="10%">
-              #
-            </TableHeaderColumn>
-            <TableHeaderColumn dataField="name">Nome</TableHeaderColumn>
-            <TableHeaderColumn dataField="cpf" width="30%">
-              CPF/CNPJ
-            </TableHeaderColumn>
-          </ModalCenterBootstrapTable>
-
+        <div className="col-8">
           <BootstrapDataTable
             data={listaPedido}
             pagination={false}
             search={false}
             exportCSV={false}
+            onSelect={null}
+            onRowClick={onSelect}
+            trClassName={rowClassCheckFormat}
           >
-            <TableHeaderColumn
-              dataField="index"
-              width="5%"
-              isKey
-              dataFormat={(cell, row) => (
-                <Button
-                  variant="danger"
-                  onClick={() =>
-                    setListaPedido(
-                      listaPedido.filter((pedido) => pedido !== row)
-                    )
-                  }
-                >
-                  <IconRemoveList title="Revomer produto da lista" />
-                </Button>
-              )}
-            >
-              #
+            <TableHeaderColumn isKey dataField="stock_id" width="8%">
+              Cod.
             </TableHeaderColumn>
             <TableHeaderColumn dataField="description">
               Produto (descrição)
