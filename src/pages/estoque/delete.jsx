@@ -13,8 +13,8 @@ export default () => {
     description: "",
     detail: "",
     unit: "",
-    quantity_purchase: "",
-    sale_amount: "",
+    quantity: "",
+    quantity_of: "",
     purchase_price: "",
     sale_value: "",
   });
@@ -39,8 +39,8 @@ export default () => {
           description: stock.description,
           detail: stock.detail,
           unit: stock.unit,
-          quantity_purchase: stock.quantity_purchase,
-          sale_amount: stock.sale_amount,
+          quantity: stock.quantity,
+          quantity_of: stock.quantity_of,
           purchase_price: stock.purchase_price,
           sale_value: stock.sale_value,
         });
@@ -69,8 +69,8 @@ export default () => {
         <p>Descrição: {formData.description}</p>
         <p>Detalhe: {formData.detail}</p>
         <p>Unidade: {formData.unit}</p>
-        <p>Quantidade: {formData.quantity_purchase}</p>
-        <p>Quantidade Vendida: {formData.sale_amount}</p>
+        <p>Quantidade: {formData.quantity}</p>
+        <p>Quantidade Vendida: {formData.quantity_of}</p>
         <p>Preço: {formData.purchase_price}</p>
         <p>Preço Venda: {formData.sale_value}</p>
       </div>
