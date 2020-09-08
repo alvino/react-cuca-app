@@ -51,7 +51,7 @@ export default () => {
             Cadastra Entrada
           </Button>
 
-          { (rowSelected.isSelected && !rowSelected.row.budget_id) || (
+          { (rowSelected.isSelected && !rowSelected.row.budget_id) && (
             <Button
               variant="danger"
               onClick={() =>
