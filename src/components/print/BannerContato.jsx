@@ -8,9 +8,8 @@ import {
   FaMapMarkedAlt,
 } from "react-icons/fa";
 
-
+import Logo from "../../components/Logo"
 import qrcodeWhats from "../../assert/whatsapp.png";
-import logoCuca from "../../assert/logo_cuca.svg";
 
 export default () => (
   <div
@@ -22,7 +21,7 @@ export default () => (
   >
     <div className="justify-content-center">
       <div className="d-flex justify-content-center">
-        <img src={logoCuca} height="100px" alt="logo" />
+        <Logo width="252" />
       </div>
       <div className="text-center">
         <span className="">MARKETING & PROPAGANDA</span>

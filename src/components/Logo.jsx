@@ -1,20 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import logoCuca from "../assert/logo_cuca.svg";
 
-function Header(props) {
-  return (
-
-      <Link to="/" className='navbar-brand'>
-        <img src={logoCuca} width={props.logoWidth} alt="Logo" />
-      </Link>
- 
-  );
+function Logo(props) {
+  return <img src={logoCuca} width={props.width} alt="Logo" />;
 }
 
-Header.defaultProps = {
+Logo.defaultProps = {
   logoWidth: "180px",
 };
 
-export default React.memo(Header)
+export default React.memo(Logo);

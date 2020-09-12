@@ -16,9 +16,7 @@ function LiNavLink(props) {
 
 function NavBar() {
     return (
-        <Header
-            logoWidth='120px'
-        >
+        <Header logoWidth='120px'>
             <LiNavLink to='/cliente' title='Cliente' />
             <LiNavLink to='/fornecedor' title='Fornecedor' />
             <LiNavLink to='/estoque' title='Estoque' />

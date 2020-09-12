@@ -1,7 +1,7 @@
 import React from "react";
 
 
-import logoCuca from "../../assert/logo_cuca.svg";
+import Logo from "../Logo"
 
 export default () => (
   <div
@@ -13,7 +13,7 @@ export default () => (
   >
     <div className="justify-content-center">
       <div className="d-flex justify-content-center">
-        <img src={logoCuca} height="100px" alt="logo" />
+        <Logo />
       </div>
     </div>
     <div className="text-center ml-2">
