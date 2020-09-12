@@ -13,6 +13,7 @@ import {
   priceFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
 import BannerContato from "../../components/print/BannerContato"
+import {ButtonHandlePrint} from "../../components/bootstrap/Buttons"
 
 import Print from "../../styles/Print";
 
@@ -68,9 +69,8 @@ export default () => {
         pagination={false}
         search={false}
         exportCSV={false}
-        keyField="index"
       >
-        <TableHeaderColumn dataField="index" dataSort width="5%">
+        <TableHeaderColumn dataField="index" isKey dataSort width="5%">
           #
         </TableHeaderColumn>
         <TableHeaderColumn dataField="description" dataSort>
@@ -105,7 +105,6 @@ export default () => {
     );
   }, [listaPedido]);
 
-  const handleImprimir = () => window.print();
 
   return (
     <Print>
@@ -113,7 +112,7 @@ export default () => {
         <Button variant="secondary" onClick={() => history.goBack()}>
           Voltar
         </Button>
-        <Button onClick={handleImprimir}>Imprimir</Button>
+        <ButtonHandlePrint />
       </div>
 
       <div className="print">
@@ -151,9 +150,7 @@ export default () => {
         </div>
       </div>
 
-      <Button className="mt-5 noprint" onClick={handleImprimir}>
-        Imprimir
-      </Button>
+      <ButtonHandlePrint />
     </Print>
   );
 };
