@@ -26,6 +26,8 @@ export default () => {
 
   const [fornecedores, setFornecedores] = useState([]);
   const [selectFornecedor, setSelectFornecedor] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [stockEmpty, setStockEmpty] = useState(false);
 
   const [valorTotalCompra, setValorTotalCompra] = useState();
   const [valorTotalVenda, setValorTotalVenda] = useState();
@@ -59,12 +61,32 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    if(selectFornecedor === "") return 
-    const serializedListaStock = stocks.filter((item) => {
-      return item.provider_id === Number(selectFornecedor);
-    });
-    setListaStock(serializedListaStock);
-  }, [selectFornecedor, stocks]);
+    let responseCheckListStock = stocks
+    
+    if (selectFornecedor !== "") {
+      responseCheckListStock = responseCheckListStock.filter( 
+        item => (item.provider_id === Number(selectFornecedor))
+      )
+    }
+
+    if (descricao !== "") {
+      responseCheckListStock = responseCheckListStock.filter(
+        item => (
+          item.description
+          .toLowerCase()
+          .includes(descricao.toLowerCase()
+        ))
+      )
+    }
+    console.log(stockEmpty);
+    if (stockEmpty ){
+      responseCheckListStock = responseCheckListStock.filter(
+        item => (item.quantity - item.quantity_of <= 1)
+      )
+    }
+   
+    setListaStock(responseCheckListStock);
+  }, [checked, descricao, selectFornecedor, stockEmpty, stocks]);
 
   useEffect(() => {
     setListaStock(stocks);
@@ -89,17 +111,17 @@ export default () => {
     );
   }, [listaStock]);
 
-  const handleButtonFiltrar = useCallback(
-    (e) => {
-      setChecked(e.currentTarget.checked);
+  useEffect(() => {
+    if (!checked) {
+      setSelectFornecedor("");
+      setListaStock([]);
+      setStockEmpty(false);
+    }
+  }, [checked]);
 
-      if (!checked) {
-        setSelectFornecedor("")
-        setListaStock([])
-      }
-    },
-    [checked]
-  );
+  const handleButtonFiltrar = useCallback((e) => {
+    setChecked(e.currentTarget.checked);
+  }, []);
 
   const rowClassCheckFormat = (row, rowIdx) => {
     if (row.quantity - row.quantity_of <= 0) return "bg-danger text-white";
@@ -133,19 +155,48 @@ export default () => {
                   </div>
                 </div>
 
+                <div className="col-2">
+                  <div className="from-group">
+                    <label htmlFor="inputDescricao">Produto</label>
+                    <div className="input-group">
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="inputDescricao"
+                        value={descricao}
+                        onChange={(event) => setDescricao(event.target.value)}
+                      />
+                      <div className="input-group-append">
+                        <button
+                          className="btn btn-secondary"
+                          onClick={() => setDescricao("")}
+                        >
+                          X
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-2">
+                  <div className="form-group form-check">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="checkStockEmpty"
+                      checked={stockEmpty}
+                      onChange={(e) => setStockEmpty(e.target.checked)}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="checkStockEmpty"
+                    >
+                      Produto em Falta
+                    </label>
+                  </div>
+                </div>
+
                 {
-                  //   <div className="col-2">
-                  //   <div className="form-group">
-                  //     <label htmlFor="inputAno">Ano</label>
-                  //     <input
-                  //       className="form-control"
-                  //       type="Number"
-                  //       id="inputAno"
-                  //       value={ano}
-                  //       onChange={(event) => setAno(event.target.value)}
-                  //     />
-                  //   </div>
-                  // </div>
                   // mes !== "" && (
                   // <div className="col-2">
                   //   <div className="form-group">
