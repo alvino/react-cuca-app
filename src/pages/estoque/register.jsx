@@ -92,7 +92,15 @@ export default () => {
   };
 
   const handleSaveListStock = async () => {
-    const res = await api.post("/stock", listaProdutos);
+    const res = await api.post("/stock", listaProdutos.map( item => ({
+      provider_id: selectedFornecedor.id,
+      description: formData.description,
+      detail: formData.detail,
+      unit: formData.unit,
+      quantity: formData.quantity.floatValue,
+      purchase_price: formData.purchase_price.floatValue,
+      sale_value: formData.sale_value.floatValue,
+    })));
     toast.success(res.data.message);
     history.goBack();
   };
