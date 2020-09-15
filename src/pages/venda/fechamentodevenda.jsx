@@ -3,55 +3,79 @@ import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import BootstrapDataTable from "../../components/patterns/DataTable";
 import api from "../../server/api";
-import InputFormControl from "../../components/bootstrap/InputFormControl";
-import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
+import InputFormControl from "../../components/InputFormControl";
+import InputNumberFormat from "../../components/InputNumberFormat";
 import NumberFormat from "../../components/NumberFormat";
 import DateFormat from "../../components/DateFormat";
-import SelectFormControl from "../../components/bootstrap/SelectFormControl";
-import NavBarVenda from "../../components/NavBarVenda";
+import SelectFormControl from "../../components/SelectFormControl";
+import NavBarVenda from "../../components/patterns/NavBarVenda";
 import {
   priceFormatter,
   numberFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
+import isEmpetyObject from "../../utils/isEmptyObject";
 
 export default () => {
   const history = useHistory();
   const { id } = useParams(0);
 
   const [orcamento, setOrcamento] = useState({});
-  const [cliente, setCliente] = useState({});
+  const [cliente, setCliente] = useState({ name: "" });
   const [listaPedido, setListaPedido] = useState([]);
+
+  const [valorTotal, setValorTotal] = useState(0.0);
 
   const [desconto, setDesconto] = useState({ value: 0, floatValue: 0 });
   const [entrada, setEntrada] = useState({ value: 0, floatValue: 0 });
   const [selectedPagamento, setSelectedPagamento] = useState("A vista");
   const [parcelas, setParcelas] = useState(30);
-  const [valorTotal, setValorTotal] = useState(0.0);
+
+  useEffect(() => {
+    if (id === "0") return;
+
+    async function fetch() {
+      const response_budget = await api.get(`budget/${id}`);
+      const { budget } = response_budget.data;
+
+      setOrcamento(budget);
+    }
+
+    fetch();
+  }, [id]);
+
+  useEffect(() => {
+    if (isEmpetyObject(orcamento)) return;
+
+    async function fetch() {
+      const response = await api.get(`requested_budget/${orcamento.id}`);
+      const { requested_budgets } = response.data;
+
+      setListaPedido(requested_budgets);
+    }
+
+    fetch();
+  }, [orcamento]);
+
+  useEffect(() => {
+    if (isEmpetyObject(orcamento)) return;
+
+    async function fetch() {
+      const response_client = await api.get(`client/${orcamento.client_id}`);
+      const { client } = response_client.data;
+
+      console.log(orcamento, "cliente: ", client);
+      setCliente(client);
+    }
+
+    fetch();
+  }, [orcamento]);
 
   useEffect(() => {
     const total = listaPedido.reduce((acc, item) => acc + item.amount, 0);
     setValorTotal(total);
   }, [listaPedido]);
-
-  useEffect(() => {
-    api
-      .get(`/budget/${id}`)
-      .then((response) => {
-        const serielizedListaPedido = response.data.wish_list.map(
-          (item, index) => ({ index: index + 1, ...item })
-        );
-
-        setListaPedido(serielizedListaPedido);
-        setOrcamento(response.data.budget);
-        setCliente(response.data.client);
-      })
-      .catch((error) => {
-        toast.error("Erro ao acessa API");
-        console.error(error);
-      });
-  }, [id]);
 
   useEffect(() => {
     if (selectedPagamento === "A vista") {
@@ -64,10 +88,6 @@ export default () => {
     if (values.formattedValue === "") values = { value: 0, floatValue: 0 };
     setDesconto(values);
   }, []);
-
-  const handlerPushImprimir = () => {
-    history.push(`/orcamento/print/${id}`);
-  };
 
   const handleConfirmarConclusaoVenda = useCallback(async () => {
     let sales = [];
@@ -127,12 +147,12 @@ export default () => {
 
     if (resposta.status === 200) {
       toast.success(resposta.data.message);
-      history.push("/venda/0");
+      history.push("/venda");
     } else {
       toast.error(resposta.data.message);
     }
   }, [
-    cliente.name,
+    cliente,
     desconto.floatValue,
     entrada.floatValue,
     history,
@@ -219,7 +239,7 @@ export default () => {
         <div className="col-9">
           <button
             className="btn btn-success m-2"
-            onClick={handlerPushImprimir}
+            onClick={() => history.push(`/orcamento/print/${id}`)}
           >
             Imprimir Orcamento
           </button>

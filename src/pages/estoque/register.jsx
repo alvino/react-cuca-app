@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { BsTrashFill as IconRemoveList } from "react-icons/bs";
@@ -6,37 +6,40 @@ import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
 import api from "../../server/api";
-import ModalCenterBootstrapTable from "../../components/bootstrap/ModalCenterBootstrapTable";
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import ModalCenterBootstrapTable from "../../components/patterns/ModalCenterBootstrapTable";
+import BootstrapDataTable from "../../components/patterns/DataTable";
 import {
   numberFormatter,
   priceFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
-import InputFormControl from "../../components/bootstrap/InputFormControl";
-import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
+import InputFormControl from "../../components/InputFormControl";
+import InputNumberFormat from "../../components/InputNumberFormat";
 
 export default () => {
   const history = useHistory();
 
   const [providers, setProviders] = useState([]);
   const [selectedFornecedor, setSelectedFornecedor] = useState({});
-
-  
-
-  const [formData, setFormData] = useState({
-    description: "",
-    detail: "",
-    unit: "",
-    quantity: {
-      value: "0",
-    },
-    purchase_price: {
-      value: "0",
-    },
-    sale_value: {
-      value: "0",
-    },
+   
+  const descriptionInputRef = useRef()
+  const detailInputRef = useRef()
+  const unitInputRef = useRef()
+  const [quantity, setQuantity] = useState({
+    formattedValue: "0",
+    value: "0",
+    floatValue: 0,
   });
+  const [purchasePrice, setPurchasePrice] = useState({
+    formattedValue: "0",
+    value: "0",
+    floatValue: 0,
+  });
+  const [saleValue, setSaleValue] = useState({
+    formattedValue: "0",
+    value: "0",
+    floatValue: 0,
+  });
+
   const [listaProdutos, setListaProdutos] = useState([]);
 
   useEffect(() => {
@@ -55,36 +58,35 @@ export default () => {
       return;
     }
 
+    const newStock = {
+      index: listaProdutos.length + 1,
+      provider_id: selectedFornecedor.id,
+      description: descriptionInputRef.current.value,
+      detail: detailInputRef.current.value,
+      unit: unitInputRef.current.value,
+      quantity: quantity.floatValue,
+      purchase_price: purchasePrice.floatValue,
+      sale_value: saleValue.floatValue,
+    };
+
     if (
-      formData.description === "" ||
-      formData.quantity === "" ||
-      formData.purchase_price === "" ||
-      formData.sale_value === ""
+      newStock.description === "" ||
+      newStock.quantity === "" ||
+      newStock.purchase_price === "" ||
+      newStock.sale_value === ""
     ) {
       toast.warning("Preencha os campos para depois adicionar a lista.");
       return;
     }
 
-    const newStock = {
-      index: listaProdutos.length + 1,
-      provider_id: selectedFornecedor.id,
-      description: formData.description,
-      detail: formData.detail,
-      unit: formData.unit,
-      quantity: formData.quantity.floatValue,
-      purchase_price: formData.purchase_price.floatValue,
-      sale_value: formData.sale_value.floatValue,
-    };
-
     setListaProdutos([newStock, ...listaProdutos]);
-    setFormData({
-      description: "",
-      detail: "",
-      unit: "",
-      quantity: { value: "0", formattedValue: "" },
-      purchase_price: { value: "0", formattedValue: "" },
-      sale_value: { value: "0", formattedValue: "" },
-    });
+    
+    descriptionInputRef.current.value = ''
+    detailInputRef.current.value = ''
+    unitInputRef.current.value = ''
+    setQuantity({ formattedValue: "0", value: "0", floatValue: 0 });
+    setPurchasePrice({ formattedValue: "0", value: "0", floatValue: 0 });
+    setSaleValue({ formattedValue: "0", value: "0", floatValue: 0 });
   };
 
   const handleSelectedFornecedor = (selected) => {
@@ -92,15 +94,18 @@ export default () => {
   };
 
   const handleSaveListStock = async () => {
-    const res = await api.post("/stock", listaProdutos.map( item => ({
-      provider_id: selectedFornecedor.id,
-      description: formData.description,
-      detail: formData.detail,
-      unit: formData.unit,
-      quantity: formData.quantity.floatValue,
-      purchase_price: formData.purchase_price.floatValue,
-      sale_value: formData.sale_value.floatValue,
-    })));
+    const res = await api.post(
+      "/stock",
+      listaProdutos.map(item => ({
+        provider_id: selectedFornecedor.id,
+        description: descriptionInputRef.current.value,
+        detail: detailInputRef.current.value,
+        unit: unitInputRef.current.value,
+        quantity: quantity.floatValue,
+        purchase_price: purchasePrice.floatValue,
+        sale_value: saleValue.floatValue,
+      }))
+    );
     toast.success(res.data.message);
     history.goBack();
   };
@@ -132,52 +137,52 @@ export default () => {
               CNPJ/CPF
             </TableHeaderColumn>
           </ModalCenterBootstrapTable>
-          <Button
-            variant="secondary"
+          <button
+            className="btn btn-secondary"
             onClick={() => history.push("/fornecedor/register")}
           >
             Criar
-          </Button>
+          </button>
         </InputFormControl>
 
-        <InputFormControl
-          label="Descrição"
-          id="description"
-          name="description"
-          value={formData.description}
-          onChange={(event) =>
-            setFormData({ ...formData, description: event.target.value })
-          }
-        />
+        <div className="form-group">
+          <label htmlFor="inputDescription">Descrição</label>
+          <input
+            type="text"
+            className="form-control"
+            id="inputDescription"
+            ref={descriptionInputRef}
+          />
+        </div>
 
-        <InputFormControl
-          label="Detalhe"
-          id="detail"
-          name="detail"
-          value={formData.detail}
-          onChange={(event) =>
-            setFormData({ ...formData, detail: event.target.value })
-          }
-        />
+        <div className="form-group">
+          <label htmlFor="inputDetail">Detalhe</label>
+          <input
+            type="text"
+            className="form-control"
+            id="inputDetail"
+            ref={detailInputRef}
+          />
+        </div>
 
-        <InputFormControl
-          label="Unidade de Medida"
-          id="unit"
-          name="unit"
-          value={formData.unit}
-          onChange={(event) =>
-            setFormData({ ...formData, unit: event.target.value })
-          }
-        />
+        <div className="form-group">
+          <label htmlFor="inputUnit">Unidade de Medida</label>
+          <input
+            type="text"
+            className="form-control"
+            id="inputUnit"
+            ref={unitInputRef}
+          />
+        </div>
 
         <InputNumberFormat
           label="Quantidade"
           id="quantity"
           name="quantity"
           prefix=""
-          value={formData.quantity.formattedValue}
+          value={quantity.formattedValue}
           onValueChange={(values) =>
-            setFormData({ ...formData, quantity: values })
+            setQuantity(values)
           }
         />
 
@@ -185,20 +190,16 @@ export default () => {
           label="Valor da Compra"
           id="purchase_price"
           name="purchase_price"
-          value={formData.purchase_price.formattedValue}
-          onValueChange={(values) =>
-            setFormData({ ...formData, purchase_price: values })
-          }
+          value={purchasePrice.formattedValue}
+          onValueChange={(values) => setPurchasePrice(values)}
         />
 
         <InputNumberFormat
           label="Valor de Venda"
           id="sale_value"
           name="sale_value"
-          value={formData.sale_value.formattedValue}
-          onValueChange={(values) =>
-            setFormData({ ...formData, sale_value: values })
-          }
+          value={saleValue.formattedValue}
+          onValueChange={(values) => setSaleValue(values)}
         />
 
         <div className="d-flex justify-content-end">
@@ -213,7 +214,6 @@ export default () => {
         )}
       </div>
       <div className="col-8">
-
         <BootstrapDataTable
           data={listaProdutos}
           pagination={false}
@@ -232,7 +232,7 @@ export default () => {
                   )
                 }
               >
-                <IconRemoveList title="Revomer produto da lista" color="red"/>
+                <IconRemoveList title="Revomer produto da lista" color="red" />
               </span>
             )}
           >

@@ -6,7 +6,7 @@ import {
   priceFormatter,
   numberFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import BootstrapDataTable from "../../components/patterns/DataTable";
 import { useCallback } from "react";
 import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";

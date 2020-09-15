@@ -9,7 +9,8 @@ import {
 import { GiReceiveMoney, GiPayMoney } from "react-icons/gi";
 
 // import NavBar from '../components/NavBar'
-import Header from '../components/Header'
+import Header from '../components/patterns/Header'
+
 import Box from '../components/Box'
 
 export default () => {
@@ -21,7 +22,7 @@ export default () => {
       <div className="container-fluid">
         <main className="d-flex justify-content-around  align-items-center">
           <div className="row w-75 mx-auto">
-            <Box title="Ponto de Venda" to="/venda/0">
+            <Box title="Ponto de Venda" to="/venda">
               <FaShoppingCart />
             </Box>
 
@@ -51,6 +52,8 @@ export default () => {
           </div>
         </main>
       </div>
+
+      
     </div>
   );
 }

@@ -5,28 +5,28 @@ import { Button } from "react-bootstrap";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
 import api from "../../server/api";
-import ModalCenterBootstrapTable from "../../components/bootstrap/ModalCenterBootstrapTable";
-import InputFormControl from "../../components/bootstrap/InputFormControl";
-import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
+import ModalCenterBootstrapTable from "../../components/patterns/ModalCenterBootstrapTable";
+import InputFormControl from "../../components/InputFormControl";
+import InputNumberFormat from "../../components/InputNumberFormat";
 import NumberFormat from "../../components/NumberFormat";
-import NavBarVenda from "../../components/NavBarVenda";
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import NavBarVenda from "../../components/patterns/NavBarVenda";
+import BootstrapDataTable from "../../components/patterns/DataTable";
 import {
   numberFormatter,
   priceFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
+import isEmpetyObject from "../../utils/isEmptyObject";
 
 export default () => {
   const history = useHistory();
   const { id } = useParams(0);
 
-  const [orcamento, setOrcamento] = useState(null);
+  const [orcamento, setOrcamento] = useState({});
 
   const [dataProdutos, setDataProdutos] = useState([]);
   const [selectedProduto, setSelectedProduto] = useState({});
 
-  const [DataClientes, setDataClientes] = useState([]);
-  const [selectedCliente, setSelectedCliente] = useState({});
+  const [cliente, setCliente] = useState([]);
 
   const [quantidade, setQuantidade] = useState({
     value: "1",
@@ -54,7 +54,7 @@ export default () => {
   }, [id]);
 
   useEffect(() => {
-    if (orcamento === null) return;
+    if (isEmpetyObject(orcamento)) return;
 
     async function fetch() {
       const response = await api.get(`requested_budget/${orcamento.id}`);
@@ -66,12 +66,12 @@ export default () => {
   }, [orcamento]);
 
   useEffect(() => {
-    if (orcamento === null) return;
+    if (isEmpetyObject(orcamento) ) return;
 
     async function fetch() {
       const response_client = await api.get(`client/${orcamento.client_id}`);
       const { client } = response_client.data;
-      setSelectedCliente(client);
+      setCliente(client);
     }
 
     fetch();
@@ -99,14 +99,6 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await api.get("/client");
-      setDataClientes(response.data.clients);
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     const total = listaPedido.reduce((acc, item) => acc + item.amount, 0);
     setValorTotal(total);
   }, [listaPedido]);
@@ -120,7 +112,7 @@ export default () => {
       setSelectedProduto(stock);
       setQuantidade({
         value: String(rowSelect.quantity),
-        formattedValue: String(rowSelect.quantity).replaceAll(".", ","),
+        formattedValue: String(rowSelect.quantity).replace(".", ","),
         floatValue: rowSelect.quantity,
       });
     }
@@ -248,10 +240,6 @@ export default () => {
     });
   }, []);
 
-  const handleSelectedCliente = useCallback((row) => {
-    setSelectedCliente(row);
-  }, []);
-
   const onSelect = useCallback(async (row, isSelected) => {
     setRowSelect(row);
     setIsSelect(isSelected);
@@ -263,10 +251,12 @@ export default () => {
       return;
     }
 
-    const amount =  parseFloat(valorTotal.toFixed(2) )
+    const amount = parseFloat(valorTotal.toFixed(2));
 
-
-    const response = await api.put(`budget/${orcamento.id}`, {...orcamento, amount});
+    const response = await api.put(`budget/${orcamento.id}`, {
+      ...orcamento,
+      amount,
+    });
 
     if (response.status === 200) {
       toast.success(response.data.message);
@@ -276,18 +266,6 @@ export default () => {
       return;
     }
   }, [history, id, listaPedido, orcamento, valorTotal]);
-
-  const handleRegistraPedido = useCallback(async () => {
-    const orcamento = {
-      client_id: selectedCliente.id,
-      amount: valorTotal,
-      created_at: data,
-    };
-
-    const response = await api.post(`budget`, orcamento);
-
-    history.push(`/venda/${response.data.id}`);
-  }, [data, history, selectedCliente.id, valorTotal]);
 
   const rowClassCheckFormat = (row, rowIdx) => {
     if (row.stock - row.quantity < 0) return "bg-danger text-white";
@@ -299,38 +277,12 @@ export default () => {
         title="Ponto de Venda"
         quantidadeDeItens={listaPedido.length}
         valorTotal={<NumberFormat value={valorTotal} />}
-      />
+      >
+        <span>{cliente.name}</span>
+      </NavBarVenda>
 
       <div className="row">
         <div className="col-4">
-          <InputFormControl
-            label="Cliente"
-            id="inputCliente"
-            name="inputCliente"
-            value={selectedCliente.name || ""}
-            readOnly
-          >
-            <ModalCenterBootstrapTable
-              title="Lista de Clientes"
-              data={DataClientes}
-              onSelected={handleSelectedCliente}
-              isShow={id === 0}
-            >
-              <TableHeaderColumn dataField="id" isKey width="10%">
-                #
-              </TableHeaderColumn>
-              <TableHeaderColumn dataField="name">Nome</TableHeaderColumn>
-              <TableHeaderColumn dataField="cpf" width="30%">
-                CPF/CNPJ
-              </TableHeaderColumn>
-            </ModalCenterBootstrapTable>
-            <button
-              className="btn btn-secondary"
-              onClick={() => history.push("/cliente/register")}
-            >
-              Criar
-            </button>
-          </InputFormControl>
           <InputFormControl
             label="Data"
             type="date"
@@ -339,12 +291,6 @@ export default () => {
             defaultValue={data}
             onChange={(event) => setData(event.target.value)}
           />
-
-          {orcamento === null && (
-            <button className="btn btn-primary" onClick={handleRegistraPedido}>
-              Registra o pedido
-            </button>
-          )}
 
           {orcamento && (
             <>
@@ -421,7 +367,7 @@ export default () => {
             </>
           )}
 
-          {listaPedido.length === 0 || !selectedCliente.name || (
+          {listaPedido.length === 0 || (
             <div className="btn-group d-flex justify-content-end mt-5">
               <Button variant="primary" onClick={handleFinalizarPedido}>
                 Finalizar o Pedido

@@ -5,10 +5,10 @@ import { Button, Form } from "react-bootstrap";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
 
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
-import InputFormControl from "../../components/bootstrap/InputFormControl";
-import InputNumberFormat from "../../components/bootstrap/InputNumberFormat";
-import SelectFormControl from "../../components/bootstrap/SelectFormControl";
+import BootstrapDataTable from "../../components/patterns/DataTable";
+import InputFormControl from "../../components/InputFormControl";
+import InputNumberFormat from "../../components/InputNumberFormat";
+import SelectFormControl from "../../components/SelectFormControl";
 import api from "../../server/api";
 import {
   priceFormatter,

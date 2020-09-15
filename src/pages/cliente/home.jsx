@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import BootstrapDataTable from "../../components/patterns/DataTable";
 import { toast } from "react-toastify";
 
 export default () => {
@@ -17,13 +17,17 @@ export default () => {
   });
 
   useEffect(() => {
-    api
-      .get("/client")
-      .then((response) => setClients(response.data.clients))
-      .catch((error) => {
+
+    async function fetch(){
+      try{
+        const response = await api.get("/client")
+        setClients(response.data.clients)
+      }catch(error) {
         toast.error("Erro de rede ao acessar API");
-        console.error(error);
-      });
+      }
+    }
+
+    fetch()
   }, []);
 
   const onSelect = useCallback((row, isSelected) => {

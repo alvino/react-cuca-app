@@ -5,7 +5,7 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 
-
+import CriarPontoDeVenda from './criarpontodevenda'
 import PontoDeVenda from './pontodevenda'
 import FechamentoDeVenda from './fechamentodevenda'
 
@@ -15,6 +15,9 @@ export default () => {
 
   return (
     <Switch>
+      <Route exact path={`${path}`}>
+        <CriarPontoDeVenda />
+      </Route>
       <Route exact path={`${path}/:id`}>
         <PontoDeVenda />
       </Route>

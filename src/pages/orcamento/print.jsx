@@ -5,7 +5,7 @@ import api from "../../server/api";
 import { Button } from "react-bootstrap";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import BootstrapDataTable from "../../components/patterns/DataTable";
 import NumberFormat from "../../components/NumberFormat";
 import DateFormat from "../../components/DateFormat";
 import {
@@ -13,7 +13,7 @@ import {
   priceFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
 import BannerContato from "../../components/print/BannerContato"
-import {ButtonHandlePrint} from "../../components/bootstrap/Buttons"
+import {ButtonHandlePrint} from "../../components/Buttons"
 
 import Print from "../../styles/Print";
 

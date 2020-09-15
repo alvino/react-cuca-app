@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
-
 import "react-toastify/dist/ReactToastify.css";
 import "./styles/App.scss";
 
@@ -24,44 +23,40 @@ import Saida from './pages/saida'
 
 function App() {
 	return (
-		<>
-			<ToastContainer
-				position="bottom-right"
-				hideProgressBar
-				closeOnClick
-			/>
-			<Router>
-				<Switch>
-					<Route exact path="/">
-						<Home />
-					</Route>
-					<Route path="/cliente">
-						<Client />
-					</Route>
-					<Route path="/fornecedor">
-						<Provider />
-					</Route>
-					<Route path="/estoque">
-						<Estoque />
-					</Route>
-					<Route path="/orcamento">
-						<Orcamento />
-					</Route>
-					<Route path='/venda'>
-						<Venda />
-					</Route>
-					<Route path='/entrada'>
-						<Entrada />
-					</Route>
-					<Route path='/saida'>
-						<Saida />
-					</Route>
-					<Redirect to='/' />
-				</Switch>
+    <>
+      <ToastContainer position="bottom-right" hideProgressBar closeOnClick />
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/cliente">
+            <Client />
+          </Route>
+          <Route path="/fornecedor">
+            <Provider />
+          </Route>
+          <Route path="/estoque">
+            <Estoque />
+          </Route>
+          <Route path="/orcamento">
+            <Orcamento />
+          </Route>
+          <Route path="/venda">
+            <Venda />
+          </Route>
+          <Route path="/entrada">
+            <Entrada />
+          </Route>
+          <Route path="/saida">
+            <Saida />
+          </Route>
+          <Redirect to="/" />
+        </Switch>
+      </Router>
 
-			</Router>
-		</>
-	)
+    </>
+  );
 }
 
 export default App;

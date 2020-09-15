@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import api from "../../server/api";
 import { Button, ToggleButton, ButtonGroup } from "react-bootstrap";
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import BootstrapDataTable from "../../components/patterns/DataTable";
 import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
@@ -10,7 +10,7 @@ import {
   priceFormatter,
   dateFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
-import { ButtonHandlePrint } from "../../components/bootstrap/Buttons";
+import { ButtonHandlePrint } from "../../components/Buttons";
 import BannerSimples from "../../components/print/BannerSimples";
 import NumberFormat from "../../components/NumberFormat";
 

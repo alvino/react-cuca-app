@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import BootstrapDataTable from "../../components/patterns/DataTable";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
 export default () => {

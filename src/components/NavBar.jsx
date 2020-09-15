@@ -3,7 +3,7 @@ import {
     NavLink,
 } from "react-router-dom";
 
-import Header from './Header'
+import Header from './patterns/Header'
 
 function LiNavLink(props) {
     return (

@@ -12,7 +12,7 @@ import {
 import { useCallback } from "react";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import BootstrapDataTable from "../../components/patterns/DataTable";
 
 export default () => {
   const history = useHistory();

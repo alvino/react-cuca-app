@@ -6,7 +6,9 @@ import {
 } from "react-router-dom";
 
 
+
 import NavBar from '../../components/NavBar'
+import Footer from '../../components/patterns/Footer'
 import Home from './home'
 import ClientRegister from './register'
 import ClientDelete from './delete'
@@ -16,11 +18,10 @@ export default () => {
   let { path } = useRouteMatch();
 
   return (
-
     <div>
       <NavBar />
 
-      <div className='container-fluid'>
+      <div className="container-fluid">
         <main>
           <Switch>
             <Route exact path={path}>
@@ -38,6 +39,8 @@ export default () => {
           </Switch>
         </main>
       </div>
+
+      <Footer />
     </div>
-  )
+  );
 }

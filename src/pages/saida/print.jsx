@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { Button, ToggleButton, ButtonGroup } from "react-bootstrap";
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import BootstrapDataTable from "../../components/patterns/DataTable";
 import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
@@ -9,13 +9,13 @@ import api from "../../server/api";
 import  {
   OptionMeses,
   OptionDias,
-} from "../../components/bootstrap/SelectFormControl";
+} from "../../components/SelectFormControl";
 import NumberFormat from "../../components/NumberFormat";
 import {
   priceFormatter,
   dateFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
-import { ButtonHandlePrint } from "../../components/bootstrap/Buttons";
+import { ButtonHandlePrint } from "../../components/Buttons";
 import BannerSimples from '../../components/print/BannerSimples'
 
 import Print from "../../styles/Print";
@@ -47,17 +47,21 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    let date_sale = "";
+    let filterDate = "";
 
     if (checked) {
-      date_sale = date_sale + ano;
-      date_sale = mes === "" ? date_sale : [date_sale, mes, dia].join("-");
+      filterDate += ano;
+      filterDate = mes === "" ? filterDate : [filterDate, mes, dia].join("-")
     }
 
-    const filterOutlays = outlays.filter((item) =>
-      item.date_sale.includes(date_sale)
-    );
-    setListaOutlay(filterOutlays);
+    const isFilterDate = (item) => {
+      console.log(item, filterDate)
+      return item.date_outlay.includes(filterDate);
+    }
+
+    const filteredOutlays = outlays.filter( isFilterDate )
+
+    setListaOutlay(filteredOutlays);
   }, [ano, checked, dia, mes, outlays]);
 
 
@@ -169,7 +173,7 @@ export default () => {
                 </span>
               </p>
               <BootstrapDataTable
-                data={outlays}
+                data={listaOutlay}
                 pagination={false}
                 search={false}
                 exportCSV={false}

@@ -24,9 +24,9 @@ export default () => {
       return;
     }
 
-    api
-      .get(`/client/${id}`)
-      .then((response) => {
+    async function fetch(){
+      try {
+        const response = await  api.get(`/client/${id}`)
         const [client] = response.data.client;
         if (!client) {
           toast.error("Cliente não encontrado");
@@ -41,11 +41,13 @@ export default () => {
         });
         setSelectedUf(client.uf);
         setSelectedCity(client.city);
-      })
-      .catch((error) => {
+        
+      } catch (error) {
         toast.error("Erro de rede ao acessar API");
-        console.error(error);
-      });
+      }
+    }
+
+    fetch()
   }, [history, id]);
 
   const handleSubmit = useCallback(

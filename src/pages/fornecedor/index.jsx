@@ -5,7 +5,7 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 
-
+import Footer from "../../components/patterns/Footer";
 import NavBar from '../../components/NavBar'
 import Home from './home'
 import Register from './register'
@@ -38,6 +38,8 @@ export default () => {
           </Switch>
         </main>
       </div>
+
+      <Footer />
     </div>
   )
 }

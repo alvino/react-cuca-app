@@ -8,7 +8,7 @@ import {
   priceFormatter,
   dateFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import BootstrapDataTable from "../../components/patterns/DataTable";
 import { useCallback } from "react";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
@@ -22,15 +22,17 @@ export default () => {
   });
 
   useEffect(() => {
-    api
-      .get("/budget")
-      .then((response) => {
+    async function fetch() {
+      try {
+        const response = await api.get("/budget");
         setOrcamentos(response.data.budgets);
-      })
-      .catch((error) => {
+      } catch (error) {
         toast.error("Erro ao acessar API");
         console.error(error);
-      });
+      }
+    }
+
+    fetch();
   }, []);
 
   const onSelect = useCallback((row, isSelected) => {
@@ -45,11 +47,8 @@ export default () => {
             <Button
               variant="primary"
               className="p-2"
-              onClick={() =>
-                history.push(`/venda/${rowSelected.row.id}`)
-              }
+              onClick={() => history.push(`/venda/${rowSelected.row.id}`)}
             >
-              
               Abrir o Orçamento
             </Button>
 
@@ -60,7 +59,6 @@ export default () => {
                 history.push(`/orcamento/print/${rowSelected.row.id}`)
               }
             >
-             
               Imprimir Orcamento
             </Button>
 
@@ -71,18 +69,13 @@ export default () => {
                 history.push(`/orcamento/delete/${rowSelected.row.id}`)
               }
             >
-              
               Deletar Orcamento
             </Button>
           </div>
-        ) }
+        )}
       </div>
 
-      <BootstrapDataTable
-        data={orcamentos}
-        onSelect={onSelect}
-        keyField='id'
-      >
+      <BootstrapDataTable data={orcamentos} onSelect={onSelect} keyField="id">
         <TableHeaderColumn dataField="id" dataSort width="5%">
           Cod
         </TableHeaderColumn>

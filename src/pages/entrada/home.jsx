@@ -10,7 +10,7 @@ import {
   dateFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
 
-import BootstrapDataTable from "../../components/bootstrap/DataTable";
+import BootstrapDataTable from "../../components/patterns/DataTable";
 
 export default () => {
   const history = useHistory();
