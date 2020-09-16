@@ -8,7 +8,6 @@ import {
 
 
 import NavBar from '../../components/NavBar'
-import Footer from '../../components/patterns/Footer'
 import Home from './home'
 import ClientRegister from './register'
 import ClientDelete from './delete'
@@ -40,7 +39,6 @@ export default () => {
         </main>
       </div>
 
-      <Footer />
     </div>
   );
 }

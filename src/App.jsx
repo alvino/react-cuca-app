@@ -19,6 +19,7 @@ import Orcamento from './pages/orcamento'
 import Venda from './pages/venda'
 import Entrada from './pages/entrada'
 import Saida from './pages/saida'
+import Sobre from './pages/sobre'
 
 
 function App() {
@@ -50,6 +51,9 @@ function App() {
           </Route>
           <Route path="/saida">
             <Saida />
+          </Route>
+          <Route path="/sobre">
+            <Sobre />
           </Route>
           <Redirect to="/" />
         </Switch>

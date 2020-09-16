@@ -7,6 +7,7 @@ import {
   FaClipboardList,
 } from 'react-icons/fa'
 import { GiReceiveMoney, GiPayMoney } from "react-icons/gi";
+import {SiAboutDotMe} from 'react-icons/si'
 
 // import NavBar from '../components/NavBar'
 import Header from '../components/patterns/Header'
@@ -49,11 +50,13 @@ export default () => {
             <Box title="Saida" to="/saida">
               <GiPayMoney />
             </Box>
+
+            <Box title="sobre" to="/sobre">
+              <SiAboutDotMe />
+            </Box>
           </div>
         </main>
       </div>
-
-      
     </div>
   );
 }
