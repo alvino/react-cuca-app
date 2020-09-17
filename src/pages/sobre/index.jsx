@@ -38,17 +38,16 @@ export default () => {
 
     try {
       const response = await api.post(`send`, { email, message });
-   
+
       if (response.status > 500) throw new Error("");
-   
-      toast.info('Em viado...');
-   
+
+      toast.info("Em viado...");
+
       emailInputRef.current.value = "";
       messageTextRef.current.value = "";
     } catch (error) {
       toast.error("Não foi possivel enviar email");
     }
-
   };
 
   return (
@@ -58,23 +57,30 @@ export default () => {
       <div className="container-fluid">
         <main>
           <div className="row">
+            <div className="col-3" />
+
             <div className="col-6">
-              <img
-                src={apiGit.avatar_url}
-                width="100px"
-                className="rounded mx-auto d-block"
-                alt="..."
-              />
-              <p>{apiGit.name}</p>
-              <p>{apiGit.company}</p>
-              <p>{apiGit.location}</p>
-              <p>{apiGit.bio}</p>
-            </div>
-            <div className="col-6">
+              <div className="d-flex">
+                <div className="m-2">
+                  <p>{apiGit.name}</p>
+                  <p>{apiGit.company}</p>
+                  <p>{apiGit.location}</p>
+                  <p>{apiGit.bio}</p>
+                </div>
+                <div className="justify-content-center align-items-centerw m-2">
+                  <img
+                    src={apiGit.avatar_url}
+                    width="100px"
+                    className="rounded mx-auto d-block"
+                    alt="imagem do programador"
+                  />
+                </div>
+                
+              </div>
+
               <div>
                 <span className="h2">Relatar bugs</span>
                 <form onSubmit={handleSubmit}>
-                  
                   <input
                     type="email"
                     name="email"
@@ -99,6 +105,8 @@ export default () => {
                 </form>
               </div>
             </div>
+
+            <div className="col-3" />
           </div>
         </main>
       </div>
