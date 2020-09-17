@@ -14,6 +14,9 @@ function Header(props) {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">{props.children}</Nav>
       </Navbar.Collapse>
+      <Link class="btn btn-outline-light" to="/sobre">
+        Sobre
+      </Link>
     </Navbar>
   );
 }

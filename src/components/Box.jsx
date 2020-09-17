@@ -5,8 +5,8 @@ import styled from "styled-components";
 // import './Box.css'
 const Anchor = styled.a`
   opacity: 0.6;
-  width: 12rem;
-  height: 12rem;
+  width: 11rem;
+  height: 11rem;
   -moz-transition: all 0.3s;
   -webkit-transition: all 0.3s;
   transition: all 0.35s;
@@ -38,7 +38,7 @@ export default function (props) {
       <div className="d-flex flex-column justify-content-center align-items-center">
         <div className="d-flex size-box">{props.children}</div>
 
-        <div className="mt-2 h4">{props.title}</div>
+        <div className="mt-2 h5">{props.title}</div>
       </div>
     </Anchor>
   );
