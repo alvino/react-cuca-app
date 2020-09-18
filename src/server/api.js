@@ -1,11 +1,13 @@
 import axios from 'axios';
+import dotenv from 'dotenv'
+dotenv.config()
 
 // 'https://cuca-api.herokuapp.com'
 // 'http://localhost:3333'
 
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3333'
+    baseURL: process.env.API
 })
 
 export default instance
