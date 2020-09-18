@@ -23,7 +23,7 @@ export default () => {
 
   useEffect(() => {
     api
-      .get("/sale", { params: { date_sale: "" } })
+      .get("/sale" })
       .then((response) => {
         setSales(response.data.sales);
       })

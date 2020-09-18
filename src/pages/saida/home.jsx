@@ -24,10 +24,9 @@ export default () => {
   });
 
   useEffect(() => {
-    const query = { date_outlay: "" };
 
     api
-      .get("/outlay", { params: query })
+      .get("/outlay")
       .then((response) => {
         setOutlays(response.data.outlays);
       })
