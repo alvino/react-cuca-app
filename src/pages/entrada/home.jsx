@@ -23,7 +23,7 @@ export default () => {
 
   useEffect(() => {
     api
-      .get("/sale" })
+      .get("/sale")
       .then((response) => {
         setSales(response.data.sales);
       })
