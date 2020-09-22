@@ -24,3 +24,4 @@ yarn.lock
 
 favicon.ico.old
 package-lock.json
+.env
