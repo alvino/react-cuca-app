@@ -7,6 +7,7 @@ import NavBar from "../../components/NavBar";
 
 import iconUser from "../../assert/user-icon.png";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export default () => {
   const [apiGit, setApiGit] = useState({
@@ -17,6 +18,8 @@ export default () => {
     bio: "...",
   });
 
+  const [apiGitRep, setApiGitRep] = useState({ sha: "", html_url: "" });
+
   const emailInputRef = useRef();
   const messageTextRef = useRef();
 
@@ -25,6 +28,20 @@ export default () => {
       const response = await github.get(`users/alvino`);
       const { avatar_url, name, location, company, bio } = response.data;
       setApiGit({ avatar_url, name, location, company, bio });
+    }
+
+    fetch();
+  }, []);
+  // https://api.github.com/repos/alvino/react-cuca-app/branches/master
+  useEffect(() => {
+    async function fetch() {
+      const response = await github.get(
+        `/repos/alvino/react-cuca-app/branches/master`
+      );
+      setApiGitRep({
+        sha: "@" + String(response.data.commit.sha).substr(0, 7),
+        html_url: response.data.commit.html_url,
+      });
     }
 
     fetch();
@@ -66,6 +83,12 @@ export default () => {
                   <p>{apiGit.company}</p>
                   <p>{apiGit.location}</p>
                   <p>{apiGit.bio}</p>
+                  <p>
+                    Repositorio do projeto:{" "}
+                    <a href={apiGitRep.html_url} target="_blank">
+                      {apiGitRep.sha}
+                    </a>
+                  </p>
                 </div>
                 <div className="justify-content-center align-items-centerw m-2">
                   <img
@@ -75,7 +98,6 @@ export default () => {
                     alt="imagem do programador"
                   />
                 </div>
-                
               </div>
 
               <div>
