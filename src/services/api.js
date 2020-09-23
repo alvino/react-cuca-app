@@ -1,7 +1,11 @@
 import axios from "axios";
 import { getToken } from "./auth";
 
-const baseURL = process.env.CUCA_API_URL || "http://localhost:3333";
+const isDev = process.env.NODE_ENV === "development";
+
+
+
+const baseURL = isDev ? "http://localhost:3333" : process.env.CUCA_API_URL
 
 const instance = axios.create({
   baseURL,
