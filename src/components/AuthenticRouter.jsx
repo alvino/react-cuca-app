@@ -5,7 +5,6 @@ import { isAuthenticated } from "../services/auth";
 export default ({ children, ...rest }) => {
   const isAuthentic = isAuthenticated();
 
-  console.log(isAuthentic);
   return isAuthentic ? (
     <Route {...rest}>{children}</Route>
   ) : (

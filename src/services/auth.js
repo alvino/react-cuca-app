@@ -8,7 +8,6 @@ export const getToken = () => storage.getItem(TOKEN_KEY);
 export const getPlayload = () => {
   if( !isAuthenticated() ) return null
   const playload = jwt_decode(storage.getItem(TOKEN_KEY))
-  console.log(playload);
   return playload
 }
   export const login = (token) => {
