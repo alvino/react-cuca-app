@@ -1,5 +1,4 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
 import { FaUserCog } from "react-icons/fa";
 import {TiArrowBackOutline} from 'react-icons/ti'
 

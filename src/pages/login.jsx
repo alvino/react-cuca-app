@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 
@@ -15,7 +15,6 @@ const Flutter = styled.div`
 
 export default () => {
   const history = useHistory();
-  const location = useLocation();
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
