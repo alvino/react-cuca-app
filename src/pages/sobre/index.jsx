@@ -84,9 +84,7 @@ export default () => {
                   <p>{apiGit.bio}</p>
                   <p>
                     Repositorio do projeto:{" "}
-                    <a href={apiGitRep.html_url} target="_blank">
-                      {apiGitRep.sha}
-                    </a>
+                    {apiGitRep.sha}
                   </p>
                 </div>
                 <div className="justify-content-center align-items-centerw m-2">
