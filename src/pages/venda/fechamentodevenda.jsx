@@ -273,12 +273,11 @@ export default () => {
           <div className="mt-3">
             <BootstrapDataTable
               data={listaPedido}
-              keyField="index"
               pagination={false}
               search={false}
               exportCSV={false}
             >
-              <TableHeaderColumn dataField="index" width="5%">
+              <TableHeaderColumn dataField="index" isKey width="5%">
                 #
               </TableHeaderColumn>
               <TableHeaderColumn dataField="description">
