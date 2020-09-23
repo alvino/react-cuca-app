@@ -3,8 +3,6 @@ import { getToken } from "./auth";
 
 const isDev = process.env.NODE_ENV === "development";
 
-
-
 const baseURL = isDev
   ? "http://localhost:3333"
   : "https://cuca-api.herokuapp.com";
