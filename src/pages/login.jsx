@@ -34,7 +34,7 @@ export default () => {
       return;
     }
 
-    history.goBack();
+    history.push("/");
   }, [history]);
 
   return (

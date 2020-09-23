@@ -28,7 +28,7 @@ function Header(props) {
         Sobre
       </Link>
 
-      <Link className="btn btn-outline-light mx-2" onClick={handleLogout}>
+      <Link className="btn btn-outline-light mx-2" to='#' onClick={handleLogout}>
         <AiOutlineLogout size="25px" />
       </Link>
     </Navbar>

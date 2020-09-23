@@ -88,8 +88,12 @@ export default () => {
     event.preventDefault();
 
     const provider = {
-      uf: ufSelectRef.current.value,
-      city: citySelectRef.current.value,
+      uf: String(ufSelectRef.current.value).includes("Sele")
+        ? ""
+        : ufSelectRef.current.value,
+      city: String(citySelectRef.current.value).includes("Sele")
+        ? ""
+        : citySelectRef.current.value,
       nickname: nicknameInputRef.current.value,
       email: emailInputRef.current.value,
       telephone: telephoneInputRef.current.value,
