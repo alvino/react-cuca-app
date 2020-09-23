@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
-import api from "../../server/api";
+import api from "../../services/api";
 import ModalCenterBootstrapTable from "../../components/patterns/ModalCenterBootstrapTable";
 import InputFormControl from "../../components/InputFormControl";
 import NumberFormat from "../../components/NumberFormat";

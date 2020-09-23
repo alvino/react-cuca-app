@@ -5,16 +5,17 @@ import {
   FaWarehouse,
   FaShoppingCart,
   FaClipboardList,
-} from 'react-icons/fa'
+} from "react-icons/fa";
 import { GiReceiveMoney, GiPayMoney } from "react-icons/gi";
+import { AiFillSetting } from "react-icons/ai";
+
 
 // import NavBar from '../components/NavBar'
-import Header from '../components/patterns/Header'
+import Header from "../components/patterns/Header";
 
-import Box from '../components/Box'
+import Box from "../components/Box";
 
 export default () => {
-
   return (
     <div className="mb-5">
       <Header />
@@ -50,10 +51,12 @@ export default () => {
               <GiPayMoney />
             </Box>
 
-           
+            <Box title="Configuração" to="/configuracao">
+              <AiFillSetting />
+            </Box>
           </div>
         </main>
       </div>
     </div>
   );
-}
+};

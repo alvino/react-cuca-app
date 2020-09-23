@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import api from "../../server/api";
+import api from "../../services/api";
 import { Button } from "react-bootstrap";
 import { useCallback } from "react";
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import api from "../../server/api";
+import api from "../../services/api";
 import { Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { TableHeaderColumn } from "react-bootstrap-table";

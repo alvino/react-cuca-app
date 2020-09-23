@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
 import BootstrapDataTable from "../../components/patterns/DataTable";
-import api from "../../server/api";
+import api from "../../services/api";
 import InputFormControl from "../../components/InputFormControl";
 import InputNumberFormat from "../../components/InputNumberFormat";
 import NumberFormat from "../../components/NumberFormat";
@@ -65,7 +65,6 @@ export default () => {
       const response_client = await api.get(`client/${orcamento.client_id}`);
       const { client } = response_client.data;
 
-      console.log(orcamento, "cliente: ", client);
       setCliente(client);
     }
 

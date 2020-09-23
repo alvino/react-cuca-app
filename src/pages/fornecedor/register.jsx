@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import api from "../../server/api";
-import localizacao from "../../server/localizacao";
+import api from "../../services/api";
+import localizacao from "../../services/localizacao";
 
 export default () => {
   const history = useHistory();

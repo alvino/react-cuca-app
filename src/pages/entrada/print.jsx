@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import api from "../../server/api";
+import api from "../../services/api";
 import { Button, ToggleButton, ButtonGroup } from "react-bootstrap";
 import BootstrapDataTable from "../../components/patterns/DataTable";
 import { toast } from "react-toastify";
@@ -55,7 +55,6 @@ export default () => {
     }
 
     const isFilterDate = (item) => {
-      console.log(item, filterDate)
       return item.date_sale.includes(filterDate);
     }
 

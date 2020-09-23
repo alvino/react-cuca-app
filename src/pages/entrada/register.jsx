@@ -9,7 +9,7 @@ import BootstrapDataTable from "../../components/patterns/DataTable";
 import InputFormControl from "../../components/InputFormControl";
 import InputNumberFormat from "../../components/InputNumberFormat";
 import SelectFormControl from "../../components/SelectFormControl";
-import api from "../../server/api";
+import api from "../../services/api";
 import {
   priceFormatter,
   dateFormatter,

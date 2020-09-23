@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import api from "../../server/api";
+import api from "../../services/api";
 import { Button, ToggleButton, ButtonGroup } from "react-bootstrap";
 import BootstrapDataTable from "../../components/patterns/DataTable";
 import { toast } from "react-toastify";
@@ -78,7 +78,6 @@ export default () => {
         ))
       )
     }
-    console.log(stockEmpty);
     if (stockEmpty ){
       responseCheckListStock = responseCheckListStock.filter(
         item => (item.quantity - item.quantity_of <= 1)

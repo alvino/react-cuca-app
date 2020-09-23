@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
-import api from "../../server/api";
+import api from "../../services/api";
 import ModalCenterBootstrapTable from "../../components/patterns/ModalCenterBootstrapTable";
 import InputFormControl from "../../components/InputFormControl";
 import InputNumberFormat from "../../components/InputNumberFormat";

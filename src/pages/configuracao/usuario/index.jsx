@@ -5,37 +5,33 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 
-import NavBar from '../../components/NavBar'
+
+
+import NavBar from '../../../components/NavBar'
 import Home from './home'
-import Register from './register'
 import Delete from './delete'
-import Print from './print'
 
 export default () => {
 
   let { path } = useRouteMatch();
 
   return (
-    <>
+    <div>
       <NavBar />
+
       <div className="container-fluid">
         <main>
           <Switch>
-            <Route exact path={path}>
-              <Home />
-            </Route>
-            <Route eact path={`${path}/register`}>
-              <Register />
-            </Route>
-            <Route exact path={`${path}/print`}>
-              <Print />
-            </Route>
             <Route exact path={`${path}/delete/:id`}>
               <Delete />
+            </Route>
+            <Route exact path={path}>
+              <Home />
             </Route>
           </Switch>
         </main>
       </div>
-    </>
+
+    </div>
   );
 }

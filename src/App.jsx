@@ -10,8 +10,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./styles/App.scss";
 
+import AuthenticRoute from './components/AuthenticRouter'
+import PrivateRouter from "./components/PrivateRouter";
+
 
 import Home from './pages/home'
+import Login from './pages/login'
 import Client from './pages/cliente'
 import Provider from './pages/fornecedor'
 import Estoque from './pages/estoque'
@@ -20,45 +24,55 @@ import Venda from './pages/venda'
 import Entrada from './pages/entrada'
 import Saida from './pages/saida'
 import Sobre from './pages/sobre'
+import Configuracao from './pages/configuracao'
+
 
 
 function App() {
+
 	return (
     <>
       <ToastContainer position="bottom-right" hideProgressBar closeOnClick />
       <Router>
         <Switch>
-          <Route exact path="/">
+          <Route path="/login" exact>
+            <Login />
+          </Route>
+
+          <AuthenticRoute path="/" exact>
             <Home />
-          </Route>
-          <Route path="/cliente">
+          </AuthenticRoute>
+          <AuthenticRoute path="/cliente">
             <Client />
-          </Route>
-          <Route path="/fornecedor">
+          </AuthenticRoute>
+          <AuthenticRoute path="/fornecedor">
             <Provider />
-          </Route>
-          <Route path="/estoque">
+          </AuthenticRoute>
+          <AuthenticRoute path="/estoque">
             <Estoque />
-          </Route>
-          <Route path="/orcamento">
+          </AuthenticRoute>
+          <AuthenticRoute path="/orcamento">
             <Orcamento />
-          </Route>
-          <Route path="/venda">
+          </AuthenticRoute>
+          <AuthenticRoute path="/venda">
             <Venda />
-          </Route>
-          <Route path="/entrada">
+          </AuthenticRoute>
+          <AuthenticRoute path="/entrada">
             <Entrada />
-          </Route>
-          <Route path="/saida">
+          </AuthenticRoute>
+          <AuthenticRoute path="/saida">
             <Saida />
-          </Route>
-          <Route path="/sobre">
+          </AuthenticRoute>
+          <AuthenticRoute path="/sobre">
             <Sobre />
-          </Route>
+          </AuthenticRoute>
+          <PrivateRouter path="/configuracao">
+            <Configuracao />
+          </PrivateRouter>
+
           <Redirect to="/" />
         </Switch>
       </Router>
-
     </>
   );
 }

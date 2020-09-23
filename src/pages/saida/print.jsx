@@ -5,7 +5,7 @@ import BootstrapDataTable from "../../components/patterns/DataTable";
 import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
-import api from "../../server/api";
+import api from "../../services/api";
 import  {
   OptionMeses,
   OptionDias,
@@ -55,7 +55,6 @@ export default () => {
     }
 
     const isFilterDate = (item) => {
-      console.log(item, filterDate)
       return item.date_outlay.includes(filterDate);
     }
 

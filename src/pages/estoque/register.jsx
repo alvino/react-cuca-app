@@ -5,7 +5,7 @@ import { BsTrashFill as IconRemoveList } from "react-icons/bs";
 import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
-import api from "../../server/api";
+import api from "../../services/api";
 import ModalCenterBootstrapTable from "../../components/patterns/ModalCenterBootstrapTable";
 import BootstrapDataTable from "../../components/patterns/DataTable";
 import {

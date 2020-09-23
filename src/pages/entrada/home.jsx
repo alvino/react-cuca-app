@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
-import api from "../../server/api";
+import api from "../../services/api";
 import {
   priceFormatter,
   dateFormatter,

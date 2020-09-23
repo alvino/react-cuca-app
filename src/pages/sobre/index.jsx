@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import api from "../../server/api";
-import github from "../../server/github";
+import api from "../../services/api";
+import github from "../../services/github";
 
 import NavBar from "../../components/NavBar";
 

@@ -1,10 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
+import { AiOutlineLogout } from "react-icons/ai";
 
-import Logo from "../Logo"
+import { logout } from "../../services/auth";
+
+import Logo from "../Logo";
 
 function Header(props) {
+  const history = useHistory();
+
+  const handleLogout = () => {
+    logout();
+    history.push("/");
+  };
+
   return (
     <Navbar bg="primary" variant="dark" className="shadow sticky-top mb-5">
       <Link to="/" className="navbar-brand">
@@ -14,8 +24,12 @@ function Header(props) {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">{props.children}</Nav>
       </Navbar.Collapse>
-      <Link class="btn btn-outline-light" to="/sobre">
+      <Link className="btn btn-outline-light mx-2" to="/sobre">
         Sobre
+      </Link>
+
+      <Link className="btn btn-outline-light mx-2" onClick={handleLogout}>
+        <AiOutlineLogout size="25px" />
       </Link>
     </Navbar>
   );
@@ -25,4 +39,4 @@ Header.defaultProps = {
   logoWidth: "180px",
 };
 
-export default React.memo(Header)
+export default React.memo(Header);
