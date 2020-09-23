@@ -5,7 +5,9 @@ const isDev = process.env.NODE_ENV === "development";
 
 
 
-const baseURL = isDev ? "http://localhost:3333" : process.env.CUCA_API_URL
+const baseURL = isDev
+  ? "http://localhost:3333"
+  : "https://cuca-api.herokuapp.com";
 
 const instance = axios.create({
   baseURL,
