@@ -7,7 +7,6 @@ import NavBar from "../../components/NavBar";
 
 import iconUser from "../../assert/user-icon.png";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 
 export default () => {
   const [apiGit, setApiGit] = useState({
