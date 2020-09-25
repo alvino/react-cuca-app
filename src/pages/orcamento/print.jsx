@@ -128,7 +128,7 @@ export default () => {
 
           <p className="text-right">Alto Horizonte-GO, {dataOrcamento}</p>
           <p className="text-right text-muted">
-            Valido por 30 dias (ou ate dura o estoque)
+            Valido por 15 dias
           </p>
 
           <p className="font-weight-bold text-uppercase mb-2">

@@ -7,35 +7,22 @@ import ModalCenterBootstrapTable from "../../components/patterns/ModalCenterBoot
 import InputFormControl from "../../components/InputFormControl";
 import NumberFormat from "../../components/NumberFormat";
 import NavBarVenda from "../../components/patterns/NavBarVenda";
+import { toast } from "react-toastify";
 
 
 export default () => {
   const history = useHistory();
 
-
-
-
-
   const [DataClientes, setDataClientes] = useState([]);
   const [selectedCliente, setSelectedCliente] = useState({});
 
-
-
   const [data, setData] = useState();
-
-
-
-
-  
-
-  
 
   useEffect(() => {
     setData(new Date().toISOString().substring(0, 10));
   }, []);
 
  
-
   useEffect(() => {
     async function fetchData() {
       const response = await api.get("/client");
@@ -60,6 +47,9 @@ export default () => {
     };
 
     const response = await api.post(`budget`, orcamento);
+
+    if(response.status > 500) toast.error("Erro ao criar pedido")
+
 
     history.push(`/venda/${response.data.id}`);
   }, [data, history, selectedCliente.id]);

@@ -113,9 +113,9 @@ export default () => {
 
       let response = {};
       if (id) {
-        response = await api.put(`/client/${id}`, client);
+        response = await api.put(`client/${id}`, client);
       } else {
-        response = await api.post("/client", client);
+        response = await api.post("client", client);
       }
 
       if (response.data) toast.success(response.data.message);

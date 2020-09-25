@@ -1,5 +1,11 @@
+
 [[redirects]]
   from = "/*"
+  status = 404
   to = "/"
-  status = 401
-  force = true
+
+[[headers]]
+  # Define which paths this specific [[headers]] block will cover.
+  for = "/*"
+    [headers.values]
+    Access-Control-Allow-Origin = "*"
