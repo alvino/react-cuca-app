@@ -21,22 +21,23 @@ export default () => {
   const citySelectRef = useRef();
   const ufSelectRef = useRef();
 
-
-
   useEffect(() => {
-
-    nameInputRef.current.focus()
+    nameInputRef.current.focus();
 
     if (!id) return;
-    api
-      .get(`/client/${id}`)
-      .then((response) => {
+
+    async function fetch() {
+      try {
+        const response = await api.get(`/client/${id}`);
+
         const [client] = response.data.client;
+
         if (!client) {
           toast.error("Cliente não encontrado");
           history.push("/cliente/register");
           return;
         }
+
         toast.info(response.data.message);
 
         nameInputRef.current.value = client.name;
@@ -45,11 +46,13 @@ export default () => {
         cpfInputRef.current.value = client.cpf;
         citySelectRef.current.value = client.city;
         ufSelectRef.current.value = client.uf;
-      })
-      .catch((error) => {
+      } catch (error) {
         toast.error("Erro de rede ao acessar API");
         console.error(error);
-      });
+      }
+    }
+
+    fetch()
   }, [history, id]);
 
   // Load UFs
@@ -104,7 +107,7 @@ export default () => {
         cpf: cpfInputRef.current.value,
       };
 
-      console.log(client)
+      console.log(client);
 
       if (client.name === "") {
         toast.warning("Preencha no minimo o nome");
