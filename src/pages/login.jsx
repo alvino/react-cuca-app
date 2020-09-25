@@ -19,7 +19,8 @@ export default () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
-  const handleLogin = useCallback(async () => {
+  const handleLogin = useCallback(async (event) => {
+      event.preventDefault()
     try {
       const response = await api.get("/login", {
         auth: {
@@ -41,7 +42,7 @@ export default () => {
     <Flutter className="w-25 shadow p-5 bg-primary text-white rounded">
       <img className="mb-4 m-auto d-block" src={logo} alt="" height="72" />
       <h1 className="h3 mb-3 font-weight-normal">Login</h1>
-
+    <form onSubmit={handleLogin}>
       <input
         type="text"
         id="inputEmail"
@@ -63,10 +64,11 @@ export default () => {
 
       <button
         className="btn btn-outline-light btn-block my-1"
-        onClick={handleLogin}
+        type="submit"
       >
         Logar
       </button>
+      </form>
     </Flutter>
   );
 };
