@@ -76,14 +76,13 @@ export default () => {
 
       <div>
         <BootstrapDataTable
-          keyField='cpf'
           data={clients}
           onSelect={onSelect}
         >
           <TableHeaderColumn dataField="name" dataSort>
             Nome
           </TableHeaderColumn>
-          <TableHeaderColumn dataField="cpf"  width="15%">
+          <TableHeaderColumn dataField="cpf" isKey width="15%">
             CPF/CNPJ
           </TableHeaderColumn>
           <TableHeaderColumn dataField="email" dataSort>
