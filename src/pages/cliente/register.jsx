@@ -30,7 +30,7 @@ export default () => {
       try {
         const response = await api.get(`/client/${id}`);
 
-        const [client] = response.data.client;
+        const client = response.data.client;
 
         if (!client) {
           toast.error("Cliente não encontrado");
