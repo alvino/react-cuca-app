@@ -29,7 +29,7 @@ export default () => {
     api
       .get(`/provider/${id}`)
       .then((response) => {
-        const [provider] = response.data.provider;
+        const provider = response.data.provider;
         if (!provider) {
           toast.error("fornecedor não encontrado");
           history.push("/fornecedor/register");
