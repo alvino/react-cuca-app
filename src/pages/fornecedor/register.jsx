@@ -35,7 +35,6 @@ export default () => {
           history.push("/fornecedor/register");
           return;
         }
-        toast.info(response.data.message);
 
         nicknameInputRef.current.value = provider.nickname;
         emailInputRef.current.value = provider.email;
@@ -113,7 +112,7 @@ export default () => {
       response = await api.post("/provider", provider);
     }
 
-    toast.success(response.data.message);
+    toast.success('fornecedor cadastrado com sucesso');
     history.goBack();
   };
 

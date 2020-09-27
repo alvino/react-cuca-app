@@ -35,7 +35,7 @@ export default () => {
     async (event) => {
       event.preventDefault();
       const response = await api.delete(`/outlay/${id}`);
-      toast.success(response.data.message);
+      toast.success('gasto deletado com sucesso');
       history.push("/saida");
     },
     [history, id]

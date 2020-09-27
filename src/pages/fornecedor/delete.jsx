@@ -56,7 +56,7 @@ export default () => {
   const handleSubmit = useCallback( async (event) => {
     event.preventDefault();
     const response = await api.delete(`/provider/${id}`);
-    toast.success(response.data.message);
+    toast.success('fornecedor deletado com sucesso');
     history.push("/fornecedor");
   }, [history, id])
 

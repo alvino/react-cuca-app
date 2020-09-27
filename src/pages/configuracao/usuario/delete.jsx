@@ -21,13 +21,13 @@ export default () => {
         const response = await api.get(`/user/${id}`);
         const user = response.data.user;
         if (!user) {
-          toast.error("Usuario não encontrado");
+          toast.error("usuario não encontrado");
           history.goBack();
           return;
         }
         setUsuario(user);
       } catch (error) {
-        toast.error("Erro de rede ao acessar API");
+        toast.error("erro de rede ao acessar API");
       }
     }
 
@@ -38,7 +38,11 @@ export default () => {
     async (event) => {
       event.preventDefault();
       const response = await api.delete(`/user/${id}`);
-      toast.success(response.data.message);
+      if(response.status >= 500){
+        toast.error("erro interno no servidor ao detetar usuario")
+        return
+      }
+      toast.success("usuario deletado");
       history.goBack();
     },
     [history, id]

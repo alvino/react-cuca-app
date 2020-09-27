@@ -60,11 +60,11 @@ export default () => {
         return outlay;
       });
       const resposta = await api.post("/outlay", serielizedOutlay);
-      if (resposta.status === 200) {
-        toast.success(resposta.data.message);
-        history.goBack();
+      if (resposta.status >= 500) {
+        toast.error('erro interno no servidor ao cadastrar gasto');
       } else {
-        toast.error(resposta.data.message);
+        toast.success('gasto cadastrado com sucesso');
+        history.goBack();
       }
     },
     [history, outlays]

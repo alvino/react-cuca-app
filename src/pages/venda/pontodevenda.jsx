@@ -258,11 +258,11 @@ export default () => {
       amount,
     });
 
-    if (response.status === 200) {
-      toast.success(response.data.message);
-      history.push(`/venda/fechamentodevenda/${id}`);
+    if (response.status >= 500) {
+      toast.error('erro interno no servidor ao alterar orcamento');
     } else {
-      toast.error(response.data.message);
+      toast.success('orcamento alterado com sucesso');
+      history.push(`/venda/fechamentodevenda/${id}`);
       return;
     }
   }, [history, id, listaPedido, orcamento, valorTotal]);

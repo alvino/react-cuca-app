@@ -142,13 +142,13 @@ export default () => {
       mes++;
     }
 
-    const resposta = await api.post("/sale", sales);
+    const resposta = await api.post("sale", sales);
 
-    if (resposta.status === 200) {
-      toast.success(resposta.data.message);
-      history.push("/venda");
+    if (resposta.status >= 500) {
+      toast.error('erro interno no servidor ao finalizar venda');
     } else {
-      toast.error(resposta.data.message);
+      toast.success('venda finalizada sucesso');
+      history.push("/venda");
     }
   }, [
     cliente,

@@ -38,7 +38,7 @@ export default () => {
           return;
         }
 
-        toast.info(response.data.message);
+        toast.info("Cliente retornado com sucesso");
 
         nameInputRef.current.value = client.name;
         emailInputRef.current.value = client.email;
@@ -121,7 +121,12 @@ export default () => {
         response = await api.post("client", client);
       }
 
-      if (response.data) toast.success(response.data.message);
+      if(response.status >= 500) {
+        toast.error("Erro interno no servidor ao cadastra cliente")
+        return 
+      }
+
+      if (response.data) toast.success("Cliente cadastrado com sucesso");
       history.goBack();
     },
     [history, id]

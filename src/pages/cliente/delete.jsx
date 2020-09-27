@@ -54,7 +54,11 @@ export default () => {
     async (event) => {
       event.preventDefault();
       const response = await api.delete(`/client/${id}`);
-      toast.success(response.data.message);
+      if(response.status >=500) {
+        toast.error("Ocorreu um erro interno no servidor ao deletar cliente")
+        return
+      }
+      toast.success("ciente deletado com sucesso");
       history.push("/cliente");
     },
     [history, id]

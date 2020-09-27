@@ -34,7 +34,7 @@ export default () => {
     (async (event) => {
       event.preventDefault();
       const response = await api.delete(`/sale/${id}`);
-      toast.success(response.data.message);
+      toast.success("entrada deletada");
       history.push("/entrada");
     },
     []);

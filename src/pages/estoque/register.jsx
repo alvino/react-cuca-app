@@ -80,11 +80,11 @@ export default () => {
 
     const res = await api.post("/stock", newStock);
     if (res.status > 500) {
-      toast.error(res.data.message);
+      toast.error('erro interno no servidor ao cadastra produto no estoque');
       return;
     }
 
-    toast.success(res.data.message);
+    toast.success('produto cadastrado com sucesso');
     newStock.id = res.data.stock_id;
     newStock.index = listaProdutos.length + 1;
 
@@ -105,11 +105,11 @@ export default () => {
   const handleRemoveProduto = async produto => {
      const res = await api.delete(`stock/${produto.id}`);
     if (res.status > 500) {
-      toast.error(res.data.message);
+      toast.error('erro interno no servidor ao deletar produto');
       return;
     }
 
-    toast.success(res.data.message);
+    toast.success('produto deletado com sucesso');
 
      setListaProdutos(listaProdutos.filter((stock) => stock !== produto));
   }

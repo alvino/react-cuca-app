@@ -68,11 +68,11 @@ export default () => {
 
       const resposta = await api.post("/sale", serializedSale);
 
-      if (resposta.status === 200) {
-        toast.success(resposta.data.message);
-        history.goBack();
+      if (resposta.status >= 500) {
+        toast.error('erro interno no servidor ao cadastra entrada');
       } else {
-        toast.error(resposta.data.message);
+        toast.success('entrada cadastrada com sucesso');
+        history.goBack();
       }
     },
     [history, sales]

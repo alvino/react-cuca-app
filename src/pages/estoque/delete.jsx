@@ -29,7 +29,7 @@ export default () => {
       .then((response) => {
         const [stock] = response.data.stock;
         if (!stock) {
-          toast.error(response.data.message);
+          toast.error("Produto nao encontrado");
           history.push("/estoque/register");
           return;
         }
@@ -55,7 +55,7 @@ export default () => {
     async (event) => {
       event.preventDefault();
       const response = await api.delete(`/stock/${id}`);
-      toast.success(response.data.message);
+      toast.success("produto deletado");
       history.push("/estoque");
     },
     [history, id]

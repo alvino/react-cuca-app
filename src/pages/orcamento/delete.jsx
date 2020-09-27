@@ -96,7 +96,7 @@ export default () => {
     event.preventDefault();
 
     const response = await api.delete(`/budget/${orcamento_id}`);
-    toast.success(response.data.message);
+    toast.success('orcamento deletado com sucesso');
 
     history.push("/orcamento");
   }
