@@ -96,6 +96,10 @@ export default () => {
     event.preventDefault();
 
     const response = await api.delete(`/budget/${orcamento_id}`);
+    if (response.status >= 500) {
+      toast.error("erro interno no servidor ao deletar orcamento");
+      return;
+    }
     toast.success('orcamento deletado com sucesso');
 
     history.push("/orcamento");

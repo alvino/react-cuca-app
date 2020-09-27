@@ -55,6 +55,10 @@ export default () => {
     async (event) => {
       event.preventDefault();
       const response = await api.delete(`/stock/${id}`);
+      if (response.status >= 500) {
+        toast.error("erro interno no servidor ao deletar produto");
+        return;
+      }
       toast.success("produto deletado");
       history.push("/estoque");
     },

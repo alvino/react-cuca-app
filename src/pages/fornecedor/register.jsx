@@ -112,6 +112,11 @@ export default () => {
       response = await api.post("/provider", provider);
     }
 
+    if(response.status >= 500) {
+      toast.error('erro interno no servidor ao cadastra fornecedor')
+      return
+    }
+
     toast.success('fornecedor cadastrado com sucesso');
     history.goBack();
   };

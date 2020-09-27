@@ -35,7 +35,11 @@ export default () => {
     async (event) => {
       event.preventDefault();
       const response = await api.delete(`/outlay/${id}`);
-      toast.success('gasto deletado com sucesso');
+      if (response.status >= 500) {
+        toast.error("erro interno no servidor ao deletar gasto");
+        return;
+      }
+      toast.success("gasto deletado com sucesso");
       history.push("/saida");
     },
     [history, id]

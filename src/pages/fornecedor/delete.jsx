@@ -56,6 +56,10 @@ export default () => {
   const handleSubmit = useCallback( async (event) => {
     event.preventDefault();
     const response = await api.delete(`/provider/${id}`);
+    if (response.status >= 500) {
+      toast.error("erro interno no servidor ao deletar fornecedor");
+      return;
+    }
     toast.success('fornecedor deletado com sucesso');
     history.push("/fornecedor");
   }, [history, id])

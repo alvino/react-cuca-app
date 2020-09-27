@@ -34,6 +34,10 @@ export default () => {
     (async (event) => {
       event.preventDefault();
       const response = await api.delete(`/sale/${id}`);
+      if (response.status >= 500) {
+        toast.error("erro interno no servidor ao deletar ganho");
+        return;
+      }
       toast.success("entrada deletada");
       history.push("/entrada");
     },
@@ -61,7 +65,7 @@ export default () => {
           Data da venda: <DateFormat value={venda.created_at} />
         </p>
       </div>
-      <Button variant="danger"  onClick={handleSubmit}>
+      <Button variant="danger" onClick={handleSubmit}>
         Confirmar remoção
       </Button>
     </div>
