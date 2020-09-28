@@ -13,7 +13,7 @@ import {
   priceFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
 import BannerContato from "../../components/print/BannerContato"
-import {ButtonHandlePrint} from "../../components/Buttons"
+import { ButtonHandlePrint } from "../../components/Buttons"
 
 import Print from "../../styles/Print";
 
@@ -31,9 +31,11 @@ export default () => {
       history.push("/orcamento");
       return;
     }
-    api
-      .get(`/budget/${id}`)
-      .then((response) => {
+
+    async function fetch() {
+      try {
+        const response = api.get(`/budget/${id}`)
+
         const budget = response.data.budget;
         if (!budget) {
           toast.error("orcamento não encontrado");
@@ -51,12 +53,30 @@ export default () => {
         setListaPedido(serializedWishList);
         setOrcamento(response.data.budget);
         setCliente(response.data.client);
-      })
-      .catch((error) => {
+
+
+      } catch (error) {
         toast.error("Erro ao acessar API");
         console.error(error);
-      });
+      }
+    }
+
+    fetch()
   }, [history, id]);
+
+  useEffect(() => {
+    async function fetch() {
+      try {
+        const response = api.get(`/client/${orcamento.client_id}`)
+        setCliente(response.data.client);
+      } catch (error) {
+        toast.error("Erro ao acessar API");
+        console.error(error);
+      }
+    }
+
+    fetch()
+  }, [orcamento]);
 
   useEffect(() => {
     setDataOrcamento(<DateFormat value={String(orcamento.created_at)} />);
@@ -116,7 +136,7 @@ export default () => {
       </div>
 
       <div className="print">
-        
+
         <BannerContato />
 
         <div className=" mb-auto">
@@ -140,7 +160,7 @@ export default () => {
           <div className="mt-3">
             <p className="text-right font-weight-bold">
               <span className="h4">
-                
+
                 <NumberFormat value={Number(orcamento.amount)} />
               </span>
             </p>
