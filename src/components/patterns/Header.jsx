@@ -3,6 +3,8 @@ import { Link, useHistory } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
 import { AiOutlineLogout } from "react-icons/ai";
 
+import FontSizeChanger from "../FontSizeChanger";
+
 import { logout } from "../../services/auth";
 
 import Logo from "../Logo";
@@ -24,12 +26,17 @@ function Header(props) {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">{props.children}</Nav>
       </Navbar.Collapse>
+
+      <FontSizeChanger />
       <Link className="btn btn-outline-light mx-2" to="/sobre">
         Sobre
       </Link>
-
-      <Link className="btn btn-outline-light mx-2" to='#' onClick={handleLogout}>
-        <AiOutlineLogout size="25px" />
+      <Link
+        className="btn btn-outline-light mx-2"
+        to="#"
+        onClick={handleLogout}
+      >
+        <AiOutlineLogout size="1.2rem" />
       </Link>
     </Navbar>
   );

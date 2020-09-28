@@ -305,7 +305,7 @@ export default () => {
             </div>
           </div>
         </div>
-        <div className="mt-2">
+        <div className="mt-5">
           <ButtonHandlePrint />
         </div>
       </div>

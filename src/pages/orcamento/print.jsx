@@ -12,9 +12,9 @@ import {
   numberFormatter,
   priceFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
-import BannerContato from "../../components/print/BannerContato"
-import { ButtonHandlePrint } from "../../components/Buttons"
-import isEmptyObject from '../../utils/isEmptyObject'
+import BannerContato from "../../components/print/BannerContato";
+import { ButtonHandlePrint } from "../../components/Buttons";
+import isEmptyObject from "../../utils/isEmptyObject";
 
 import Print from "../../styles/Print";
 
@@ -35,8 +35,8 @@ export default () => {
 
     async function fetch() {
       try {
-        const response = await api.get(`budget/${id}`)
-        console.log(response.data)
+        const response = await api.get(`budget/${id}`);
+        console.log(response.data);
         const budget = response.data.budget;
         if (!budget) {
           toast.error("orcamento não encontrado");
@@ -50,15 +50,15 @@ export default () => {
       }
     }
 
-    fetch()
+    fetch();
   }, [history, id]);
 
   useEffect(() => {
-    if( isEmptyObject(orcamento)) return
+    if (isEmptyObject(orcamento)) return;
     async function fetch() {
       try {
-        const response = await api.get(`requested_budget/${orcamento.id}`)
-console.log(response.data)
+        const response = await api.get(`requested_budget/${orcamento.id}`);
+        console.log(response.data);
         const serializedWishList = response.data.requested_budgets.map(
           (item, index) => ({
             index: index + 1,
@@ -73,15 +73,15 @@ console.log(response.data)
       }
     }
 
-    fetch()
+    fetch();
   }, [orcamento]);
 
   useEffect(() => {
-    if( isEmptyObject(orcamento)) return
+    if (isEmptyObject(orcamento)) return;
     async function fetch() {
       try {
-        const response = await api.get(`client/${orcamento.client_id}`)
-        console.log(response.data)
+        const response = await api.get(`client/${orcamento.client_id}`);
+        console.log(response.data);
         setCliente(response.data.client);
       } catch (error) {
         toast.error("Erro ao acessar API");
@@ -89,7 +89,7 @@ console.log(response.data)
       }
     }
 
-    fetch()
+    fetch();
   }, [orcamento]);
 
   useEffect(() => {
@@ -139,7 +139,6 @@ console.log(response.data)
     );
   }, [listaPedido]);
 
-
   return (
     <Print>
       <div className="btn-group mb-5 noprint" role="group">
@@ -150,7 +149,6 @@ console.log(response.data)
       </div>
 
       <div className="print">
-
         <BannerContato />
 
         <div className=" mb-auto">
@@ -161,9 +159,7 @@ console.log(response.data)
           </p>
 
           <p className="text-right">Alto Horizonte-GO, {dataOrcamento}</p>
-          <p className="text-right text-muted">
-            Valido por 15 dias
-          </p>
+          <p className="text-right text-muted">Valido por 15 dias</p>
 
           <p className="font-weight-bold text-uppercase mb-2">
             Cliente: {cliente.name}
@@ -174,7 +170,6 @@ console.log(response.data)
           <div className="mt-3">
             <p className="text-right font-weight-bold">
               <span className="h4">
-
                 <NumberFormat value={Number(orcamento.amount)} />
               </span>
             </p>
@@ -183,8 +178,9 @@ console.log(response.data)
           </div>
         </div>
       </div>
-
-      <ButtonHandlePrint />
+      <div class="mt-5">
+        <ButtonHandlePrint />
+      </div>
     </Print>
   );
 };

@@ -6,10 +6,7 @@ import BootstrapDataTable from "../../components/patterns/DataTable";
 import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
 
-import {
-  OptionMeses,
-  OptionDias,
-} from "../../components/SelectFormControl";
+import { OptionMeses, OptionDias } from "../../components/SelectFormControl";
 import NumberFormat from "../../components/NumberFormat";
 import {
   priceFormatter,
@@ -56,7 +53,7 @@ export default () => {
 
     const isFilterDate = (item) => {
       return item.date_sale.includes(filterDate);
-    }
+    };
 
     const filteredSales = sales.filter(isFilterDate);
     setListSale(filteredSales);
@@ -208,8 +205,9 @@ export default () => {
             </div>
           </div>
         </div>
-
-        <ButtonHandlePrint />
+        <div class="mt-5">
+          <ButtonHandlePrint />
+        </div>
       </div>
     </Print>
   );
