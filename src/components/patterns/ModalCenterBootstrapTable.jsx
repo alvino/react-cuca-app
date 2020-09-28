@@ -36,7 +36,7 @@ export default function ModalCenterBootstrapTable({
         onClick={handleShow}
         disabled={disable}
       >
-        <IconList size="22px" title="Pesquisar Cliente" />
+        <IconList size="1.2rem" title="Pesquisar Cliente" />
       </button>
 
       <Modal
