@@ -10,7 +10,12 @@ import logo from "../assert/logo_cuca.svg";
 
 const Flutter = styled.div`
   position: relative;
-  margin: 100px auto;
+  margin: 10rem auto;
+  display: table;
+
+  img {
+      height: 7rem;
+  }
 `;
 
 export default () => {
@@ -39,9 +44,9 @@ export default () => {
   }, [history]);
 
   return (
-    <Flutter className="w-25 shadow p-5 bg-primary text-white rounded">
-      <img className="mb-4 m-auto d-block" src={logo} alt="" height="72" />
-      <h1 className="h3 mb-3 font-weight-normal">Login</h1>
+    <Flutter className="shadow p-5 bg-primary text-white rounded">
+      <img className="mb-4 m-auto" src={logo} />
+      <span className="h3 mb-3 font-weight-normal">Login</span>
     <form onSubmit={handleLogin}>
       <input
         type="text"

@@ -8,7 +8,7 @@ function NavBarVenda(props) {
     <div className="row p-3 mb-2 bg-primary text-white d-flex justify-content-between align-items-center sticky-top">
       <div>
         <Link to="/" className="text-white">
-          <Logo width="120px" />
+          <Logo style={{width: "7rem"}} />
         </Link>
         <h3>{props.title}</h3>
       </div>
