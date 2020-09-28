@@ -13,7 +13,8 @@ import {
   priceFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
 import BannerContato from "../../components/print/BannerContato"
-import {ButtonHandlePrint} from "../../components/Buttons"
+import { ButtonHandlePrint } from "../../components/Buttons"
+import isEmptyObject from '../../utils/isEmptyObject'
 
 import Print from "../../styles/Print";
 
@@ -31,17 +32,34 @@ export default () => {
       history.push("/orcamento");
       return;
     }
-    api
-      .get(`/budget/${id}`)
-      .then((response) => {
+
+    async function fetch() {
+      try {
+        const response = await api.get(`budget/${id}`)
+        console.log(response.data)
         const budget = response.data.budget;
         if (!budget) {
           toast.error("orcamento não encontrado");
           history.push("/orcamento");
           return;
         }
+        setOrcamento(budget);
+      } catch (error) {
+        toast.error("Erro ao acessar API");
+        console.error(error);
+      }
+    }
 
-        const serializedWishList = response.data.wish_list.map(
+    fetch()
+  }, [history, id]);
+
+  useEffect(() => {
+    if( isEmptyObject(orcamento)) return
+    async function fetch() {
+      try {
+        const response = await api.get(`requested_budget/${orcamento.id}`)
+console.log(response.data)
+        const serializedWishList = response.data.requested_budgets.map(
           (item, index) => ({
             index: index + 1,
             ...item,
@@ -49,14 +67,30 @@ export default () => {
         );
 
         setListaPedido(serializedWishList);
-        setOrcamento(response.data.budget);
-        setCliente(response.data.client);
-      })
-      .catch((error) => {
+      } catch (error) {
         toast.error("Erro ao acessar API");
         console.error(error);
-      });
-  }, [history, id]);
+      }
+    }
+
+    fetch()
+  }, [orcamento]);
+
+  useEffect(() => {
+    if( isEmptyObject(orcamento)) return
+    async function fetch() {
+      try {
+        const response = await api.get(`client/${orcamento.client_id}`)
+        console.log(response.data)
+        setCliente(response.data.client);
+      } catch (error) {
+        toast.error("Erro ao acessar API");
+        console.error(error);
+      }
+    }
+
+    fetch()
+  }, [orcamento]);
 
   useEffect(() => {
     setDataOrcamento(<DateFormat value={String(orcamento.created_at)} />);
@@ -116,7 +150,7 @@ export default () => {
       </div>
 
       <div className="print">
-        
+
         <BannerContato />
 
         <div className=" mb-auto">
@@ -140,7 +174,7 @@ export default () => {
           <div className="mt-3">
             <p className="text-right font-weight-bold">
               <span className="h4">
-                
+
                 <NumberFormat value={Number(orcamento.amount)} />
               </span>
             </p>

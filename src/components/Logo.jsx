@@ -7,7 +7,7 @@ function Logo(props) {
 }
 
 Logo.defaultProps = {
-  width: "180px",
+  width: "120px",
 };
 
 export default React.memo(Logo);

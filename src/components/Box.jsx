@@ -24,6 +24,10 @@ const Anchor = styled.a`
     width: 5rem;
     height: 5rem;
   }
+
+  .title{
+      font-size: 1.2rem;
+  }
 `;
 
 
@@ -38,7 +42,7 @@ export default function (props) {
       <div className="d-flex flex-column justify-content-center align-items-center">
         <div className="d-flex size-box">{props.children}</div>
 
-        <div className="mt-2 h5">{props.title}</div>
+        <div className="mt-2 title">{props.title}</div>
       </div>
     </Anchor>
   );
