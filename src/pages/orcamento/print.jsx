@@ -35,7 +35,7 @@ export default () => {
 
     async function fetch() {
       try {
-        const response = api.get(`budget/${id}`)
+        const response = await api.get(`budget/${id}`)
         console.log(response.data)
         const budget = response.data.budget;
         if (!budget) {
@@ -57,7 +57,7 @@ export default () => {
     if( isEmptyObject(orcamento)) return
     async function fetch() {
       try {
-        const response = api.get(`requested_budget/${orcamento.id}`)
+        const response = await api.get(`requested_budget/${orcamento.id}`)
 console.log(response.data)
         const serializedWishList = response.data.requested_budgets.map(
           (item, index) => ({
@@ -80,7 +80,7 @@ console.log(response.data)
     if( isEmptyObject(orcamento)) return
     async function fetch() {
       try {
-        const response = api.get(`client/${orcamento.client_id}`)
+        const response = await api.get(`client/${orcamento.client_id}`)
         console.log(response.data)
         setCliente(response.data.client);
       } catch (error) {
