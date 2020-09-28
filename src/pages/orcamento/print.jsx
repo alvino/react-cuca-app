@@ -14,6 +14,7 @@ import {
 } from "../../utils/react-bootstrap-table-formatted";
 import BannerContato from "../../components/print/BannerContato"
 import { ButtonHandlePrint } from "../../components/Buttons"
+import isEmptyObject from '../../utils/isEmptyObject'
 
 import Print from "../../styles/Print";
 
@@ -34,7 +35,7 @@ export default () => {
 
     async function fetch() {
       try {
-        const response = api.get(`/budget/${id}`)
+        const response = api.get(`budget/${id}`)
 
         const budget = response.data.budget;
         if (!budget) {
@@ -42,11 +43,7 @@ export default () => {
           history.push("/orcamento");
           return;
         }
-
-       
-        setOrcamento(response.data.budget);
-        
-
+        setOrcamento(budget);
       } catch (error) {
         toast.error("Erro ao acessar API");
         console.error(error);
@@ -57,9 +54,10 @@ export default () => {
   }, [history, id]);
 
   useEffect(() => {
+    if( !isEmptyObject(orcamento)) return
     async function fetch() {
       try {
-        const response = api.get(`/requested_budget/${orcamento.id}`)
+        const response = api.get(`requested_budget/${orcamento.id}`)
 
         const serializedWishList = response.data.requested_budgets.map(
           (item, index) => ({
@@ -79,9 +77,10 @@ export default () => {
   }, [orcamento]);
 
   useEffect(() => {
+    if( !isEmptyObject(orcamento)) return
     async function fetch() {
       try {
-        const response = api.get(`/client/${orcamento.client_id}`)
+        const response = api.get(`client/${orcamento.client_id}`)
         setCliente(response.data.client);
       } catch (error) {
         toast.error("Erro ao acessar API");
