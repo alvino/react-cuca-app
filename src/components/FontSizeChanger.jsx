@@ -36,7 +36,7 @@ function FontSizeChanger() {
 
   return (
     <>
-      <div class="btn-group" role="group" aria-label="Basic example">
+      <div class="btn-group mx-2" role="group" aria-label="Basic example">
         <button type="button" class="btn btn-outline-light" onClick={up}>
           A+
         </button>
