@@ -45,7 +45,7 @@ export default () => {
 
   return (
     <Flutter className="shadow p-5 bg-primary text-white rounded">
-      <img className="mb-4 m-auto" src={logo} />
+      <img className="mb-4 m-auto" src={logo} alt='logo'/>
       <span className="h3 mb-3 font-weight-normal">Login</span>
     <form onSubmit={handleLogin}>
       <input
