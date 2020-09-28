@@ -43,17 +43,9 @@ export default () => {
           return;
         }
 
-        const serializedWishList = response.data.wish_list.map(
-          (item, index) => ({
-            index: index + 1,
-            ...item,
-          })
-        );
-
-        setListaPedido(serializedWishList);
+       
         setOrcamento(response.data.budget);
-        setCliente(response.data.client);
-
+        
 
       } catch (error) {
         toast.error("Erro ao acessar API");
@@ -63,6 +55,28 @@ export default () => {
 
     fetch()
   }, [history, id]);
+
+  useEffect(() => {
+    async function fetch() {
+      try {
+        const response = api.get(`/requested_budget/${orcamento.id}`)
+
+        const serializedWishList = response.data.requested_budgets.map(
+          (item, index) => ({
+            index: index + 1,
+            ...item,
+          })
+        );
+
+        setListaPedido(serializedWishList);
+      } catch (error) {
+        toast.error("Erro ao acessar API");
+        console.error(error);
+      }
+    }
+
+    fetch()
+  }, [orcamento]);
 
   useEffect(() => {
     async function fetch() {
