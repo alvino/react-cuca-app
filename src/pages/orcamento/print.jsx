@@ -54,7 +54,7 @@ export default () => {
   }, [history, id]);
 
   useEffect(() => {
-    if( !isEmptyObject(orcamento)) return
+    if( isEmptyObject(orcamento)) return
     async function fetch() {
       try {
         const response = api.get(`requested_budget/${orcamento.id}`)
@@ -77,7 +77,7 @@ console.log(response.data)
   }, [orcamento]);
 
   useEffect(() => {
-    if( !isEmptyObject(orcamento)) return
+    if( isEmptyObject(orcamento)) return
     async function fetch() {
       try {
         const response = api.get(`client/${orcamento.client_id}`)
