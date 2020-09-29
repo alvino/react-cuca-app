@@ -3,8 +3,8 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 
-import api from "../services/api";
-import { login } from "../services/auth";
+import api from "../../services/api";
+import { login } from "../../services/auth";
 
 import logo from "../assert/logo_cuca.svg";
 

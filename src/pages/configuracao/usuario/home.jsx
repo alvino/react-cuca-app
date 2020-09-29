@@ -101,62 +101,56 @@ export default () => {
             />
           </div>
           <div className="form-check">
-            <label className="form-check-label">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                ref={adminCheckRef}
-                value=""
-              />
-              Admin
-            </label>
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="adminSwitch" />
+              <label class="custom-control-label" for="adminSwitch">Admin</label>
+            </div>
           </div>
-        </div>
-        <div className="btn-group " role="group">
-          <button
-            className="btn btn-primary p-2"
-            onClick={handlerCadastraUsuario}
-          >
-            Cadastra Usuario
+          <div className="btn-group " role="group">
+            <button
+              className="btn btn-primary p-2"
+              onClick={handlerCadastraUsuario}
+            >
+              Cadastra Usuario
           </button>
 
-          {rowSelected.isSelected ? (
-            <>
-              <button
-                className="btn btn-danger p-2"
-                onClick={() =>
-                  history.push(
-                    `/configuracao/usuario/delete/${rowSelected.row.id}`
-                  )
-                }
-              >
-                Deletar Usuario
+            {rowSelected.isSelected ? (
+              <>
+                <button
+                  className="btn btn-danger p-2"
+                  onClick={() =>
+                    history.push(
+                      `/configuracao/usuario/delete/${rowSelected.row.id}`
+                    )
+                  }
+                >
+                  Deletar Usuario
               </button>
-            </>
-          ) : (
-            ""
-          )}
+              </>
+            ) : (
+                ""
+              )}
+          </div>
+        </div>
+
+        <div className="col">
+          <BootstrapDataTable data={users} onSelect={onSelect} exportCSV={false}>
+            <TableHeaderColumn dataField="email" isKey dataSort>
+              Usuario
+          </TableHeaderColumn>
+            <TableHeaderColumn dataField="password" >
+              Senha
+          </TableHeaderColumn>
+            <TableHeaderColumn
+              dataField="admin"
+              width="15%"
+              dataSort
+              dataFormat={boolFormatter}
+            >
+              Admin
+          </TableHeaderColumn>
+          </BootstrapDataTable>
         </div>
       </div>
-
-      <div className="col">
-        <BootstrapDataTable data={users} onSelect={onSelect} exportCSV={false}>
-          <TableHeaderColumn dataField="email" isKey dataSort>
-            Usuario
-          </TableHeaderColumn>
-          <TableHeaderColumn dataField="password" >
-            Senha
-          </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField="admin"
-            width="15%"
-            dataSort
-            dataFormat={boolFormatter}
-          >
-            Admin
-          </TableHeaderColumn>
-        </BootstrapDataTable>
-      </div>
-    </div>
   );
 };

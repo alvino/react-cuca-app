@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from "react";
 
-// import { Container } from './styles';
-
 function FontSizeChanger() {
   const KEY_FONTSIZE = 'REACT_HTML_FONT-SIZE'
   const pass = 2
@@ -36,7 +34,7 @@ function FontSizeChanger() {
 
   return (
     <>
-      <div class="btn-group mx-2" role="group" aria-label="Basic example">
+      <div class="btn-group mx-2" role="group">
         <button type="button" class="btn btn-outline-light" onClick={up}>
           A+
         </button>
