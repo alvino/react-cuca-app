@@ -251,7 +251,7 @@ export default () => {
       return;
     }
 
-    const amount = parseFloat(valorTotal.toFixed(2));
+    const amount = parseFloat(String(valorTotal).toFixed(2));
 
     const response = await api.put(`budget/${id}`, {
       ...orcamento,

@@ -206,7 +206,7 @@ export default () => {
             label="Pagamento"
             id="selectedPagamento"
             name="selectedPagamento"
-            defaultValue={selectedPagamento}
+            value={selectedPagamento}
             onChange={(event) => setSelectedPagamento(event.target.value)}
           >
             <option key={0} value={"avista"}>A vista</option>
