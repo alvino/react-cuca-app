@@ -102,8 +102,18 @@ export default () => {
           </div>
           <div className="form-check">
             <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="adminSwitch" />
-              <label class="custom-control-label" for="adminSwitch">Admin</label>
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                checked="false"
+                ref={adminCheckRef}
+                id="adminSwitch" />
+              <label
+                class="custom-control-label"
+                for="adminSwitch"
+              >
+                Admin
+              </label>
             </div>
           </div>
           <div className="btn-group " role="group">
