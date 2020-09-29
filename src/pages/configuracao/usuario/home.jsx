@@ -100,12 +100,12 @@ export default () => {
               ref={passwordInputRef}
             />
           </div>
-          <div className="form-check">
+          <div className="form-group">
             <div class="custom-control custom-switch">
               <input
                 type="checkbox"
                 class="custom-control-input"
-                checked="false"
+                checked={false}
                 ref={adminCheckRef}
                 id="adminSwitch" />
               <label
