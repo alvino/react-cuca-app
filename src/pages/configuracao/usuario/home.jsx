@@ -105,7 +105,6 @@ export default () => {
               <input
                 type="checkbox"
                 class="custom-control-input"
-                checked={true}
                 ref={adminCheckRef}
                 id="adminSwitch" />
               <label
