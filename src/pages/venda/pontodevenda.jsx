@@ -251,8 +251,8 @@ export default () => {
       return;
     }
 
-    const amount = parseFloat(valorTotal.toPrecision(2));
-
+    const amount = parseFloat(valorTotal);
+    console.log('pontovenda 254:', amount )
     const response = await api.put(`budget/${id}`, {
       ...orcamento,
       amount,
