@@ -101,14 +101,14 @@ export default () => {
             />
           </div>
           <div className="form-group">
-            <div class="custom-control custom-switch">
+            <div className="custom-control custom-switch">
               <input
                 type="checkbox"
-                class="custom-control-input"
+                className="custom-control-input"
                 ref={adminCheckRef}
                 id="adminSwitch" />
               <label
-                class="custom-control-label"
+                className="custom-control-label"
                 for="adminSwitch"
               >
                 Admin

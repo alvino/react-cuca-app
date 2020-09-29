@@ -34,11 +34,11 @@ function FontSizeChanger() {
 
   return (
     <>
-      <div class="btn-group mx-2" role="group">
-        <button type="button" class="btn btn-outline-light" onClick={up}>
+      <div className="btn-group mx-2" role="group">
+        <button type="button" className="btn btn-outline-light" onClick={up}>
           A+
         </button>
-        <button type="button" class="btn btn-outline-light" onClick={down}>
+        <button type="button" className="btn btn-outline-light" onClick={down}>
           A-
         </button>
       </div>

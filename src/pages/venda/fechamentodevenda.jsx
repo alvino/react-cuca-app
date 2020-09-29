@@ -29,7 +29,7 @@ export default () => {
 
   const [desconto, setDesconto] = useState({ value: 0, floatValue: 0 });
   const [entrada, setEntrada] = useState({ value: 0, floatValue: 0 });
-  const [selectedPagamento, setSelectedPagamento] = useState("A vista");
+  const [selectedPagamento, setSelectedPagamento] = useState("avista");
   const [parcelas, setParcelas] = useState(30);
 
   useEffect(() => {
@@ -52,7 +52,14 @@ export default () => {
       const response = await api.get(`requested_budget/${orcamento.id}`);
       const { requested_budgets } = response.data;
 
-      setListaPedido(requested_budgets);
+      const serializedRequestedBudget = requested_budgets.map(
+        (item, index) => ({
+          index,
+          ...item,
+        })
+      );
+
+      setListaPedido(serializedRequestedBudget);
     }
 
     fetch();
@@ -125,7 +132,7 @@ export default () => {
       });
     }
 
-    mes = selectedPagamento === "A prazo" ? ++mes : mes;
+    mes = selectedPagamento === "aprazo" ? ++mes : mes;
 
     while (index < multiplicador) {
       index++;
@@ -145,9 +152,9 @@ export default () => {
     const resposta = await api.post("sale", sales);
 
     if (resposta.status >= 500) {
-      toast.error('erro interno no servidor ao finalizar venda');
+      toast.error("erro interno no servidor ao finalizar venda");
     } else {
-      toast.success('venda finalizada sucesso');
+      toast.success("venda finalizada sucesso");
       history.push("/venda");
     }
   }, [
@@ -199,13 +206,13 @@ export default () => {
             label="Pagamento"
             id="selectedPagamento"
             name="selectedPagamento"
-            value={selectedPagamento}
+            defaultValue={selectedPagamento}
             onChange={(event) => setSelectedPagamento(event.target.value)}
           >
-            <option>A vista</option>
-            <option>A prazo</option>
+            <option key={0} value={"avista"}>A vista</option>
+            <option key={1} value={"aprazo"}>A prazo</option>
           </SelectFormControl>
-          {selectedPagamento === "A prazo" && (
+          {selectedPagamento === "aprazo" && (
             <>
               <InputFormControl
                 label="Parcelas"
@@ -264,7 +271,7 @@ export default () => {
           <p className="text-right">
             Desconto: <NumberFormat value={desconto.floatValue || 0} />
           </p>
-          {selectedPagamento === "A prazo" && (
+          {selectedPagamento === "aprazo" && (
             <p className="text-right">
               Entrada: <NumberFormat value={entrada.floatValue || 0} />
             </p>
