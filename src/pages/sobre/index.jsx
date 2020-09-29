@@ -86,6 +86,8 @@ export default () => {
                     Repositorio do projeto:{" "}
                     {apiGitRep.sha}
                   </p>
+                  <p>{apiGitRep.html_url}</p>
+                  <p>{process.env.BUILD_ID}</p>
                 </div>
                 <div className="justify-content-center align-items-centerw m-2">
                   <img
