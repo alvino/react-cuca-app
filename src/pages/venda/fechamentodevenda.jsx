@@ -29,7 +29,7 @@ export default () => {
 
   const [desconto, setDesconto] = useState({ value: 0, floatValue: 0 });
   const [entrada, setEntrada] = useState({ value: 0, floatValue: 0 });
-  const [selectedPagamento, setSelectedPagamento] = useState("avista");
+  const [selectedPagamento, setSelectedPagamento] = useState("A vista");
   const [parcelas, setParcelas] = useState(30);
 
   useEffect(() => {
@@ -132,7 +132,7 @@ export default () => {
       });
     }
 
-    mes = selectedPagamento === "aprazo" ? ++mes : mes;
+    mes = selectedPagamento === "A prazo" ? ++mes : mes;
 
     while (index < multiplicador) {
       index++;
@@ -204,15 +204,15 @@ export default () => {
 
           <SelectFormControl
             label="Pagamento"
-            id="selectedPagamento"
-            name="selectedPagamento"
+            id="selectPagamento"
+            name="selectPagamento"
             value={selectedPagamento}
             onChange={(event) => setSelectedPagamento(event.target.value)}
           >
-            <option key={0} value={"avista"}>A vista</option>
-            <option key={1} value={"aprazo"}>A prazo</option>
+            <option key={0} >A vista</option>
+            <option key={1} >A prazo</option>
           </SelectFormControl>
-          {selectedPagamento === "aprazo" && (
+          {selectedPagamento === "A prazo" && (
             <>
               <InputFormControl
                 label="Parcelas"
@@ -271,7 +271,7 @@ export default () => {
           <p className="text-right">
             Desconto: <NumberFormat value={desconto.floatValue || 0} />
           </p>
-          {selectedPagamento === "aprazo" && (
+          {selectedPagamento === "A prazo" && (
             <p className="text-right">
               Entrada: <NumberFormat value={entrada.floatValue || 0} />
             </p>

@@ -5,7 +5,7 @@ export default function SelectFormControl({label, ...props}) {
   return (
     <div className="form-group">
       <label htmlFor={props.id}>{label}</label>
-      <select {...props} value>{props.children}</select>
+      <select {...props}>{props.children}</select>
     </div>
   );
 }
