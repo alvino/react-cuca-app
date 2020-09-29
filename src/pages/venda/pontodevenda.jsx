@@ -47,8 +47,7 @@ export default () => {
       const response_budget = await api.get(`budget/${id}`);
       const { budget } = response_budget.data;
       setOrcamento(budget);
-      console.log('Data',budget.created_at)
-      setData(budget.created_at);
+      setData(String(budget.created_at).substr(0,10));
     }
 
     fetch();
