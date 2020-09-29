@@ -47,6 +47,7 @@ export default () => {
       const response_budget = await api.get(`budget/${id}`);
       const { budget } = response_budget.data;
       setOrcamento(budget);
+      console.log('Data',budget.created_at)
       setData(budget.created_at);
     }
 
@@ -77,9 +78,9 @@ export default () => {
     fetch();
   }, [orcamento]);
 
-  useEffect(() => {
-    setData(new Date().toISOString().substring(0, 10));
-  }, []);
+  // useEffect(() => {
+  //   setData(new Date().toISOString().substring(0, 10));
+  // }, []);
 
   useEffect(() => {
     async function fetch() {
@@ -252,7 +253,8 @@ export default () => {
     }
 
     const amount = parseFloat(valorTotal);
-    console.log('pontovenda 254:', amount )
+    console.log('pontodevenda 254:', amount )
+
     const response = await api.put(`budget/${id}`, {
       ...orcamento,
       amount,
