@@ -178,7 +178,7 @@ export default () => {
         quantidadeDeItens={listaPedido.length}
         valorTotal={
           selectedPagamento === "A vista" ? (
-            <NumberFormat value={valorTotal} />
+            <NumberFormat value={valorTotal - desconto.floatValue} />
           ) : (
             <div>
               <span>{parcelas} X </span>{" "}
