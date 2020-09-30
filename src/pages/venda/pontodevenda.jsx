@@ -101,7 +101,7 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    const total = listaPedido.reduce((acc, item) => acc + parseFloat(item.amount), 0);
+    const total = listaPedido.reduce((acc, item) => acc + item.amount, 0);
     setValorTotal(total);
   }, [listaPedido]);
 
@@ -228,7 +228,7 @@ export default () => {
     setQuantidade({
       formattedValue: estoque,
       floatValue: parseFloat(estoque),
-      value: parseFloat(estoque),
+      value: estoque,
     });
   }, []);
 

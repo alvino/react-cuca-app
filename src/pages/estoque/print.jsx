@@ -92,8 +92,8 @@ export default () => {
       listaStock.reduce(
         (acc, item) =>
           acc +
-          parseFloat(item.purchase_price) *
-            (parseFloat(item.quantity) - parseFloat(item.quantity_of)),
+          item.purchase_pric) *
+            (item.quantity - item.quantity_of),
         0.0
       )
     );
@@ -103,8 +103,8 @@ export default () => {
       listaStock.reduce(
         (acc, item) =>
           acc +
-          parseFloat(item.sale_value) *
-            (parseFloat(item.quantity) - parseFloat(item.quantity_of)),
+           item.sale_value *
+            (item.quantity - item.quantity_of),
         0.0
       )
     );

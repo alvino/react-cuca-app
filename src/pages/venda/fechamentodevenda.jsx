@@ -48,12 +48,12 @@ export default () => {
   }, [id]);
 
   useEffect(() => {
-    if (isObjectEmpty(orcamento)) return;
+    if (id === 0) return;
 
     async function fetch() {
-      const response = await api.get(`requested_budget/${orcamento.id}`);
+      const response = await api.get(`requested_budget/${id}`);
       const { requested_budgets } = response.data;
-
+      console.log('rb: ',requested_budgets)
       const serializedRequestedBudget = requested_budgets.map(
         (item, index) => ({
           index,
@@ -65,7 +65,7 @@ export default () => {
     }
 
     fetch();
-  }, [orcamento]);
+  }, [id]);
 
   useEffect(() => {
     if (isObjectEmpty(orcamento)) return;
@@ -81,7 +81,7 @@ export default () => {
   }, [orcamento]);
 
   useEffect(() => {
-    const total = listaPedido.reduce((acc, item) => acc + parseFloat(item.amount), 0);
+    const total = listaPedido.reduce((acc, item) => acc + item.amount, 0);
     setValorTotal(total);
   }, [listaPedido]);
 
