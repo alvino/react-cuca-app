@@ -61,29 +61,25 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    let responseCheckListStock = stocks
-    
+    let responseCheckListStock = stocks;
+
     if (selectFornecedor !== "") {
-      responseCheckListStock = responseCheckListStock.filter( 
-        item => (item.provider_id === Number(selectFornecedor))
-      )
+      responseCheckListStock = responseCheckListStock.filter(
+        (item) => item.provider_id === Number(selectFornecedor)
+      );
     }
 
     if (descricao !== "") {
-      responseCheckListStock = responseCheckListStock.filter(
-        item => (
-          item.description
-          .toLowerCase()
-          .includes(descricao.toLowerCase()
-        ))
-      )
+      responseCheckListStock = responseCheckListStock.filter((item) =>
+        item.description.toLowerCase().includes(descricao.toLowerCase())
+      );
     }
-    if (stockEmpty ){
+    if (stockEmpty) {
       responseCheckListStock = responseCheckListStock.filter(
-        item => (item.quantity - item.quantity_of <= 1)
-      )
+        (item) => item.quantity - item.quantity_of <= 1
+      );
     }
-   
+
     setListaStock(responseCheckListStock);
   }, [checked, descricao, selectFornecedor, stockEmpty, stocks]);
 
@@ -95,7 +91,9 @@ export default () => {
     setValorTotalCompra(
       listaStock.reduce(
         (acc, item) =>
-          acc + item.purchase_price * (item.quantity - item.quantity_of),
+          acc +
+          parseFloat(item.purchase_price) *
+            (parseFloat(item.quantity) - parseFloat(item.quantity_of)),
         0.0
       )
     );
@@ -104,7 +102,9 @@ export default () => {
     setValorTotalVenda(
       listaStock.reduce(
         (acc, item) =>
-          acc + item.sale_value * (item.quantity - item.quantity_of),
+          acc +
+          parseFloat(item.sale_value) *
+            (parseFloat(item.quantity) - parseFloat(item.quantity_of)),
         0.0
       )
     );

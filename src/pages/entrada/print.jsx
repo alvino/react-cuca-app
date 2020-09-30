@@ -60,7 +60,7 @@ export default () => {
   }, [ano, checked, dia, mes, sales]);
 
   useEffect(() => {
-    setValorTotal(listaSale.reduce((acc, item) => acc + item.amount, 0.0));
+    setValorTotal(listaSale.reduce((acc, item) => acc + parseFloat(item.amount), 0.0));
   }, [listaSale]);
 
   const handleButtonFiltrar = useCallback(

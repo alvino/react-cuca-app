@@ -5,6 +5,7 @@
   "author": "Alvino de Oliveira Figueiredo",
   "license": "MIT",
   "scripts": {
+    "dev": "react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build && cp _redirects build",
     "test": "react-scripts test",

@@ -61,7 +61,9 @@ export default () => {
   }, [ano, checked, dia, mes, outlays]);
 
   useEffect(() => {
-    setValorTotal(listaOutlay.reduce((acc, item) => acc + item.amount, 0.0));
+    setValorTotal(
+      listaOutlay.reduce((acc, item) => acc + parseFloat(item.amount), 0.0)
+    );
   }, [listaOutlay]);
 
   const handleButtonFiltrar = useCallback(

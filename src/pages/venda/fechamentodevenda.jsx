@@ -81,7 +81,7 @@ export default () => {
   }, [orcamento]);
 
   useEffect(() => {
-    const total = listaPedido.reduce((acc, item) => acc + item.amount, 0);
+    const total = listaPedido.reduce((acc, item) => acc + parseFloat(item.amount), 0);
     setValorTotal(total);
   }, [listaPedido]);
 
