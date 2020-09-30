@@ -123,7 +123,7 @@ export default () => {
   }, []);
 
   const rowClassCheckFormat = (row, rowIdx) => {
-    if (row.quantity - row.quantity_of <= 0) return "bg-danger text-white";
+    if (row.quantity - row.quantity_of <= 0) return "text-muted";
   };
 
   return (
