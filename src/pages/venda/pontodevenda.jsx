@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
@@ -15,16 +15,18 @@ import {
   numberFormatter,
   priceFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
-import isEmpetyObject from "../../utils/isEmptyObject";
+import isObjectEmpty from "../../utils/isObjectEmpty";
 
 export default () => {
   const history = useHistory();
   const { id } = useParams(0);
 
-  const [orcamento, setOrcamento] = useState({});
+  const produtoInputRef = useRef();
+
+  const [orcamento, setOrcamento] = useState(null);
 
   const [dataProdutos, setDataProdutos] = useState([]);
-  const [selectedProduto, setSelectedProduto] = useState({});
+  const [selectedProduto, setSelectedProduto] = useState(null);
 
   const [cliente, setCliente] = useState([]);
 
@@ -38,7 +40,7 @@ export default () => {
   const [valorTotal, setValorTotal] = useState(0);
 
   const [isSelected, setIsSelect] = useState(false);
-  const [rowSelect, setRowSelect] = useState({});
+  const [rowSelect, setRowSelect] = useState(null);
 
   useEffect(() => {
     if (id === "0") return;
@@ -47,14 +49,14 @@ export default () => {
       const response_budget = await api.get(`budget/${id}`);
       const { budget } = response_budget.data;
       setOrcamento(budget);
-      setData(String(budget.created_at).substr(0,10));
+      setData(String(budget.created_at).substr(0, 10));
     }
 
     fetch();
   }, [id]);
 
   useEffect(() => {
-    if (isEmpetyObject(orcamento)) return;
+    if (isObjectEmpty(orcamento)) return;
 
     async function fetch() {
       const response = await api.get(`requested_budget/${orcamento.id}`);
@@ -66,7 +68,7 @@ export default () => {
   }, [orcamento]);
 
   useEffect(() => {
-    if (isEmpetyObject(orcamento) ) return;
+    if (isObjectEmpty(orcamento)) return;
 
     async function fetch() {
       const response_client = await api.get(`client/${orcamento.client_id}`);
@@ -108,7 +110,8 @@ export default () => {
 
     async function fetch() {
       const response = await api.get(`stock/${rowSelect.stock_id}`);
-      const { stock } = response.data;
+      const [stock] = response.data.stock;
+
       setSelectedProduto(stock);
       setQuantidade({
         value: String(rowSelect.quantity),
@@ -119,8 +122,9 @@ export default () => {
     fetch();
   }, [isSelected, rowSelect]);
 
-  const handleInciaCamposListaProduto = useCallback(() => {
-    setSelectedProduto({});
+  const handleInciaCamposListaProduto = () => {
+    produtoInputRef.current.value = "";
+    setSelectedProduto(null);
     setQuantidade({
       value: "1",
       formattedValue: "1",
@@ -128,20 +132,21 @@ export default () => {
     });
     setRowSelect({});
     setIsSelect(false);
-  }, []);
+  };
 
-  const handleRemover = useCallback(async () => {
+  const handleRemover = async () => {
     try {
       const newListaPedido = listaPedido.filter((item) => item !== rowSelect);
+
       await api.delete(`requested_budget/${rowSelect.id}`);
       setListaPedido(newListaPedido);
       handleInciaCamposListaProduto();
     } catch (error) {
       console.error(error);
     }
-  }, [handleInciaCamposListaProduto, listaPedido, rowSelect]);
+  }
 
-  const handleAdicionar = useCallback(async () => {
+  const handleAdicionar = async () => {
     if (!selectedProduto.description) {
       toast.warning(
         "Selecione um produto e confira a quantidade antes de adicionar a lista."
@@ -214,24 +219,12 @@ export default () => {
     }
 
     handleInciaCamposListaProduto();
-  }, [
-    selectedProduto.description,
-    selectedProduto.quantity,
-    selectedProduto.quantity_of,
-    selectedProduto.sale_value,
-    selectedProduto.detail,
-    selectedProduto.id,
-    quantidade.floatValue,
-    isSelected,
-    listaPedido,
-    rowSelect,
-    handleInciaCamposListaProduto,
-    id,
-    data,
-  ]);
+  };
 
   const handleSelectedProduto = useCallback((row) => {
     setSelectedProduto(row);
+    console.log(row);
+    produtoInputRef.current.value = row.description;
     const estoque = parseFloat(row.quantity - row.quantity_of);
     setQuantidade({
       formattedValue: estoque,
@@ -241,6 +234,7 @@ export default () => {
   }, []);
 
   const onSelect = useCallback(async (row, isSelected) => {
+    produtoInputRef.current.value = row.description;
     setRowSelect(row);
     setIsSelect(isSelected);
   }, []);
@@ -252,7 +246,6 @@ export default () => {
     }
 
     const amount = parseFloat(valorTotal);
-    console.log('pontodevenda 254:', amount )
 
     const response = await api.put(`budget/${id}`, {
       ...orcamento,
@@ -260,9 +253,9 @@ export default () => {
     });
 
     if (response.status >= 500) {
-      toast.error('erro interno no servidor ao alterar orcamento');
+      toast.error("erro interno no servidor ao alterar orcamento");
     } else {
-      toast.success('orcamento alterado com sucesso');
+      toast.success("orcamento alterado com sucesso");
       history.push(`/venda/fechamentodevenda/${id}`);
       return;
     }
@@ -295,31 +288,39 @@ export default () => {
 
           {orcamento && (
             <>
-              <InputFormControl
-                label="Produto"
-                id="inputProduto"
-                name="inputProduto"
-                value={selectedProduto.description || ""}
-                readOnly
-              >
-                <ModalCenterBootstrapTable
-                  title="Lista de Produtos"
-                  data={dataProdutos}
-                  onSelected={handleSelectedProduto}
-                  disable={isSelected}
-                >
-                  <TableHeaderColumn dataField="id" isKey width="10%">
-                    #
-                  </TableHeaderColumn>
-                  <TableHeaderColumn dataField="description">
-                    Descrição
-                  </TableHeaderColumn>
-                  <TableHeaderColumn dataField="unit">Und.</TableHeaderColumn>
-                  <TableHeaderColumn dataField="detail" width="20%">
-                    Detalhe
-                  </TableHeaderColumn>
-                </ModalCenterBootstrapTable>
-              </InputFormControl>
+              <div className="form-group">
+                <label htmlFor="inputProduto">Produto</label>
+                <div className="input-group mb-3">
+                  <input
+                    id="inputProduto"
+                    name="inputProduto"
+                    ref={produtoInputRef}
+                    className="form-control"
+                    readOnly
+                  />
+                  <div className="input-group-append">
+                    <ModalCenterBootstrapTable
+                      title="Lista de Produtos"
+                      data={dataProdutos}
+                      onSelected={handleSelectedProduto}
+                      disable={isSelected}
+                    >
+                      <TableHeaderColumn dataField="id" isKey width="10%">
+                        #
+                      </TableHeaderColumn>
+                      <TableHeaderColumn dataField="description">
+                        Descrição
+                      </TableHeaderColumn>
+                      <TableHeaderColumn dataField="unit">
+                        Und.
+                      </TableHeaderColumn>
+                      <TableHeaderColumn dataField="detail" width="20%">
+                        Detalhe
+                      </TableHeaderColumn>
+                    </ModalCenterBootstrapTable>
+                  </div>
+                </div>
+              </div>
 
               <InputNumberFormat
                 label="Quantidade"
@@ -332,7 +333,7 @@ export default () => {
               <div className="row justify-content-between p-3">
                 <label>Valor Unit.</label>
                 <h3 className="text-muted">
-                  <NumberFormat value={selectedProduto.sale_value || 0} />
+                  <NumberFormat value={isObjectEmpty(selectedProduto) ? 0 : selectedProduto.sale_value} />
                 </h3>
               </div>
               <div className="row justify-content-between p-3">
@@ -340,16 +341,19 @@ export default () => {
                 <h2>
                   <NumberFormat
                     value={
-                      selectedProduto.sale_value * quantidade.floatValue || 0
+                      isObjectEmpty(selectedProduto) ? 0 :
+                      selectedProduto.sale_value * quantidade.floatValue 
                     }
                   />
                 </h2>
               </div>
               <div className="d-flex justify-content-end">
                 <div className="btn-group " role="group">
-                  <Button variant="success" onClick={handleAdicionar}>
-                    Adicionar
-                  </Button>
+                  {!isSelected && (
+                    <Button variant="success" onClick={handleAdicionar}>
+                      Adicionar
+                    </Button>
+                  )}
                   {isSelected && (
                     <>
                       <Button variant="danger" onClick={handleRemover}>

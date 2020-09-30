@@ -15,7 +15,7 @@ import {
   priceFormatter,
   numberFormatter,
 } from "../../utils/react-bootstrap-table-formatted";
-import isEmpetyObject from "../../utils/isEmptyObject";
+import isObjectEmpty from "../../utils/isObjectEmpty";
 
 export default () => {
   const history = useHistory();
@@ -46,7 +46,7 @@ export default () => {
   }, [id]);
 
   useEffect(() => {
-    if (isEmpetyObject(orcamento)) return;
+    if (isObjectEmpty(orcamento)) return;
 
     async function fetch() {
       const response = await api.get(`requested_budget/${orcamento.id}`);
@@ -66,7 +66,7 @@ export default () => {
   }, [orcamento]);
 
   useEffect(() => {
-    if (isEmpetyObject(orcamento)) return;
+    if (isObjectEmpty(orcamento)) return;
 
     async function fetch() {
       const response_client = await api.get(`client/${orcamento.client_id}`);

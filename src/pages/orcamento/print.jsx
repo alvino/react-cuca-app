@@ -14,7 +14,7 @@ import {
 } from "../../utils/react-bootstrap-table-formatted";
 import BannerContato from "../../components/print/BannerContato";
 import { ButtonHandlePrint } from "../../components/Buttons";
-import isEmptyObject from "../../utils/isEmptyObject";
+import isObjectEmpty from "../../utils/isObjectEmpty";
 
 import Print from "../../styles/Print";
 
@@ -54,7 +54,7 @@ export default () => {
   }, [history, id]);
 
   useEffect(() => {
-    if (isEmptyObject(orcamento)) return;
+    if (isObjectEmpty(orcamento)) return;
     async function fetch() {
       try {
         const response = await api.get(`requested_budget/${orcamento.id}`);
@@ -77,7 +77,7 @@ export default () => {
   }, [orcamento]);
 
   useEffect(() => {
-    if (isEmptyObject(orcamento)) return;
+    if (isObjectEmpty(orcamento)) return;
     async function fetch() {
       try {
         const response = await api.get(`client/${orcamento.client_id}`);
