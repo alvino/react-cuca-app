@@ -20,7 +20,6 @@ import isObjectEmpty from "../../utils/isObjectEmpty";
 export default () => {
   const history = useHistory();
   const { id } = useParams(0);
-  console.log(id)
   
   const [orcamento, setOrcamento] = useState({});
   const [cliente, setCliente] = useState({ name: "" });
@@ -38,7 +37,6 @@ export default () => {
 
     async function fetch() {
       const response = await api.get(`budget/${id}`);
-      console.log(response.data)
       const  budget = response.data.budget;
 
       setOrcamento(budget);
@@ -53,7 +51,6 @@ export default () => {
     async function fetch() {
       const response = await api.get(`requested_budget/${id}`);
       const { requested_budgets } = response.data;
-      console.log('rb: ',requested_budgets)
       const serializedRequestedBudget = requested_budgets.map(
         (item, index) => ({
           index,

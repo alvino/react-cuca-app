@@ -89,22 +89,16 @@ export default () => {
 
   useEffect(() => {
     setValorTotalCompra(
-      listaStock.reduce(
-        (acc, item) =>
-          acc +
-          item.purchase_pric) *
-            (item.quantity - item.quantity_of),
-        0.0
-      )
+      listaStock.reduce((acc, item) => {
+        return acc + item.purchase_price * (item.quantity - item.quantity_of);
+      }, 0.0)
     );
   }, [listaStock]);
   useEffect(() => {
     setValorTotalVenda(
       listaStock.reduce(
         (acc, item) =>
-          acc +
-           item.sale_value *
-            (item.quantity - item.quantity_of),
+          acc + item.sale_value * (item.quantity - item.quantity_of),
         0.0
       )
     );
