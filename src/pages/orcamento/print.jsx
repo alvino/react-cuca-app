@@ -36,7 +36,6 @@ export default () => {
     async function fetch() {
       try {
         const response = await api.get(`budget/${id}`);
-        console.log(response.data);
         const budget = response.data.budget;
         if (!budget) {
           toast.error("orcamento não encontrado");
@@ -58,7 +57,6 @@ export default () => {
     async function fetch() {
       try {
         const response = await api.get(`requested_budget/${orcamento.id}`);
-        console.log(response.data);
         const serializedWishList = response.data.requested_budgets.map(
           (item, index) => ({
             index: index + 1,
@@ -81,7 +79,6 @@ export default () => {
     async function fetch() {
       try {
         const response = await api.get(`client/${orcamento.client_id}`);
-        console.log(response.data);
         setCliente(response.data.client);
       } catch (error) {
         toast.error("Erro ao acessar API");

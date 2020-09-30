@@ -107,7 +107,6 @@ export default () => {
         cpf: cpfInputRef.current.value,
       };
 
-      console.log(client);
 
       if (client.name === "") {
         toast.warning("Preencha no minimo o nome");

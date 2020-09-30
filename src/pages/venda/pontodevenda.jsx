@@ -223,7 +223,6 @@ export default () => {
 
   const handleSelectedProduto = useCallback((row) => {
     setSelectedProduto(row);
-    console.log(row);
     produtoInputRef.current.value = row.description;
     const estoque = parseFloat(row.quantity - row.quantity_of);
     setQuantidade({

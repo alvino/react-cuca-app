@@ -33,7 +33,6 @@ export default () => {
           history.push("/estoque/register");
           return;
         }
-        console.info(stock);
         setFormData({
           nickname: stock.nickname,
           description: stock.description,
