@@ -20,7 +20,8 @@ import isObjectEmpty from "../../utils/isObjectEmpty";
 export default () => {
   const history = useHistory();
   const { id } = useParams(0);
-
+  console.log(id)
+  
   const [orcamento, setOrcamento] = useState({});
   const [cliente, setCliente] = useState({ name: "" });
   const [listaPedido, setListaPedido] = useState([]);
@@ -33,11 +34,12 @@ export default () => {
   const [parcelas, setParcelas] = useState(30);
 
   useEffect(() => {
-    if (id === "0") return;
+    if (id === 0) return;
 
     async function fetch() {
-      const response_budget = await api.get(`budget/${id}`);
-      const { budget } = response_budget.data;
+      const response = await api.get(`budget/${id}`);
+      console.log(response.data)
+      const  budget = response.data.budget;
 
       setOrcamento(budget);
     }
@@ -96,6 +98,7 @@ export default () => {
   }, []);
 
   const handleConfirmarConclusaoVenda = useCallback(async () => {
+    const budget_id = parseInt(id)
     let sales = [];
     let multiplicador = parcelas / 30;
     let [ano, mes, dia] = new Date()
@@ -123,7 +126,7 @@ export default () => {
       index++;
 
       sales.push({
-        budget_id: id,
+        budget_id: budget_id,
         description,
         amount: entrada.floatValue,
         all_parcel: multiplicador,
@@ -138,7 +141,7 @@ export default () => {
       index++;
 
       sales.push({
-        budget_id: id,
+        budget_id: budget_id,
         description,
         amount: valor_venda,
         all_parcel: multiplicador,
