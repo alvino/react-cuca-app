@@ -41,7 +41,6 @@ export default () => {
             className="p-2"
             onClick={() => history.push("/fornecedor/register")}
           >
-            
             Cadastra Fornecedor
           </Button>
 
@@ -64,19 +63,17 @@ export default () => {
                   history.push(`/fornecedor/delete/${rowSelected.row.id}`)
                 }
               >
-                
                 Deletar Fornecedor
               </Button>
             </>
-          ) }
+          )}
         </div>
       </div>
 
-      <BootstrapDataTable
-        keyField="cnpj"
-        data={providers}
-        onSelect={onSelect}
-      >
+      <BootstrapDataTable data={providers} onSelect={onSelect}>
+        <TableHeaderColumn dataField="id" isKey dataSort width="6%">
+          Cod.
+        </TableHeaderColumn>
         <TableHeaderColumn dataField="nickname" dataSort>
           Empresa
         </TableHeaderColumn>
@@ -95,7 +92,7 @@ export default () => {
         <TableHeaderColumn dataField="city" dataSort>
           Cidade
         </TableHeaderColumn>
-        <TableHeaderColumn dataField="uf" dataSort width="10%">
+        <TableHeaderColumn dataField="uf" dataSort width="7%">
           UF
         </TableHeaderColumn>
       </BootstrapDataTable>

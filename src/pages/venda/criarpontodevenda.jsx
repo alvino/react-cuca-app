@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 export default () => {
   const history = useHistory();
 
-  const [DataClientes, setDataClientes] = useState([]);
+  const [clientes, setClientes] = useState([]);
   const [selectedCliente, setSelectedCliente] = useState({});
 
   const [data, setData] = useState();
@@ -26,7 +26,7 @@ export default () => {
   useEffect(() => {
     async function fetchData() {
       const response = await api.get("/client");
-      setDataClientes(response.data.clients);
+      setClientes(response.data.clients);
     }
     fetchData();
   }, []);
@@ -45,7 +45,7 @@ export default () => {
       amount: 0,
       created_at: data,
     };
-
+    console.log(orcamento)
     const response = await api.post(`budget`, orcamento);
 
     if(response.status > 500) toast.error("Erro ao criar pedido")
@@ -75,7 +75,7 @@ export default () => {
           >
             <ModalCenterBootstrapTable
               title="Lista de Clientes"
-              data={DataClientes}
+              data={clientes}
               onSelected={handleSelectedCliente}
             >
               <TableHeaderColumn dataField="id" isKey width="10%">

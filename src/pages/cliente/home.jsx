@@ -75,14 +75,14 @@ export default () => {
       </div>
 
       <div>
-        <BootstrapDataTable
-          data={clients}
-          onSelect={onSelect}
-        >
+        <BootstrapDataTable data={clients} onSelect={onSelect}>
+          <TableHeaderColumn dataField="id" isKey dataSort width="6%">
+            Cod.
+          </TableHeaderColumn>
           <TableHeaderColumn dataField="name" dataSort>
             Nome
           </TableHeaderColumn>
-          <TableHeaderColumn dataField="cpf" isKey width="15%">
+          <TableHeaderColumn dataField="cpf" width="15%">
             CPF/CNPJ
           </TableHeaderColumn>
           <TableHeaderColumn dataField="email" dataSort>
@@ -94,7 +94,7 @@ export default () => {
           <TableHeaderColumn dataField="city" dataSort>
             Cidade
           </TableHeaderColumn>
-          <TableHeaderColumn dataField="uf" dataSort width="5%">
+          <TableHeaderColumn dataField="uf" dataSort width="7%">
             Estado
           </TableHeaderColumn>
         </BootstrapDataTable>

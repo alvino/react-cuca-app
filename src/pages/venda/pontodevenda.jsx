@@ -48,6 +48,7 @@ export default () => {
     async function fetch() {
       const response_budget = await api.get(`budget/${id}`);
       const { budget } = response_budget.data;
+      console.log(budget)
       setOrcamento(budget);
       setData(String(budget.created_at).substr(0, 10));
     }
@@ -106,12 +107,12 @@ export default () => {
   }, [listaPedido]);
 
   useEffect(() => {
-    if (!isSelected) return;
+    if (isObjectEmpty(rowSelect)) return;
 
     async function fetch() {
       const response = await api.get(`stock/${rowSelect.stock_id}`);
-      const [stock] = response.data.stock;
-
+      const stock = response.data.stock;
+      console.log(stock)
       setSelectedProduto(stock);
       setQuantidade({
         value: String(rowSelect.quantity),
@@ -120,7 +121,7 @@ export default () => {
       });
     }
     fetch();
-  }, [isSelected, rowSelect]);
+  }, [rowSelect]);
 
   const handleInciaCamposListaProduto = () => {
     produtoInputRef.current.value = "";
@@ -130,7 +131,7 @@ export default () => {
       formattedValue: "1",
       floatValue: 1,
     });
-    setRowSelect({});
+    setRowSelect(null);
     setIsSelect(false);
   };
 
@@ -221,7 +222,7 @@ export default () => {
     handleInciaCamposListaProduto();
   };
 
-  const handleSelectedProduto = useCallback((row) => {
+  const handleSelectedProduto = (row) => {
     setSelectedProduto(row);
     produtoInputRef.current.value = row.description;
     const estoque = parseFloat(row.quantity - row.quantity_of);
@@ -230,13 +231,13 @@ export default () => {
       floatValue: parseFloat(estoque),
       value: estoque,
     });
-  }, []);
+  }
 
-  const onSelect = useCallback(async (row, isSelected) => {
+  const onSelect = (row, isSelected) => {
     produtoInputRef.current.value = row.description;
     setRowSelect(row);
     setIsSelect(isSelected);
-  }, []);
+  }
 
   const handleFinalizarPedido = useCallback(async () => {
     if (listaPedido.find((item) => item.stock - item.quantity < 0)) {
@@ -244,11 +245,10 @@ export default () => {
       return;
     }
 
-    const amount = parseFloat(valorTotal);
-
     const response = await api.put(`budget/${id}`, {
-      ...orcamento,
-      amount,
+      client_id: orcamento.client_id,
+      created_at: data.substr(0, 10),
+      amount: parseFloat(valorTotal),
     });
 
     if (response.status >= 500) {
@@ -258,7 +258,7 @@ export default () => {
       history.push(`/venda/fechamentodevenda/${id}`);
       return;
     }
-  }, [history, id, listaPedido, orcamento, valorTotal]);
+  }, [history, id, listaPedido, orcamento, valorTotal, data]);
 
   const rowClassCheckFormat = (row, rowIdx) => {
     if (row.stock - row.quantity < 0) return "bg-danger text-white";
