@@ -27,7 +27,8 @@ export default () => {
     api
       .get(`/stock/${id}`)
       .then((response) => {
-        const [stock] = response.data.stock;
+        const stock = response.data.stock;
+        console.log(stock)
         if (!stock) {
           toast.error("Produto nao encontrado");
           history.push("/estoque/register");
