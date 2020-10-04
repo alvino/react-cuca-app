@@ -55,8 +55,8 @@ export default () => {
   useEffect(() => {
     if (isObjectEmpty(orcamento)) return;
     async function fetch() {
-      try {
-        const response = await api.get(`requested_budget/${orcamento.id}`);
+     
+        const response = await api.get(`requested_budget/budget/${orcamento.id}`);
         const serializedWishList = response.data.requested_budgets.map(
           (item, index) => ({
             index: index + 1,
@@ -65,10 +65,7 @@ export default () => {
         );
 
         setListaPedido(serializedWishList);
-      } catch (error) {
-        toast.error("Erro ao acessar API");
-        console.error(error);
-      }
+      
     }
 
     fetch();

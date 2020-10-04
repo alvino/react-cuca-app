@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import { Button, ToggleButton, ButtonGroup } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import BootstrapDataTable from "../../components/patterns/DataTable";
 import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
@@ -14,6 +14,7 @@ import {
 } from "../../utils/react-bootstrap-table-formatted";
 import { ButtonHandlePrint } from "../../components/Buttons";
 import BannerSimples from "../../components/print/BannerSimples";
+import Collapse from "../../components/Collapse";
 
 import Print from "../../styles/Print";
 
@@ -66,26 +67,22 @@ export default () => {
     );
   }, [listaOutlay]);
 
-  const handleButtonFiltrar = useCallback(
-    (e) => {
-      setChecked(e.currentTarget.checked);
-
-      if (checked) {
-        setMes("");
-        setDia("");
-      }
-    },
-    [checked]
-  );
+  const handlerFiltrer = useCallback((isFilter) => {
+    setChecked(!isFilter);
+    if (!isFilter) {
+      setMes("");
+      setDia("");
+    }
+  }, [])
 
   return (
     <Print>
       <div className="my-2 noprint">
         <div>
-          <div className="row d-flex justify-content-start align-items-center">
-            {checked && (
-              <>
-                <div className="col-2">
+          <Collapse isFilter={false} handlerFilter={handlerFiltrer}>
+            <div>
+              <div className="row">
+                <div className="col-1">
                   <div className="form-group">
                     <label htmlFor="inputAno">Ano</label>
                     <input
@@ -113,7 +110,7 @@ export default () => {
                 </div>
 
                 {mes !== "" && (
-                  <div className="col-2">
+                  <div className="col-1">
                     <div className="form-group">
                       <label htmlFor="selectDia">Dia</label>
                       <select
@@ -127,22 +124,9 @@ export default () => {
                     </div>
                   </div>
                 )}
-              </>
-            )}
-            <div className="col-2">
-              <ButtonGroup toggle>
-                <ToggleButton
-                  type="checkbox"
-                  variant="secondary"
-                  checked={checked}
-                  value="1"
-                  onChange={handleButtonFiltrar}
-                >
-                  {checked ? "Todos" : "Filtrar"}
-                </ToggleButton>
-              </ButtonGroup>
+              </div>
             </div>
-          </div>
+          </Collapse>
 
           <div className="btn-group my-2" role="group">
             <Button variant="secondary" onClick={() => history.goBack()}>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import api from "../../services/api";
-import { Button, ToggleButton, ButtonGroup } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import BootstrapDataTable from "../../components/patterns/DataTable";
 import { toast } from "react-toastify";
 import { TableHeaderColumn } from "react-bootstrap-table";
@@ -13,6 +13,7 @@ import {
 import { ButtonHandlePrint } from "../../components/Buttons";
 import BannerSimples from "../../components/print/BannerSimples";
 import NumberFormat from "../../components/NumberFormat";
+import Collapse from "../../components/Collapse";
 
 import Print from "../../styles/Print";
 
@@ -112,8 +113,8 @@ export default () => {
     }
   }, [checked]);
 
-  const handleButtonFiltrar = useCallback((e) => {
-    setChecked(e.currentTarget.checked);
+  const handlerFiltrer = useCallback((isFilter) => {
+    setChecked(isFilter);
   }, []);
 
   const rowClassCheckFormat = (row, rowIdx) => {
@@ -124,104 +125,62 @@ export default () => {
     <Print>
       <div className="my-2 noprint">
         <div>
-          <div className="row d-flex justify-content-start align-items-center">
-            {checked && (
-              <>
-                <div className="col-2">
-                  <div className="form-group">
-                    <label htmlFor="selectFornecedor">Fornecedor</label>
-                    <select
-                      id="selectFornecedor"
-                      className="form-control"
-                      value={selectFornecedor}
-                      onChange={(event) =>
-                        setSelectFornecedor(event.target.value)
-                      }
-                    >
-                      <option value="">Selecione...</option>
-                      {fornecedores.map((item, index) => (
-                        <option key={index} value={item.id}>
-                          {item.nickname}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+          <Collapse isFilter={true} handlerFilter={handlerFiltrer}>
+            <div>
+              <div className="form-group">
+                <div className="custom-control custom-switch">
+                  <input
+                    type="checkbox"
+                    className="custom-control-input"
+                    checked={stockEmpty}
+                    onChange={(e) => setStockEmpty(e.target.checked)}
+                    id="checkStockEmpty"
+                  />
+                  <label className="custom-control-label" htmlFor="checkStockEmpty">
+                    Produtos Esgotado?
+                  </label>
                 </div>
+              </div>
 
-                <div className="col-2">
-                  <div className="from-group">
-                    <label htmlFor="inputDescricao">Produto</label>
-                    <div className="input-group">
-                      <input
-                        className="form-control"
-                        type="text"
-                        id="inputDescricao"
-                        value={descricao}
-                        onChange={(event) => setDescricao(event.target.value)}
-                      />
-                      <div className="input-group-append">
-                        <button
-                          className="btn btn-secondary"
-                          onClick={() => setDescricao("")}
-                        >
-                          X
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-2">
-                  <div className="form-group form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="checkStockEmpty"
-                      checked={stockEmpty}
-                      onChange={(e) => setStockEmpty(e.target.checked)}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="checkStockEmpty"
-                    >
-                      Produto em Falta
-                    </label>
-                  </div>
-                </div>
-
-                {
-                  // mes !== "" && (
-                  // <div className="col-2">
-                  //   <div className="form-group">
-                  //     <label htmlFor="selectDia">Dia</label>
-                  //     <select
-                  //       className="form-control"
-                  //       id="selectDia"
-                  //       value={dia}
-                  //       onChange={(event) => setDia(event.target.value)}
-                  //     >
-                  //       <OptionDias />
-                  //     </select>
-                  //   </div>
-                  // </div>
-                  // )
-                }
-              </>
-            )}
-            <div className="col-2">
-              <ButtonGroup toggle>
-                <ToggleButton
-                  type="checkbox"
-                  variant="secondary"
-                  checked={checked}
-                  value="1"
-                  onChange={handleButtonFiltrar}
+              <div className="form-group">
+                <label htmlFor="selectFornecedor">Fornecedor</label>
+                <select
+                  id="selectFornecedor"
+                  className="form-control"
+                  value={selectFornecedor}
+                  onChange={(event) => setSelectFornecedor(event.target.value)}
                 >
-                  {checked ? "Todos" : "Filtrar"}
-                </ToggleButton>
-              </ButtonGroup>
+                  <option value="">Selecione...</option>
+                  {fornecedores.map((item, index) => (
+                    <option key={index} value={item.id}>
+                      {item.nickname}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="from-group">
+                <label htmlFor="inputDescricao">Produto</label>
+                <div className="input-group">
+                  <input
+                    className="form-control"
+                    type="text"
+                    id="inputDescricao"
+                    value={descricao}
+                    onChange={(event) => setDescricao(event.target.value)}
+                  />
+                  <div className="input-group-append">
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => setDescricao("")}
+                    >
+                      X
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          </Collapse>
           <div className="btn-group my-2" role="group">
             <Button variant="secondary" onClick={() => history.goBack()}>
               Voltar
