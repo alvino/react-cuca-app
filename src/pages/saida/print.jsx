@@ -27,7 +27,7 @@ export default () => {
 
   const [outlays, setOutlays] = useState([]);
   const [listaOutlay, setListaOutlay] = useState([]);
-  const [valorTotal, setValorTotal] = useState();
+  const [valorTotal, setValorTotal] = useState(0);
 
   useEffect(() => {
     async function fetch() {

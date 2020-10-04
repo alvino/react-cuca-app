@@ -29,8 +29,8 @@ export default () => {
   const [descricao, setDescricao] = useState("");
   const [stockEmpty, setStockEmpty] = useState(false);
 
-  const [valorTotalCompra, setValorTotalCompra] = useState();
-  const [valorTotalVenda, setValorTotalVenda] = useState();
+  const [valorTotalCompra, setValorTotalCompra] = useState(0);
+  const [valorTotalVenda, setValorTotalVenda] = useState(0);
 
   useEffect(() => {
     async function fetch() {
