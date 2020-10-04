@@ -36,16 +36,12 @@ export default () => {
     setSelectedCliente(row);
   }, []);
 
-  
-  
-
   const handleRegistraPedido = useCallback(async () => {
     const orcamento = {
       client_id: selectedCliente.id,
       amount: 0,
       created_at: data,
     };
-    console.log(orcamento)
     const response = await api.post(`budget`, orcamento);
 
     if(response.status > 500) toast.error("Erro ao criar pedido")

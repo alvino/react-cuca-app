@@ -48,7 +48,6 @@ export default () => {
     async function fetch() {
       const response_budget = await api.get(`budget/${id}`);
       const { budget } = response_budget.data;
-      console.log(budget)
       setOrcamento(budget);
       setData(String(budget.created_at).substr(0, 10));
     }
@@ -60,7 +59,7 @@ export default () => {
     if (isObjectEmpty(orcamento)) return;
 
     async function fetch() {
-      const response = await api.get(`requested_budget/${orcamento.id}`);
+      const response = await api.get(`requested_budget/budget/${orcamento.id}`);
       const { requested_budgets } = response.data;
       setListaPedido(requested_budgets);
     }
@@ -79,10 +78,6 @@ export default () => {
 
     fetch();
   }, [orcamento]);
-
-  // useEffect(() => {
-  //   setData(new Date().toISOString().substring(0, 10));
-  // }, []);
 
   useEffect(() => {
     async function fetch() {
@@ -112,7 +107,6 @@ export default () => {
     async function fetch() {
       const response = await api.get(`stock/${rowSelect.stock_id}`);
       const stock = response.data.stock;
-      console.log(stock)
       setSelectedProduto(stock);
       setQuantidade({
         value: String(rowSelect.quantity),

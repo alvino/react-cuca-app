@@ -49,7 +49,7 @@ export default () => {
     if (id === 0) return;
 
     async function fetch() {
-      const response = await api.get(`requested_budget/${id}`);
+      const response = await api.get(`requested_budget/budget/${id}`);
       const { requested_budgets } = response.data;
       const serializedRequestedBudget = requested_budgets.map(
         (item, index) => ({

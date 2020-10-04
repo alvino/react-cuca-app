@@ -46,8 +46,8 @@ export default () => {
     }
 
     async function fetch() {
-      try {
-        const response = await api.get(`/requested_budget/${orcamento_id}`);
+     
+        const response = await api.get(`/requested_budget/budget/${orcamento_id}`);
 
         const { requested_budgets } = response.data;
         if (!requested_budgets) {
@@ -57,10 +57,7 @@ export default () => {
         }
 
         setListaPedido(requested_budgets);
-      } catch (error) {
-        toast.error("Erro ao acessar API");
-        console.error(error);
-      }
+      
     }
 
     fetch();
