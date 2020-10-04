@@ -19,4 +19,12 @@ instance.interceptors.request.use(async (config) => {
   return config;
 });
 
+instance.interceptors.response.use(
+  res => res,
+  err => {
+    console.error(err)
+    return Promise.reject(err);
+  }
+)
+
 export default instance;
