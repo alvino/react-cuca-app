@@ -115,8 +115,8 @@ export default () => {
 
         <p>Produtos: </p>
 
-        {listaPedido.map((produto) => (
-          <div>
+        {listaPedido.map((produto, index) => (
+          <div key={index}>
             <p>descricão: {produto.description}</p>
             <p>quantidade: {produto.quantity}</p>
             <p>valor: {produto.amount}</p>
