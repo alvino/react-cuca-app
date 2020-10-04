@@ -109,7 +109,7 @@ export default () => {
                 id="adminSwitch" />
               <label
                 className="custom-control-label"
-                for="adminSwitch"
+                htmlFor="adminSwitch"
               >
                 Admin
               </label>
