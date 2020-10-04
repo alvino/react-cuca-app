@@ -71,6 +71,12 @@ export default () => {
           ) : (
             ""
           )}
+          <Button
+            variant="success"
+            onClick={() => history.push(`/cliente/print`)}
+          >
+            Relatorio de Comsumo
+          </Button>
         </div>
       </div>
 

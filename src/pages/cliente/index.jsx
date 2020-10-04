@@ -11,6 +11,7 @@ import NavBar from '../../components/NavBar'
 import Home from './home'
 import ClientRegister from './register'
 import ClientDelete from './delete'
+import Print from './print'
 
 export default () => {
 
@@ -34,6 +35,9 @@ export default () => {
             </Route>
             <Route exact path={`${path}/delete/:id`}>
               <ClientDelete />
+            </Route>
+            <Route path={`${path}/print`}>
+              <Print />
             </Route>
           </Switch>
         </main>
