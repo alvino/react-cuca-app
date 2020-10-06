@@ -20,26 +20,21 @@ export default () => {
   });
 
   useEffect(() => {
-
-    async function fetch(){
+    async function fetch() {
       try {
-        const response = await  api.get("/stock")
-        const serializeStock = response.data.stocks.map(
-          (item) => ({
-              ...item,
-              stock: Number(item.quantity - item.quantity_of).toFixed(2),
-            }
-          )
-        )
+        const response = await api.get("/stock");
+        const serializeStock = response.data.stocks.map((item) => ({
+          ...item,
+          stock: Number(item.quantity - item.quantity_of).toFixed(2),
+        }));
         setStocks(serializeStock.filter((item) => item.stock > 0));
-        
-      } catch(error) {
+      } catch (error) {
         toast.error("Erro no acesso a API");
         console.error(error);
       }
     }
 
-    fetch()
+    fetch();
   }, []);
 
   const onSelect = useCallback((row, isSelected) => {
@@ -58,14 +53,24 @@ export default () => {
           </button>
 
           {rowSelected.isSelected && (
-            <button
-              className="p-2 btn btn-danger"
-              onClick={() =>
-                history.push(`/estoque/delete/${rowSelected.row.id}`)
-              }
-            >
-              Deletar Estoque
-            </button>
+            <>
+              <button
+                className="p-2 btn btn-info"
+                onClick={() =>
+                  history.push(`/estoque/alterar/${rowSelected.row.id}`)
+                }
+              >
+                Alterar Estoque
+              </button>
+              <button
+                className="p-2 btn btn-danger"
+                onClick={() =>
+                  history.push(`/estoque/delete/${rowSelected.row.id}`)
+                }
+              >
+                Deletar Estoque
+              </button>
+            </>
           )}
 
           <button

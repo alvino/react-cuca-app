@@ -10,17 +10,17 @@ import Home from './home'
 import Register from './register'
 import Delete from './delete'
 import Print from './print'
+import Alterar from './alterar'
 
 export default () => {
 
   let { path } = useRouteMatch();
 
   return (
-
     <div>
       <NavBar />
 
-      <div className='container-fluid'>
+      <div className="container-fluid">
         <main>
           <Switch>
             <Route exact path={path}>
@@ -32,13 +32,15 @@ export default () => {
             <Route exact path={`${path}/print`}>
               <Print />
             </Route>
+            <Route exact path={`${path}/alterar/:id`}>
+              <Alterar />
+            </Route>
             <Route exact path={`${path}/delete/:id`}>
               <Delete />
             </Route>
           </Switch>
         </main>
       </div>
-
     </div>
-  )
+  );
 }
