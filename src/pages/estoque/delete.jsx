@@ -9,14 +9,14 @@ export default () => {
   const history = useHistory();
   const { id } = useParams(0);
 
-  const [formData, setFormData] = useState({
+  const [stock, setStock] = useState({
     description: "",
     detail: "",
     unit: "",
-    quantity: "",
-    quantity_of: "",
-    purchase_price: "",
-    sale_value: "",
+    quantity: -1,
+    quantity_of: -1,
+    purchase_price: -1,
+    sale_value: -1,
   });
 
   useEffect(() => {
@@ -24,36 +24,51 @@ export default () => {
       history.push("/estoque");
       return;
     }
-    api
-      .get(`/stock/${id}`)
-      .then((response) => {
-        const stock = response.data.stock;
-        if (!stock) {
+    async function fetch() {
+      try {
+        const response = await api.get(`/stock/${id}`);
+        const data = response.data.stock;
+        if (!data) {
           toast.error("Produto nao encontrado");
           history.push("/estoque/register");
           return;
         }
-        setFormData({
-          nickname: stock.nickname,
-          description: stock.description,
-          detail: stock.detail,
-          unit: stock.unit,
-          quantity: stock.quantity,
-          quantity_of: stock.quantity_of,
-          purchase_price: stock.purchase_price,
-          sale_value: stock.sale_value,
+        setStock({
+          nickname: data.nickname,
+          description: data.description,
+          detail: data.detail,
+          unit: data.unit,
+          quantity: parseFloat(data.quantity),
+          quantity_of: parseFloat(data.quantity_of),
+          purchase_price: parseFloat(data.purchase_price),
+          sale_value: parseFloat(data.sale_value),
         });
-      })
-      .catch((error) => {
+      } catch (err) {
         toast.error("Erro ao acessar API");
-        console.error(error);
-      });
+        console.error(err);
+      }
+    }
+
+    fetch();
   }, [history, id]);
 
   const handleSubmit = useCallback(
     async (event) => {
       event.preventDefault();
-      const response = await api.delete(`/stock/${id}`);
+      const diferenca = stock.quantity - stock.quantity_of
+      if(diferenca === 0) {
+        toast.info("Não e possivel remover pois estes dodos são usados. Para relatorios")
+        return
+      }
+
+      let response = null;
+      if (stock.quantity_of > 0) {
+        response = await api.put(`stock/${id}`, {
+          quantity: stock.quantity_of
+        });
+      } else {
+        response = await api.delete(`/stock/${id}`);
+      }
       if (response.status >= 500) {
         toast.error("erro interno no servidor ao deletar produto");
         return;
@@ -61,21 +76,21 @@ export default () => {
       toast.success("produto deletado");
       history.push("/estoque");
     },
-    [history, id]
+    [history, id, stock]
   );
 
   return (
     <div>
       <h2>Tem certeza que deseja deletar:</h2>
       <div className="mt-4 mb-4 justify-content-center">
-        <p>Fornecedor: {formData.nickname}</p>
-        <p>Descrição: {formData.description}</p>
-        <p>Detalhe: {formData.detail}</p>
-        <p>Unidade: {formData.unit}</p>
-        <p>Quantidade: {formData.quantity}</p>
-        <p>Quantidade Vendida: {formData.quantity_of}</p>
-        <p>Preço: {formData.purchase_price}</p>
-        <p>Preço Venda: {formData.sale_value}</p>
+        <p>Fornecedor: {stock.nickname}</p>
+        <p>Descrição: {stock.description}</p>
+        <p>Detalhe: {stock.detail}</p>
+        <p>Unidade: {stock.unit}</p>
+        <p>Quantidade: {stock.quantity}</p>
+        <p>Quantidade Vendida: {stock.quantity_of}</p>
+        <p>Preço: {stock.purchase_price}</p>
+        <p>Preço Venda: {stock.sale_value}</p>
       </div>
       <Button variant="danger" onClick={handleSubmit}>
         Confirmar remoção
